@@ -4,13 +4,13 @@ from waitress import serve
 app = Flask(__name__)
 
 
-@app.route('/')
-def hello_world():
-    return 'Hello World'
+# @app.route('/')
+# def hello_world():
+#     return 'Hello World'
 
 from AlphaDensity import alphaDensityFun
 from AlphaYoung import alphaYoungFun
-@app.route('/index', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def index():
     # alpha = [0.313, 0.455, 0.585]
     g1 = g2 = g3 = g4 = 'basic.avif' # Default Graph Image
