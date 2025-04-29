@@ -135,10 +135,10 @@
                 <div class="form-group">                    
                     
                     <label><u>Fuzzy Membership Function:</u></label>
-                    <select name="ddlfuntion">
-                        <option>Select Function.</option>
-                        <option selected>Trapezoidal Fuzzy Function.</option>
-                        <option>Triangular Fuzzy Function.</option>
+                    <select name="ddlfuntion" required>
+                        <option value="">Select Function.</option>
+                        <option value="Trapezoidal" {% if s2=="Trapezoidal" %}selected{% endif %}>Trapezoidal Fuzzy Function.</option>
+                        <option value="Triangular" {% if s2=="Triangular" %}selected{% endif %}>Triangular Fuzzy Function.</option>
                     </select>
                 </div>
 
@@ -153,7 +153,7 @@
                         <option value="SS-304 Grade ABS Silicon">SS-304 Grade ABS Silicon</option>                        
                     </select>
                 </div>
-                <div class="form-group">
+                <div class="form-group" style="display: none;">
                     <label><u>Graph of:</u></label>
                     <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" style="width: 20px;" checked>
                     <label for="vehicle1" style="display: contents;"> Density</label><br>
@@ -163,7 +163,6 @@
                         <option value="">Select Graph.</option>
                         <option value="Density" {% if s2=="Density" %}selected{% endif %}>Density</option>
                         <option value="Youngs modulus" {% if s2=="Youngs modulus" %}selected{% endif %}>Young's modulus</option>
-
                     </select> -->
                 </div>
                 <label class="form-group"><u>Enter The Value:</u></label>
