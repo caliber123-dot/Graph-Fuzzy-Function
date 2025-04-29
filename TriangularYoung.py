@@ -6,7 +6,7 @@ b = 300000  # Peak value (N/m²)
 c = 500000  # Maximum value (N/m²)
 
 def TriangularYoungFun(a1,a2,a3,graph): 
-    # Define α levels
+    # Define α levels -
     # alpha = [0.3, 0.4, 0.5]
     alpha = [a1, a2, a3]
     colors = ["red", "purple", "orange"]  # Different colors for α-cuts

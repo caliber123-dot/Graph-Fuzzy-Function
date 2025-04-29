@@ -5,7 +5,7 @@ b = 2.70  # Most likely value (kg/m³)
 c = 2.72  # Maximum value (kg/m³)
 
 def TriangularDensity(a1,a2,a3,graph): 
-    # Define α levels
+    # Define α levels -
     # alpha = [0.3, 0.4, 0.5]
     alpha = [a1, a2, a3]
 
