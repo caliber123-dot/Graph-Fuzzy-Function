@@ -16,7 +16,7 @@
     top: 0;
     width: 100%; /* Full width */
     height: 100%; /* Full height */
-    /* overflow: auto;  */
+    overflow: auto; 
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
   }
@@ -26,7 +26,7 @@
     margin: auto;
     display: block;
     width: 100%;
-    max-width: 850px;
+    max-width: 1000px;    
   }
   
   /* Caption of Modal Image */
@@ -68,6 +68,27 @@
     font-size: 40px;
     font-weight: bold;
     transition: 0.3s;
+  }
+  .close2 {
+    position: absolute;
+    top: 15px;
+    left: 35px;
+    background-color: darkgreen;
+    color: white;
+    font-weight: bold;
+    padding: 10px;
+    border: 2px solid #ccc;    
+  }
+  .close3 {
+    position: absolute;
+    top: 55px;
+    right: 25px;
+    background-color: darkgreen;
+    color: white;
+    font-weight: bold;
+    padding: 10px;
+    border: 2px solid #ccc;    
+    border-radius: 20px;
   }
   
   .close:hover,

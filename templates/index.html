@@ -131,13 +131,15 @@
     <form action="/" method="POST">
         <div class="container" id="mainContainer">
             <div class="left-section">
-                <div class="form-group">                    
-                    
+                <div class="form-group">
+
                     <label><u>Fuzzy Membership Function:</u></label>
                     <select name="ddlfuntion" required>
                         <option value="">Select Function.</option>
-                        <option value="Trapezoidal" {% if s2=="Trapezoidal" %}selected{% endif %}>Trapezoidal Fuzzy Function.</option>
-                        <option value="Triangular" {% if s2=="Triangular" %}selected{% endif %}>Triangular Fuzzy Function.</option>
+                        <option value="Trapezoidal" {% if s2=="Trapezoidal" %}selected{% endif %}>Trapezoidal Fuzzy
+                            Function.</option>
+                        <option value="Triangular" {% if s2=="Triangular" %}selected{% endif %}>Triangular Fuzzy
+                            Function.</option>
                     </select>
                 </div>
 
@@ -146,11 +148,39 @@
                     <select name="ddlmaterials" required>
                         <option value="">Select Materials.</option>
                         <option value="Aluminium" {% if s1=="Aluminium" %}selected{% endif %}>Aluminium</option>
-                        <option value="Neoprene Rubber" {% if s1=="Neoprene Rubber" %}selected{% endif %}>Neoprene Rubber</option>
+                        <option value="Neoprene Rubber" {% if s1=="Neoprene Rubber" %}selected{% endif %}>Neoprene
+                            Rubber</option>
                         <option value="Teflon" {% if s1=="Teflon" %}selected{% endif %}>Teflon</option>
                         <option value="Nylon" {% if s1=="Nylon" %}selected{% endif %}>Nylon</option>
-                        <option value="SS-304 Grade ABS Silicon">SS-304 Grade ABS Silicon</option>                        
+                        <option value="SS-304 Grade ABS Silicon">SS-304 Grade ABS Silicon</option>
+                        <option value="Other">Other Material</option>
                     </select>
+                </div>
+                <div class="form-group">
+                    <label><u>Add Material:</u></label>
+                    <table>
+                        <tr>
+                            <td colspan="2"><input type="text" id="material" name="material"
+                                    placeholder="Enter Material Name">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>a:</b></td>
+                            <td><input type="text" id="a_value" name="a_value" placeholder="Enter a value"></td>
+                        </tr>
+                        <tr>
+                            <td><b>b:</b></td>
+                            <td><input type="text" id="b_value" name="b_value" placeholder="Enter b value"></td>
+                        </tr>
+                        <tr>
+                            <td><b>c:</b></td>
+                            <td><input type="text" id="c_value" name="c_value" placeholder="Enter c value"></td>
+                        </tr>
+                        <tr>
+                            <td><b>d:</b></td>
+                            <td><input type="text" id="d_value" name="d_value" placeholder="Enter d value"></td>
+                        </tr>
+                    </table>
                 </div>
                 <div class="form-group" style="display: none;">
                     <label><u>Graph of:</u></label>
@@ -164,22 +194,26 @@
                         <option value="Youngs modulus" {% if s2=="Youngs modulus" %}selected{% endif %}>Young's modulus</option>
                     </select> -->
                 </div>
-                <label class="form-group"><u>Enter The Value:</u></label>
+                <label class="form-group"><u>The Alpha Value:</u></label>
+                <label style="color: red;font-size: 14px;">* After decimal enter only 4-digits value.</label>
                 <table>
                     <tr>
                         <td><b>α1:</b></td>
-                        <td><input type="text" id="alpha1" name="alpha1" value="{{a1}}" placeholder="Enter Alpha Value α1"
-                              required onkeypress="return validateOneToFourDecimals(this)"></td>
+                        <td><input type="text" id="alpha1" name="alpha1" value="{{a1}}"
+                                placeholder="Enter Alpha Value α1" required
+                                onkeypress="return validateOneToFourDecimals(this)"></td>
                     </tr>
                     <tr>
                         <td><b>α2:</b></td>
-                        <td><input type="text" id="alpha2" name="alpha2" value="{{a2}}" placeholder="Enter Alpha Value α2"
-                            required onkeypress="return validateOneToFourDecimals(this)"></td>
+                        <td><input type="text" id="alpha2" name="alpha2" value="{{a2}}"
+                                placeholder="Enter Alpha Value α2" required
+                                onkeypress="return validateOneToFourDecimals(this)"></td>
                     </tr>
                     <tr>
                         <td><b>α3:</b></td>
-                        <td><input type="text" id="alpha3" name="alpha3" value="{{a3}}" placeholder="Enter Alpha Value α3"
-                            required onkeypress="return validateOneToFourDecimals(this)"></td>
+                        <td><input type="text" id="alpha3" name="alpha3" value="{{a3}}"
+                                placeholder="Enter Alpha Value α3" required
+                                onkeypress="return validateOneToFourDecimals(this)"></td>
                     </tr>
                     <tr>
                         <td><b>α-α'1:</b></td>
@@ -200,29 +234,33 @@
 
                 <div class="form-group">
                     <button type="submit" class="change-bg-btn">Create Alpha Graph</button>
-                    <button type="button" class="change-bg-btn" style="background-color: #ff9966;" onclick="changeBackground()">Change
+                    <button type="button" class="change-bg-btn" style="background-color: #ff9966;"
+                        onclick="changeBackground()">Change
                         Background</button>
                 </div>
             </div>
 
             <div class="right-section">
-                <div class="graph-box">α-Cut for Density<img src="static/img/{{g1}}" id="myImg" onclick="onMyPopup(this)"
-                        style="width: 100%;height: auto;" alt="g2.png">
+                <div class="graph-box">α-Cut for Density<img id="gr1" src="static/img/{{g1}}" id="myImg"
+                        onclick="onMyPopup(this)" style="width: 100%;height: auto;" alt="g2.png">
                 </div>
-                <div class="graph-box">α-α'-Cut for Density <img src="static/img/{{g2}}" onclick="onMyPopup(this)"
-                        style="width: 100%;height: auto;" alt="g2.png"></div>
-                <div class="graph-box">α-Cut for Young's modulus<img src="static/img/{{g3}}" id="myImg3" onclick="onMyPopup(this)"
-                        style="width: 100%;height: auto;" alt="g1.png">
+                <div class="graph-box">α-α'-Cut for Density <img id="gr2" src="static/img/{{g2}}"
+                        onclick="onMyPopup(this)" style="width: 100%;height: auto;" alt="g2.png"></div>
+                <div class="graph-box">α-Cut for Young's modulus<img id="gr3" src="static/img/{{g3}}" id="myImg3"
+                        onclick="onMyPopup(this)" style="width: 100%;height: auto;" alt="g1.png">
                 </div>
-                <div class="graph-box">α-α'-Cut for Young's modulus<img src="static/img/{{g4}}" onclick="onMyPopup(this)"
-                        style="width: 100%;height: auto;" alt="g1.png"></div>
+                <div class="graph-box">α-α'-Cut for Young's modulus<img id="gr4" src="static/img/{{g4}}"
+                        onclick="onMyPopup(this)" style="width: 100%;height: auto;" alt="g1.png"></div>
             </div>
+            <button type="button" onclick="onDownloadPdf()" class="close3">Save Graph in 1 PDF</button>
             <!-- The Modal -->
             <div id="myModal" class="modal">
-                <span class="close">&times;</span>
-                <img class="modal-content" id="img01">
-                <button type="button" onclick="onDownload()" style="margin-top: 10px;">Save Graph</button>
+                <span class="close" style="float: right;">&times;</span>
+                <button type="button" onclick="onDownload()" class="close2">Save Graph</button>
+                <img class="modal-content" id="img01" style="margin-bottom: 50px;">
+                <!-- <button type="button" onclick="onDownload()" style="margin-top: 20px;">Save Graph</button> -->
                 <!-- <div id="caption" style="background-color: #ff5f6d;"></div> -->
+
             </div>
         </div>
     </form>
@@ -265,6 +303,87 @@
         }
     </script>
     <script src="static/js/script.js"></script>
+    <!-- jsPDF save in one file -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        // Initialize jsPDF
+        const { jsPDF } = window.jspdf;
+        async function onDownloadPdf() {
+            const imageIds = ['gr1', 'gr2', 'gr3', 'gr4']; // IDs of all images
+            const pdf = new jsPDF();
+            let imagesAdded = 0; // Track how many images were successfully added
+            try {
+                for (let i = 0; i < imageIds.length; i++) {
+                    const img = document.getElementById(imageIds[i]);
+
+                    // Skip if image is .avif
+                    if (img.src.toLowerCase().endsWith('.avif')) {
+                        console.warn(`Skipping AVIF image: ${imageIds[i]}`);
+                        continue;
+                    }
+                    const response = await fetch(img.src);
+                    const blob = await response.blob();
+
+                    // Check MIME type (alternative check if extension missing)
+                    if (blob.type === 'image/avif') {
+                        console.warn(`Skipping AVIF image (MIME type detected): ${imageIds[i]}`);
+                        continue;
+                    }
+                    const imgData = await blobToBase64(blob);
+
+                    // Calculate position (2 images per page)
+                    const x = 15;
+                    const y = (imagesAdded % 2 === 0) ? 15 : 120;
+                    const width = 180;
+                    const height = 100;
+
+                    pdf.addImage(imgData, getImageFormat(blob), x, y, width, height);
+                    imagesAdded++;
+
+                    // Add new page after every 2 images
+                    if (imagesAdded % 2 === 0 && i !== imageIds.length - 1) {
+                        pdf.addPage();
+                    }
+                }
+
+                if (imagesAdded === 0) {
+                    alert('No compatible images found (skipped AVIF).');
+                    return;
+                }
+
+                const fileHandle = await window.showSaveFilePicker({
+                    suggestedName: 'graphs.pdf',
+                    types: [{ description: 'PDF', accept: { 'application/pdf': ['.pdf'] } }],
+                });
+                const writable = await fileHandle.createWritable();
+                await writable.write(await pdf.output('arraybuffer'));
+                await writable.close();
+                alert('PDF saved successfully!');
+
+            } catch (error) {
+                console.error('Error saving PDF:', error);
+                alert('Failed to save PDF.');
+            }
+        }
+
+        // Helper: Get image format from Blob
+        function getImageFormat(blob) {
+            if (blob.type.includes('jpeg')) return 'JPEG';
+            if (blob.type.includes('png')) return 'PNG';
+            if (blob.type.includes('webp')) return 'WEBP';
+            return 'JPEG'; // Default fallback
+        }
+        // Helper function (same as before)
+        function blobToBase64(blob) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(blob);
+            });
+        }
+
+    </script>
 </body>
 
 </html>
