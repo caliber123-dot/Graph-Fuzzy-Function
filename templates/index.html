@@ -109,6 +109,40 @@
         .change-bg-btn:hover {
             background: #ff9966;
         }
+
+        .color-panel {
+            padding: 15px;
+            background: #f0f0f0;
+            border-radius: 8px;
+            margin: 10px 0;
+            display: inline-block;
+        }
+
+        .color-panel label {
+            margin-right: 5px;
+            font-family: Arial, sans-serif;
+        }
+
+        .color-panel input[type="color"] {
+            width: 60px;
+            height: 40px;
+            margin-right: 15px;
+            cursor: pointer;
+        }
+
+        .apply-gradient-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .apply-gradient-btn:hover {
+            background: #45a049;
+        }
     </style>
     <script>
         function validateOneToFourDecimals(input) {
@@ -234,9 +268,17 @@
 
                 <div class="form-group">
                     <button type="submit" class="change-bg-btn">Create Alpha Graph</button>
-                    <button type="button" class="change-bg-btn" style="background-color: #ff9966;"
-                        onclick="changeBackground()">Change
-                        Background</button>
+                    <!-- <button type="button" class="change-bg-btn" style="background-color: #ff9966;"
+                        onclick="changeBackground()">Change Background</button> -->
+
+                </div>
+
+                <div class="form-group color-panel" style="float: left;">
+                    <label for="startColor">Change Background Color:</label>
+                    <input type="color" id="startColor" value="#ff9966">
+                    <button type="button" class="apply-gradient-btn" onclick="changeBackground()">
+                        Apply Color
+                    </button>
                 </div>
             </div>
 
@@ -291,6 +333,7 @@
 
     <script>
         function changeBackground() {
+            const startColor = document.getElementById('startColor').value;
             const colors = [
                 'linear-gradient(to right, #42e695, #3bb2b8)',
                 'linear-gradient(to right, #ff7eb3, #ff758c)',
@@ -298,8 +341,8 @@
                 'linear-gradient(to right, #a1c4fd, #c2e9fb)',
                 'linear-gradient(to right, #fff, #f1f1f1)'
             ];
-            let randomColor = colors[Math.floor(Math.random() * colors.length)];
-            document.getElementById('mainContainer').style.background = randomColor;
+            // let randomColor = colors[Math.floor(Math.random() * colors.length)];
+            document.getElementById('mainContainer').style.background = startColor;
         }
     </script>
     <script src="static/js/script.js"></script>
