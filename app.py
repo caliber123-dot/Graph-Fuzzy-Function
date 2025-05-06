@@ -3,9 +3,31 @@ from waitress import serve
 
 app = Flask(__name__)
 
-# @app.route('/')
-# def hello_world():
-#     return 'Hello World'
+from app_fn import GetFuns
+from barchat import GetBarChat
+@app.route('/graph', methods=['GET', 'POST'])
+# @app.route('/graph')
+def graph():    
+    g1 = g2 = g3 = g4 = 'basic.avif' # Default Graph Image
+    alpha_cuts = ''
+    alpha_dash_cuts= ''
+    fn_dict_dash = fn_dict = ''
+    if request.method=='POST':
+        ddlfuntion = request.form.get('ddlfuntion')  
+        ddlmaterials = request.form.get('ddlmaterials')        
+        if(ddlfuntion == 'Trapezoidal'):    
+            alpha_cuts = [0.3, 0.4, 0.5]        
+            fn_dict = GetFuns(alpha_cuts)
+            g2 = 'Bar_alpha' + 'MF' + '.png' 
+            g1 = GetBarChat(alpha_cuts,fn_dict,g2,ddlmaterials, 1)
+            # Alpha dash code
+            alpha_dash_cuts = [0.35, 0.48, 0.54]        
+            fn_dict_dash = GetFuns(alpha_dash_cuts)
+            g4 = 'Bar_alpha_dash' + 'MF' + '.png' 
+            g3 = GetBarChat(alpha_dash_cuts,fn_dict_dash,g4,ddlmaterials, 2)
+        return render_template('graph.html',fn_dict= fn_dict,alpha_cuts=alpha_cuts,alpha_dash_cuts=alpha_dash_cuts,fn_dict_dash=fn_dict_dash,g1=g1,g2=g2,g3=g3,g4=g4,s1=ddlmaterials,s2=ddlfuntion)
+    
+    return render_template('graph.html',g1=g1,g2=g2,g3=g3,g4=g4)
 
 from AlphaDensity import alphaDensityFun
 from AlphaYoung import alphaYoungFun

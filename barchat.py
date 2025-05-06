@@ -1,0 +1,51 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Alpha levels
+def GetBarChat(alpha_cuts,fn_dict, graph, material, aval):
+    # alphas = [0.3, 0.4, 0.5]
+    alphas = alpha_cuts
+    # print(alphas)
+
+    # Natural frequencies for each alpha level
+    # fn1 = [0.816, 0.819, 0.822]
+    # fn2 = [0.857, 0.854, 0.851]
+    # fn3 = [0.812, 0.815, 0.819]
+    # fn4 = [0.853, 0.851, 0.848]
+    fn1 =  fn_dict["fn1"]
+    fn2 =  fn_dict["fn2"]
+    fn3 =  fn_dict["fn3"]
+    fn4 =  fn_dict["fn4"]
+    # print(fn1)
+    # Bar width and positions
+    bar_width = 0.2
+    r1 = np.arange(len(alphas))
+    r2 = [x + bar_width for x in r1]
+    r3 = [x + bar_width for x in r2]
+    r4 = [x + bar_width for x in r3]
+
+    # Plotting the bar chart
+    plt.figure(figsize=(10, 6))
+    plt.bar(r1, fn1, width=bar_width, label='fn₁ (Y, ρ)')
+    plt.bar(r2, fn2, width=bar_width, label='fn₂ (Y̅, ρ)')
+    plt.bar(r3, fn3, width=bar_width, label='fn₃ (Y, ρ̅)')
+    plt.bar(r4, fn4, width=bar_width, label='fn₄ (Y̅, ρ̅)')
+
+    # Labels and ticks
+    if aval == 1:
+        plt.xlabel('α-level')
+    else:
+        plt.xlabel('α dash-level')
+    plt.ylabel('Natural Frequency (fn)')
+    if aval == 1:
+        plt.title("Natural Frequency vs α-level for Trapezoidal MF (" + material + ")")
+    else:
+        plt.title("Natural Frequency vs α-dash level for Trapezoidal MF (" + material + ")")
+    plt.xticks([r + 1.5 * bar_width for r in range(len(alphas))], alphas)
+    plt.legend()
+    plt.grid(True, axis='y', linestyle='--', alpha=0.6)
+    plt.tight_layout()
+    # plt.show()
+    g = "static/img/" + graph
+    plt.savefig(g)
+    plt.close()  # Close the figure to free up memory
