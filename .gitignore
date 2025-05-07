@@ -3,4 +3,4 @@ __pycache__
 info.txt
 templates/demo.html
 templates/demo2.html
-demo.py
+.env

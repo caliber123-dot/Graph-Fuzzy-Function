@@ -65,10 +65,11 @@
         }
 
         input {
-            width: 90%;
+            width: 80%;
             padding: 8px;
             border: 1px solid #ccc;
             border-radius: 0px;
+            font-weight: 600;
             /* border: none; */
             /* margin-top: 5px; */
             /* float: right; */
@@ -101,9 +102,11 @@
             font-size: 16px;
             border-radius: 6px;
             cursor: pointer;
-            margin-top: 20px;
+            margin-top: 0px;
             transition: 0.3s;
             float: left;
+            font-weight: 600;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         .change-bg-btn:hover {
@@ -160,63 +163,98 @@
     </script>
     <style>
         ul {
-          list-style-type: none;
-          margin: 0;
-          padding: 0;
-          overflow: hidden;
-          background-color: #666;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #666;
         }
-        
+
         li {
-          float: left;
-          border-right:1px solid #bbb;
+            float: left;
+            border-right: 1px solid #bbb;
         }
-        
+
         li:last-child {
-          border-right: none;
+            border-right: none;
         }
-        
+
         li a {
-          display: block;
-          color: white;
-          text-align: center;
-          /* padding: 14px 16px; */
-          padding: 10px 16px;
-          text-decoration: none;
+            display: block;
+            color: white;
+            text-align: center;
+            /* padding: 14px 16px; */
+            padding: 10px 16px;
+            text-decoration: none;
         }
-        
-        li a:hover:not(.active) {
-          background-color: #111;
+
+        li a:hover:not(.active2) {
+            background-color: #111;
         }
-        
-        .active {
-          background-color: #04AA6D;
+
+        .active2 {
+            background-color: #04AA6D;
         }
-        </style>
+
+        .collapsible {
+            background-color: #888;
+            color: white;
+            cursor: pointer;
+            padding: 10px;
+            width: 75%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .active,
+        .collapsible:hover {
+            background-color: #555;
+        }
+
+        .collapsible:after {
+            content: '\002B';
+            color: white;
+            font-weight: bold;
+            float: right;
+            margin-left: 5px;
+        }
+
+        .active:after {
+            content: "\2212";
+        }
+
+        .content2 {
+            padding: 0 18px;
+            display: none;
+            overflow: hidden;
+            background-color: #f1f1f1;
+        }
+    </style>
 </head>
 
 <body>
     <h1>Study on Natural Frequency of Oscillation of Unilink Flexible Robot using Fuzzy Function</h1>
     <ul>
-        <li><a class="active" href="/">Home</a></li>
-        <li><a href="/graph">Bar Chart</a></li>          
+        <li><a class="active2" href="/">Home</a></li>
+        <li><a href="/graph">Bar Chart</a></li>
     </ul>
-      
     <form action="/" method="POST">
         <div class="container" id="mainContainer">
             <div class="left-section">
                 <div class="form-group">
                     <label><u>Fuzzy Membership Function:</u></label>
-                    <select name="ddlfuntion" required>
+                    <select name="ddlfuntion" id="ddlfuntion" required>
                         <option value="">Select Function.</option>
-                        <option value="Trapezoidal" {% if s2=="Trapezoidal" %}selected{% endif %}>Trapezoidal Fuzzy
+                        <option value="1" {% if s2=="1" %}selected{% endif %}>Trapezoidal Fuzzy
                             Function.</option>
-                        <option value="Triangular" {% if s2=="Triangular" %}selected{% endif %}>Triangular Fuzzy
+                        <option value="2" {% if s2=="2" %}selected{% endif %}>Triangular Fuzzy
                             Function.</option>
                     </select>
                 </div>
-
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label><u>Materials:</u></label>
                     <select name="ddlmaterials" required>
                         <option value="">Select Materials.</option>
@@ -228,32 +266,54 @@
                         <option value="SS-304 Grade ABS Silicon">SS-304 Grade ABS Silicon</option>
                         <option value="Other">Other Material</option>
                     </select>
+                </div> -->
+
+                <div class="form-group">
+                    <label><u>Materials:</u></label>
+                    <select name="ddlmaterials" id="ddlmaterials" required>
+                        <option value="">Select Materials.</option>
+                        {% for mat in materials %}
+                        <option value="{{ mat.mat_id }}" {% if s1|int==mat.mat_id %}selected{% endif %}>{{ mat.mat_name
+                            }}</option>
+                        {% endfor %}
+
+                        <!-- <option value="Other" {% if s1=="Other" %}selected{% endif %}>Other Material</option> -->
+                    </select>
+                    <!-- <label style="font-size: 14px;margin-top: 5px;color: goldenrod;">Materials already saved.</label> -->
                 </div>
                 <div class="form-group">
-                    <label><u>Add Material:</u></label>
-                    <table>
-                        <tr>
-                            <td colspan="2"><input type="text" id="material" name="material"
-                                    placeholder="Enter Material Name">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><b>a:</b></td>
-                            <td><input type="text" id="a_value" name="a_value" placeholder="Enter a value"></td>
-                        </tr>
-                        <tr>
-                            <td><b>b:</b></td>
-                            <td><input type="text" id="b_value" name="b_value" placeholder="Enter b value"></td>
-                        </tr>
-                        <tr>
-                            <td><b>c:</b></td>
-                            <td><input type="text" id="c_value" name="c_value" placeholder="Enter c value"></td>
-                        </tr>
-                        <tr>
-                            <td><b>d:</b></td>
-                            <td><input type="text" id="d_value" name="d_value" placeholder="Enter d value"></td>
-                        </tr>
-                    </table>
+                    <button type="button" class="collapsible">Add Material</button>
+                    <div class="content2">
+                        <!-- <label><u>Add Material:</u></label> -->
+                        <table>
+                            <tr>
+                                <td colspan="2"><input type="text" id="material" name="material"
+                                        placeholder="Enter Material Name">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><b>a:</b></td>
+                                <td><input type="text" id="a_value" name="a_value" placeholder="Enter a value"></td>
+                            </tr>
+                            <tr>
+                                <td><b>b:</b></td>
+                                <td><input type="text" id="b_value" name="b_value" placeholder="Enter b value"></td>
+                            </tr>
+                            <tr>
+                                <td><b>c:</b></td>
+                                <td><input type="text" id="c_value" name="c_value" placeholder="Enter c value"></td>
+                            </tr>
+                            <tr>
+                                <td><b>d:</b></td>
+                                <td><input type="text" id="d_value" name="d_value" placeholder="Enter d value"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><input type="submit" onclick="return MyValidate()" formnovalidate
+                                        style="width: 90%;background-color: green;color: white;" value="Add"></td>
+
+                            </tr>
+                        </table>
+                    </div>
                 </div>
                 <div class="form-group" style="display: none;">
                     <label><u>Graph of:</u></label>
@@ -290,23 +350,29 @@
                     </tr>
                     <tr>
                         <td><b>α-α'1:</b></td>
-                        <td><input type="text" name="alpha_dash1" value="{{a4}}" placeholder="Enter Alpha Value α-α'1"
+                        <td><input type="text" name="alpha_dash1" id="alphadash1" value="{{a4}}"
+                                placeholder="Enter Alpha Value α-α'1"
                                 onkeypress="return validateOneToFourDecimals(this)"></td>
                     </tr>
                     <tr>
                         <td><b>α-α'2:</b></td>
-                        <td><input type="text" name="alpha_dash2" value="{{a5}}" placeholder="Enter Alpha Value α-α'2"
+                        <td><input type="text" name="alpha_dash2" id="alphadash2" value="{{a5}}"
+                                placeholder="Enter Alpha Value α-α'2"
                                 onkeypress="return validateOneToFourDecimals(this)"></td>
                     </tr>
                     <tr>
                         <td><b>α-α'3:</b></td>
-                        <td><input type="text" name="alpha_dash3" value="{{a6}}" placeholder="Enter Alpha Value α-α'3"
+                        <td><input type="text" name="alpha_dash3" id="alphadash3" value="{{a6}}"
+                                placeholder="Enter Alpha Value α-α'3"
                                 onkeypress="return validateOneToFourDecimals(this)"></td>
                     </tr>
                 </table>
 
                 <div class="form-group">
-                    <button type="submit" class="change-bg-btn">Create Alpha Graph</button>
+                    <button type="submit" id="alphaButton" class="change-bg-btn">
+                        {{ 'Update Alpha Graph' if is_update else 'Create Alpha Graph' }}
+                    </button>
+                    <input type="text" name="alpha_id" id="alpha_id" value="{{alpha_id}}" style="display: none;">
                     <!-- <button type="button" class="change-bg-btn" style="background-color: #ff9966;"
                         onclick="changeBackground()">Change Background</button> -->
 
@@ -345,7 +411,52 @@
             </div>
         </div>
     </form>
+    <script>
+        function MyValidate() {
+            // alert("hi");
+            // return false;
+            const material = document.getElementById("material");
+            const a = document.getElementById("a_value");
+            const b = document.getElementById("b_value");
+            const c = document.getElementById("c_value");
+            const d = document.getElementById("d_value");
+            if (material.value.trim() == '') {
+                alert("Please enter a value for 'material'.");
+                material.focus();
+                return false;
+            }
+            else if (a.value.trim() == '') {
+                alert("Please enter a value for 'a'.");
+                a.focus();
+                return false;
+            }
+            else if (b.value.trim() == '') {
+                alert("Please enter a value for 'b'.");
+                b.focus();
+                return false;
+            }
+            else if (c.value.trim() == '') {
+                alert("Please enter a value for 'c'.");
+                c.focus();
+                return false;
+            }
+            else if (d.value.trim() == '') {
+                alert("Please enter a value for 'd'.");
+                d.focus();
+                return false;
+            }
+            else {
+                return true;
+            }
 
+
+            // if (!material || !a || !b || !c || !d) {
+            //     e.preventDefault(); // Stop form from submitting
+            //     alert("Please fill in all fields (material, a, b, c, d).");
+            // }
+
+        }
+    </script>
     <script>
         // Get the modal
         var modal = document.getElementById("myModal");
@@ -383,7 +494,22 @@
             // let randomColor = colors[Math.floor(Math.random() * colors.length)];
             document.getElementById('mainContainer').style.background = startColor;
         }
+        var coll = document.getElementsByClassName("collapsible");
+        var i;
+
+        for (i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var content = this.nextElementSibling;
+                if (content.style.display === "block") {
+                    content.style.display = "none";
+                } else {
+                    content.style.display = "block";
+                }
+            });
+        }
     </script>
+    <script src="static/js/code.js"></script>
     <script src="static/js/script.js"></script>
     <!-- jsPDF save in one file -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>

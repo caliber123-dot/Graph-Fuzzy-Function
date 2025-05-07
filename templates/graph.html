@@ -64,19 +64,22 @@
             margin-top: 5px;
         }
 
-        input {
-            width: 90%;
+        input[type="text"] {
+            width: 80%;
             padding: 8px;
             border: 1px solid #ccc;
             border-radius: 0px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: not-allowed;
             /* border: none; */
             /* margin-top: 5px; */
             /* float: right; */
         }
 
-        table,
-        th,
-        td {
+        .table1,
+        .table1 th,
+        .table1 td {
             border: 0px solid #ccc;
             border-collapse: collapse;
             padding: 5px;
@@ -102,7 +105,7 @@
             font-size: 16px;
             border-radius: 6px;
             cursor: pointer;
-            margin-top: 20px;
+            margin-top: 0px;
             transition: 0.3s;
             float: left;
         }
@@ -208,29 +211,67 @@
                 <div class="form-group">
 
                     <label><u>Fuzzy Membership Function:</u></label>
-                    <select name="ddlfuntion" required>
+                    <select name="ddlfuntion" id="ddlfuntion" required>
                         <option value="">Select Function.</option>
-                        <option value="Trapezoidal" {% if s2=="Trapezoidal" %}selected{% endif %}>Trapezoidal Fuzzy
+                        <option value="1" {% if s2=="1" %}selected{% endif %}>Trapezoidal Fuzzy
                             Function.</option>
-                        <option value="Triangular" {% if s2=="Triangular" %}selected{% endif %}>Triangular Fuzzy
+                        <option value="2" {% if s2=="2" %}selected{% endif %}>Triangular Fuzzy
                             Function.</option>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label><u>Materials:</u></label>
-                    <select name="ddlmaterials" required>
+                    <select name="ddlmaterials" id="ddlmaterials" required>
                         <option value="">Select Materials.</option>
-                        <option value="Aluminium" {% if s1=="Aluminium" %}selected{% endif %}>Aluminium</option>
-                        <option value="Neoprene Rubber" {% if s1=="Neoprene Rubber" %}selected{% endif %}>Neoprene
-                            Rubber</option>
-                        <option value="Teflon" {% if s1=="Teflon" %}selected{% endif %}>Teflon</option>
-                        <option value="Nylon" {% if s1=="Nylon" %}selected{% endif %}>Nylon</option>
-                        <option value="SS-304 Grade ABS Silicon">SS-304 Grade ABS Silicon</option>
-                        <option value="Other">Other Material</option>
+                        {% for mat in materials %}
+                        <option value="{{ mat.mat_id }}" {% if s1|int==mat.mat_id %}selected{% endif %}>{{ mat.mat_name
+                            }}</option>
+                        {% endfor %}
+                       
                     </select>
+                    
                 </div>
-
+                <a href="/" style="float: left;font-weight: 600;color: red;font-size: 16px;">If Edit Alpha Values Go to Home</a><br>
+                <label class="form-group"><u>The Alpha Value:</u></label>
+                <table>
+                    <tr>
+                        <td><b>α1:</b></td>
+                        <td><input type="text" id="alpha1" name="alpha1" value="{{a1}}" readonly
+                                placeholder="View Alpha Value α1" required
+                                onkeypress="return validateOneToFourDecimals(this)"></td>
+                    </tr>
+                    <tr>
+                        <td><b>α2:</b></td>
+                        <td><input type="text" id="alpha2" name="alpha2" value="{{a2}}" readonly
+                                placeholder="View Alpha Value α2" required
+                                onkeypress="return validateOneToFourDecimals(this)"></td>
+                    </tr>
+                    <tr>
+                        <td><b>α3:</b></td>
+                        <td><input type="text" id="alpha3" name="alpha3" value="{{a3}}" readonly
+                                placeholder="View Alpha Value α3" required
+                                onkeypress="return validateOneToFourDecimals(this)"></td>
+                    </tr>
+                    <tr>
+                        <td><b>α-α'1:</b></td>
+                        <td><input type="text" name="alpha_dash1" id="alphadash1" value="{{a4}}" readonly
+                                placeholder="View Alpha Value α-α'1"
+                                onkeypress="return validateOneToFourDecimals(this)"></td>
+                    </tr>
+                    <tr>
+                        <td><b>α-α'2:</b></td>
+                        <td><input type="text" name="alpha_dash2" id="alphadash2" value="{{a5}}" readonly
+                                placeholder="View Alpha Value α-α'2"
+                                onkeypress="return validateOneToFourDecimals(this)"></td>
+                    </tr>
+                    <tr>
+                        <td><b>α-α'3:</b></td>
+                        <td><input type="text" name="alpha_dash3" id="alphadash3" value="{{a6}}" readonly
+                                placeholder="View Alpha Value α-α'3"
+                                onkeypress="return validateOneToFourDecimals(this)"></td>
+                    </tr>
+                </table>
                 <div class="form-group">
                     <button type="submit" class="change-bg-btn" style="font-weight: 600;">Create Bar Graph</button>
 
@@ -245,9 +286,9 @@
                 </div>
             </div>
             <style>
-                table,
-                th,
-                td {
+                .table3,
+                .table3 th,
+                .table3 td {
                     border: 1px solid black;
                     border-collapse: collapse;
                     color: black;
@@ -256,11 +297,11 @@
                 }
             </style>
             <div class="right-section">
-                <div class="graph-box">Table - 1 : α-Cut
+                <div class="graph-box" id="table1">Table - 1 : α-Cut
                     
                     <!-- <img id="gr1" src="static/img/{{g1}}" id="myImg"
                         onclick="onMyPopup(this)" style="width: 100%;height: auto;" alt="g2.png"> -->
-                    <table class="table" style="width: 100%;margin-top: 15px;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+                    <table class="table3" style="width: 100%;margin-top: 15px;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
                         <tr style="background-color: #fafafa;">
                             <td>α</td>
                             <td>fn₁ (Y̲,ρ̲)</td>
@@ -284,10 +325,10 @@
                     <img id="gr2" src="static/img/{{g2}}" onclick="onMyPopup(this)" style="width: 100%;height: auto;"
                         alt="g2.png">
                 </div>
-                <div class="graph-box">Table - 2 : α-α'-Cut
+                <div class="graph-box" id="table2">Table - 2 : α-α'-Cut
                     <!-- <img id="gr3" src="static/img/{{g3}}" id="myImg3"
                         onclick="onMyPopup(this)" style="width: 100%;height: auto;" alt="g1.png"> -->
-                        <table class="table" style="width: 100%;margin-top: 15px;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+                        <table class="table3" style="width: 100%;margin-top: 15px;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
                             <tr style="background-color: #fafafa;">
                                 <td>α-α'</td>
                                 <td>fn₁ (Y̲,ρ̲)</td>
@@ -311,14 +352,16 @@
                         onclick="onMyPopup(this)" style="width: 100%;height: auto;" alt="g1.png"></div>
             </div>
             <button type="button" onclick="onDownloadPdf()" class="close3">Save Graph in 1 PDF</button>
+            <div style="display: none;">
+                <button id="alphaButton"></button>
+                <input type="text" name="" id="alpha_id">
+            </div>
             <!-- The Modal -->
             <div id="myModal" class="modal">
                 <span class="close" style="float: right;">&times;</span>
                 <button type="button" onclick="onDownload()" class="close2">Save Graph</button>
                 <img class="modal-content" id="img01" style="margin-bottom: 50px;">
-                <!-- <button type="button" onclick="onDownload()" style="margin-top: 20px;">Save Graph</button> -->
-                <!-- <div id="caption" style="background-color: #ff5f6d;"></div> -->
-
+                
             </div>
         </div>
     </form>
@@ -361,14 +404,17 @@
             document.getElementById('mainContainer').style.background = startColor;
         }
     </script>
+    <script src="static/js/code.js"></script>
     <script src="static/js/script.js"></script>
     <!-- jsPDF save in one file -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script></script>
     <script>
         // Initialize jsPDF
         const { jsPDF } = window.jspdf;
         async function onDownloadPdf() {
-            const imageIds = ['gr1', 'gr2', 'gr3', 'gr4']; // IDs of all images
+            // const imageIds = ['gr1', 'gr2', 'gr3', 'gr4']; // IDs of all images
+            const imageIds = ['gr2', 'gr4']; // IDs of all images
             const pdf = new jsPDF();
             let imagesAdded = 0; // Track how many images were successfully added
             try {
@@ -411,7 +457,7 @@
                 }
 
                 const fileHandle = await window.showSaveFilePicker({
-                    suggestedName: 'graphs.pdf',
+                    suggestedName: 'bar_graph.pdf',
                     types: [{ description: 'PDF', accept: { 'application/pdf': ['.pdf'] } }],
                 });
                 const writable = await fileHandle.createWritable();
