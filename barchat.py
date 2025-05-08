@@ -2,11 +2,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Alpha levels
-def GetBarChat(alpha_cuts,fn_dict, graph, material, aval):
+def GetBarChat(alpha_cuts,fn_dict, graph, material, aval, fun_type):
     # alphas = [0.3, 0.4, 0.5]
     alphas = alpha_cuts
     # print(alphas)
-
     # Natural frequencies for each alpha level
     # fn1 = [0.816, 0.819, 0.822]
     # fn2 = [0.857, 0.854, 0.851]
@@ -38,9 +37,9 @@ def GetBarChat(alpha_cuts,fn_dict, graph, material, aval):
         plt.xlabel('α dash-level')
     plt.ylabel('Natural Frequency (fn)')
     if aval == 1:
-        plt.title("Natural Frequency vs α-level for Trapezoidal MF (" + material + ")")
+        plt.title("Natural Frequency vs α-level for "+ fun_type + " MF (" + material + ")")
     else:
-        plt.title("Natural Frequency vs α-dash level for Trapezoidal MF (" + material + ")")
+        plt.title("Natural Frequency vs α-dash level for "+ fun_type + " MF (" + material + ")")
     plt.xticks([r + 1.5 * bar_width for r in range(len(alphas))], alphas)
     plt.legend()
     plt.grid(True, axis='y', linestyle='--', alpha=0.6)

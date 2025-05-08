@@ -109,17 +109,21 @@ def graph():
         a6 = safe_float(request.form.get('alpha_dash3'))     
         material = tbl_materials.query.filter_by(mat_id=ddlmat_ID).first()
         mat_name = material.mat_name if material else None
-        print("Material Name =====>>>>", mat_name)
-        if(ddlfuntion == '1'):    
-            alpha_cuts = [a1, a2, a3]        
-            fn_dict = GetFuns(alpha_cuts)
-            g2 = 'Bar_alpha' + 'MF' + '.png' 
-            g1 = GetBarChat(alpha_cuts,fn_dict,g2,mat_name, 1)
-            # Alpha dash code
-            alpha_dash_cuts = [a4, a5, a6]        
-            fn_dict_dash = GetFuns(alpha_dash_cuts)
-            g4 = 'Bar_alpha_dash' + 'MF' + '.png' 
-            g3 = GetBarChat(alpha_dash_cuts,fn_dict_dash,g4,mat_name, 2)
+        # print("Material Name =====>>>>", mat_name)
+        fun_type = ''
+        if(ddlfuntion == '1'):   
+            fun_type = "Trapezoidal" 
+        else:
+            fun_type = "Triangular"
+        alpha_cuts = [a1, a2, a3]        
+        fn_dict = GetFuns(alpha_cuts)
+        g2 = 'Bar_alpha' + 'MF' + '.png' 
+        g1 = GetBarChat(alpha_cuts, fn_dict, g2, mat_name, 1, fun_type)
+        # Alpha dash code
+        alpha_dash_cuts = [a4, a5, a6]        
+        fn_dict_dash = GetFuns(alpha_dash_cuts)
+        g4 = 'Bar_alpha_dash' + 'MF' + '.png' 
+        g3 = GetBarChat(alpha_dash_cuts, fn_dict_dash, g4, mat_name, 2, fun_type)
         return render_template('graph.html',fn_dict= fn_dict,alpha_cuts=alpha_cuts,alpha_dash_cuts=alpha_dash_cuts,fn_dict_dash=fn_dict_dash,g1=g1,g2=g2,g3=g3,g4=g4,a1=a1,a2=a2,a3=a3,a4=a4,a5=a5,a6=a6,s1=ddlmat_ID,s2=ddlfuntion,materials=materials)
     
     return render_template('graph.html',g1=g1,g2=g2,g3=g3,g4=g4,materials=materials,s1=None)
