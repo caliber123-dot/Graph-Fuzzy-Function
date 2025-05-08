@@ -98,8 +98,8 @@ def graph():
     fn_dict_dash = fn_dict = ''
     materials = tbl_materials.query.filter_by(mat_status=1).all()  # Only active materials
     if request.method=='POST':
-        ddlfuntion = request.form.get('ddlfuntion')  
-        ddlmaterials = request.form.get('ddlmaterials')      
+        ddlfuntion = request.form.get('ddlfuntion')  # ID
+        ddlmat_ID = request.form.get('ddlmaterials') # ID 
         a1 = safe_float(request.form.get('alpha1'))
         a2 = safe_float(request.form.get('alpha2'))
         a3 = safe_float(request.form.get('alpha3'))
@@ -107,17 +107,20 @@ def graph():
         a4 = safe_float(request.form.get('alpha_dash1'))
         a5 = safe_float(request.form.get('alpha_dash2'))
         a6 = safe_float(request.form.get('alpha_dash3'))     
+        material = tbl_materials.query.filter_by(mat_id=ddlmat_ID).first()
+        mat_name = material.mat_name if material else None
+        print("Material Name =====>>>>", mat_name)
         if(ddlfuntion == '1'):    
             alpha_cuts = [a1, a2, a3]        
             fn_dict = GetFuns(alpha_cuts)
             g2 = 'Bar_alpha' + 'MF' + '.png' 
-            g1 = GetBarChat(alpha_cuts,fn_dict,g2,ddlmaterials, 1)
+            g1 = GetBarChat(alpha_cuts,fn_dict,g2,mat_name, 1)
             # Alpha dash code
             alpha_dash_cuts = [a4, a5, a6]        
             fn_dict_dash = GetFuns(alpha_dash_cuts)
             g4 = 'Bar_alpha_dash' + 'MF' + '.png' 
-            g3 = GetBarChat(alpha_dash_cuts,fn_dict_dash,g4,ddlmaterials, 2)
-        return render_template('graph.html',fn_dict= fn_dict,alpha_cuts=alpha_cuts,alpha_dash_cuts=alpha_dash_cuts,fn_dict_dash=fn_dict_dash,g1=g1,g2=g2,g3=g3,g4=g4,a1=a1,a2=a2,a3=a3,a4=a4,a5=a5,a6=a6,s1=ddlmaterials,s2=ddlfuntion,materials=materials)
+            g3 = GetBarChat(alpha_dash_cuts,fn_dict_dash,g4,mat_name, 2)
+        return render_template('graph.html',fn_dict= fn_dict,alpha_cuts=alpha_cuts,alpha_dash_cuts=alpha_dash_cuts,fn_dict_dash=fn_dict_dash,g1=g1,g2=g2,g3=g3,g4=g4,a1=a1,a2=a2,a3=a3,a4=a4,a5=a5,a6=a6,s1=ddlmat_ID,s2=ddlfuntion,materials=materials)
     
     return render_template('graph.html',g1=g1,g2=g2,g3=g3,g4=g4,materials=materials,s1=None)
 
@@ -213,7 +216,6 @@ def add_Materials(ddlmaterials,material):
     return myMsg
 def add_Alpha(a1,a2,a3,a4,a5,a6,ddlfuntion,ddlmaterials):
     myMsg = ''   
-    
     # Check if email or phone number already exists
     existing_record = tbl_alpha.query.filter((tbl_alpha.alpha_fm_id == ddlfuntion) & (tbl_alpha.alpha_mat_id == ddlmaterials)).first()
     if existing_record:
