@@ -128,10 +128,12 @@ def graph():
     
     return render_template('graph.html',g1=g1,g2=g2,g3=g3,g4=g4,materials=materials,s1=None)
 
-from AlphaDensity import alphaDensityFun
-from AlphaYoung import alphaYoungFun
-from TriangularDensity import TriangularDensity
-from TriangularYoung import TriangularYoungFun
+# from AlphaDensity import alphaDensityFun
+# from AlphaYoung import alphaYoungFun
+from Trapezoidal import GetFuzzyFunction_aplha, GetFuzzyFunction_aplha_alpha_dash
+from Triangular import GetFuzzyFunction_aplha2, GetFuzzyFunction_aplha_alpha_dash2
+# from TriangularDensity import TriangularDensity
+# from TriangularYoung import TriangularYoungFun
 @app.route('/', methods=['GET', 'POST'])
 def index():
     # alpha = [0.313, 0.455, 0.585]
@@ -139,59 +141,96 @@ def index():
     g1 = g2 = g3 = g4 = 'basic.avif' # Default Graph Image
     if request.method=='POST':
         # Retrieve form data
-        ddlmaterials = request.form.get('ddlmaterials')
+        ddlmaterials = request.form.get('ddlmaterials') # id
         # print(ddlmaterials)
-        ddlfuntion = request.form.get('ddlfuntion')      
-
-        material = request.form.get('material') 
+        ddlfuntion = request.form.get('ddlfuntion') # id 
+        material = request.form.get('material') # textbox
         if material.strip() != '':
+            # Add Materials:
             msg = add_Materials(ddlmaterials,material)
             materials = tbl_materials.query.filter_by(mat_status=1).all()  # Only active materials
             return render_template('index.html', g1=g1,g2=g2,g3=g3,g4=g4,materials=materials,s1=ddlmaterials,s2=ddlfuntion,msg=msg)     
-        else:
-        # print(ddlfuntion)
-        # ddlgraph = None  
+        else:            
             a1 = safe_float(request.form.get('alpha1'))
             a2 = safe_float(request.form.get('alpha2'))
             a3 = safe_float(request.form.get('alpha3'))
-
             a4 = safe_float(request.form.get('alpha_dash1'))
             a5 = safe_float(request.form.get('alpha_dash2'))
             a6 = safe_float(request.form.get('alpha_dash3'))   
-            alpha_id = request.form.get('alpha_id')
-            if alpha_id.strip() != '':
-                print("Record Found")
-            else:
-                print("No Record")
+            alpha_id = request.form.get('alpha_id') # its Disabled in html use for update id
+            # if alpha_id.strip() != '':
+            #     print("Record Found")
+            # else:
+            #     print("No Record")
             msg = add_Alpha(a1,a2,a3,a4,a5,a6,ddlfuntion,ddlmaterials)
             if(msg == "Record updated successfully!"):
                 is_update = True
             else:
                 is_update = False
-            print(msg)        
-
-            if a1 != '' and a2 != '' and a3 != '': 
-                
-                g1 = 'Alpha_' + 'Density' + '.png'   
-                g3 = 'Alpha_' + 'Young' + '.png' 
-                if(ddlfuntion == 'Trapezoidal'):
-                    alphaDensityFun(a1,a2,a3,g1)
-                    alphaYoungFun(a1,a2,a3,g3)
-                else:
-                    TriangularDensity(a1,a2,a3,g1)
-                    TriangularYoungFun(a1,a2,a3,g3)
-                
-            if a4 != '' and a5 != '' and a6 != '': 
-                
-                g2 = 'Alpha_dash_' + 'Density' + '.png'  
-                g4 = 'Alpha_dash_' + 'Young' + '.png' 
-                if(ddlfuntion == 'Trapezoidal'):
-                    alphaDensityFun(a4,a5,a6,g2)               
-                    alphaYoungFun(a4,a5,a6,g4)  
-                else:
-                    TriangularDensity(a4,a5,a6,g2)
-                    TriangularYoungFun(a4,a5,a6,g4)
-                    
+            # print(msg)        
+            # Create Alpha Graph
+            g1 = 'Alpha_' + 'Density' + '.png'   
+            g3 = 'Alpha_' + 'Young' + '.png' 
+            g2 = 'Alpha_dash_' + 'Density' + '.png'  
+            g4 = 'Alpha_dash_' + 'Young' + '.png' 
+            material = tbl_materials.query.filter_by(mat_id=ddlmaterials).first()
+            mat_name = material.mat_name if material else None
+            if(ddlfuntion == '1'): #Trapezoidal 
+                # a, b, c, d = 68947600000, 71402200000, 77402200000, 79966000000
+                a, b, c, d = 2680, 2690, 2710, 2720  
+                # alpha cut
+                if a1 != '' and a2 != '' and a3 != '':
+                    GetFuzzyFunction_aplha(a,b,c,d,a1,a2,a3,g1,mat_name,"Density")
+                    GetFuzzyFunction_aplha(a,b,c,d,a1,a2,a3,g3,mat_name,"Young's Modulus")
+                if a4 != '' and a5 != '' and a6 != '':                    
+                    # alpha - alpha dash cut
+                    GetFuzzyFunction_aplha_alpha_dash(a,b,c,d,a1,a2,a3,a4,a5,a6,g2,mat_name,"Density")
+                    GetFuzzyFunction_aplha_alpha_dash(a,b,c,d,a1,a2,a3,a4,a5,a6,g4,mat_name,"Young's Modulus")                
+            elif(ddlfuntion == '2'): #Triangular
+                a, b, c = 68947600000, 74456800000, 79966000000
+                if a1 != '' and a2 != '' and a3 != '':
+                    GetFuzzyFunction_aplha2(a,b,c,a1,a2,a3,g1,mat_name,"Density")
+                    GetFuzzyFunction_aplha2(a,b,c,a1,a2,a3,g3,mat_name,"Young's Modulus")
+                if a4 != '' and a5 != '' and a6 != '':                    
+                    # alpha - alpha dash cut
+                    GetFuzzyFunction_aplha_alpha_dash2(a,b,c,a1,a2,a3,a4,a5,a6,g2,mat_name,"Density")
+                    GetFuzzyFunction_aplha_alpha_dash2(a,b,c,a1,a2,a3,a4,a5,a6,g4,mat_name,"Young's Modulus")                
+                # alpha cut
+                # TriangularDensity(a1,a2,a3,g1)
+                # TriangularYoungFun(a1,a2,a3,g3)
+                # # alpha - alpha dash cut
+                # TriangularDensity(a4,a5,a6,g2)
+                # TriangularYoungFun(a4,a5,a6,g4)
+            # if a1 != '' and a2 != '' and a3 != '':
+            #     g1 = 'Alpha_' + 'Density' + '.png'   
+            #     g3 = 'Alpha_' + 'Young' + '.png' 
+            #     material = tbl_materials.query.filter_by(mat_id=ddlmaterials).first()
+            #     mat_name = material.mat_name if material else None
+            #     if(ddlfuntion == '1'): #Trapezoidal 
+            #         a = 2.66  
+            #         b = 2.68  
+            #         c = 2.72  
+            #         d = 2.74  
+            #         # alpha cut
+            #         GetFuzzyFunction_aplha(a,b,c,d,a1,a2,a3,g1,mat_name,"Density")
+            #         GetFuzzyFunction_aplha(a,b,c,d,a1,a2,a3,g3,mat_name,"Young")
+            #         # alpha - alpha dash cut
+            #         GetFuzzyFunction_aplha_alpha_dash(a,b,c,d,a1,a2,a3,a4,a5,a6,g1,mat_name,"Density")
+            #         GetFuzzyFunction_aplha_alpha_dash(a,b,c,d,a1,a2,a3,a4,a5,a6,g3,mat_name,"Young")
+            #         # alphaDensityFun(a1,a2,a3,g1)
+            #         # alphaYoungFun(a1,a2,a3,g3)
+            #     else: #Triangular
+            #         TriangularDensity(a1,a2,a3,g1)
+            #         TriangularYoungFun(a1,a2,a3,g3)                
+            # if a4 != '' and a5 != '' and a6 != '':
+            #     g2 = 'Alpha_dash_' + 'Density' + '.png'  
+            #     g4 = 'Alpha_dash_' + 'Young' + '.png' 
+            #     if(ddlfuntion == 'Trapezoidal'):
+            #         alphaDensityFun(a4,a5,a6,g2)               
+            #         alphaYoungFun(a4,a5,a6,g4)  
+            #     else:
+            #         TriangularDensity(a4,a5,a6,g2)
+            #         TriangularYoungFun(a4,a5,a6,g4)                    
             return render_template('index.html', g1=g1,g2=g2,g3=g3,g4=g4,a1=a1,a2=a2,a3=a3,a4=a4,a5=a5,a6=a6,materials=materials,s1=ddlmaterials,s2=ddlfuntion,alpha_id=alpha_id,is_update=is_update)     
     return render_template('index.html',g1=g1,g2=g2,g3=g3,g4=g4,materials=materials, s1=None)
 def add_Materials(ddlmaterials,material):

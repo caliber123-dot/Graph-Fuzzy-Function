@@ -4,3 +4,5 @@ info.txt
 templates/demo.html
 templates/demo2.html
 .env
+demo.py
+demo2.py
