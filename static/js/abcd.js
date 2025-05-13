@@ -9,21 +9,22 @@ function fetchAlphaData() {
             return response.json();
         })
         .then(data => {
-            document.getElementById("a_value").value = data.alpha1 || "";
-            document.getElementById("b_value").value = data.alpha2 || "";
-            document.getElementById("c_value").value = data.alpha3 || "";
-            document.getElementById("d_value").value = data.alphadash1 || "";
-            // document.getElementById("alphadash2").value = data.alphadash2 || "";
-            // document.getElementById("alphadash3").value = data.alphadash3 || "";
-            // document.getElementById("alpha_id").value = data.alpha_id || "";
-            // document.getElementById("alphaButton").textContent = "Update Alpha Graph";
-            // document.getElementById("alphaButton").style.backgroundColor = "#007bff";  // Blue
+            document.getElementById("a_value_d").value = data.a_val_d || "";
+            document.getElementById("b_value_d").value = data.b_val_d || "";
+            document.getElementById("c_value_d").value = data.c_val_d || "";
+            document.getElementById("d_value_d").value = data.d_val_d || "";
+
+            document.getElementById("a_value_y").value = data.a_val_y || "";
+            document.getElementById("b_value_y").value = data.b_val_y || "";
+            document.getElementById("c_value_y").value = data.c_val_y || "";
+            document.getElementById("d_value_y").value = data.d_val_y || "";
+            
         })
         .catch(error => {
             clearAlphaFields();
             console.log("No alpha data found.");
-            document.getElementById("alphaButton").textContent = "Create Alpha Graph";
-            document.getElementById("alphaButton").style.backgroundColor = "#28a745";  // Green
+            // document.getElementById("alphaButton").textContent = "Create Alpha Graph";
+            // document.getElementById("alphaButton").style.backgroundColor = "#28a745";  // Green
         });
 }
 

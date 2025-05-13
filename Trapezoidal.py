@@ -119,7 +119,31 @@ def GetFuzzyFunction_aplha_alpha_dash(a_val, b_val, c_val, d_val, a1, a2, a3, a4
     plt.plot([a, b, c, d], [0, 1, 1, 0], label= "Trapezoidal MF", color="blue", linewidth=2)
 
     colors = ['red', 'purple', 'orange', 'green', 'brown', 'cyan']
-    x_extend = 3  # Horizontal extension for α–α′ lines
+    if material == "Aluminium":
+        if(module == "Density"):
+            x_extend = 3  # Horizontal extension for α–α′ lines
+        else:
+            x_extend = 1e9  # Large enough for visible extension
+    if material == "Neoprene Rubber":
+        if(module == "Density"):
+            x_extend = 3  
+        else:
+            x_extend = 1e5  
+    if material == "Teflon":
+        if(module == "Density"):
+            x_extend = 3  
+        else:
+            x_extend = 1e7  
+    if material == "Nylon":
+        if(module == "Density"):
+            x_extend = 3  
+        else:
+            x_extend = 1e8
+    if material == "SS-304 Grade ABS Silicon":
+        if(module == "Density"):
+            x_extend = 3  
+        else:
+            x_extend = 3e8
 
     for i in range(len(alpha)):
         color = colors[i % len(colors)]

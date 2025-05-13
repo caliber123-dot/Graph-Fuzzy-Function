@@ -18,10 +18,14 @@ class tbl_materials(db.Model):
     mat_id = db.Column(db.Integer, primary_key=True)
     mat_fm_id = db.Column(db.Integer, nullable=False)
     mat_name = db.Column(db.String(100), nullable=False) # Cannot be NULL
-    mat_a_val = db.Column(db.String(50), nullable=False)
-    mat_b_val = db.Column(db.String(50), nullable=False)
-    mat_c_val = db.Column(db.String(50), nullable=False)
-    mat_d_val = db.Column(db.String(50), nullable=False)
+    mat_a_val_d = db.Column(db.String(50), nullable=False)
+    mat_b_val_d = db.Column(db.String(50), nullable=False)
+    mat_c_val_d = db.Column(db.String(50), nullable=False)
+    mat_d_val_d = db.Column(db.String(50), nullable=False)
+    mat_a_val_y = db.Column(db.String(50), nullable=False)
+    mat_b_val_y = db.Column(db.String(50), nullable=False)
+    mat_c_val_y = db.Column(db.String(50), nullable=False)
+    mat_d_val_y = db.Column(db.String(50), nullable=False)
     mat_status = db.Column(db.Integer, nullable=False)
 
 class tbl_alpha(db.Model):
@@ -53,50 +57,61 @@ def init_db():
             materials_to_add = []
             if "Aluminium" not in existing_names:
                 materials_to_add.append(tbl_materials(
-                   mat_fm_id=1, mat_name="Aluminium", mat_a_val="0.2", mat_b_val="0.4",
-                    mat_c_val="0.6", mat_d_val="0.8", mat_status=1
+                   mat_fm_id=1, mat_name="Aluminium", mat_a_val_d="2680", mat_b_val_d="2690",
+                    mat_c_val_d="2710", mat_d_val_d="2720", mat_a_val_y="68947600000", mat_b_val_y="71402200000",
+                    mat_c_val_y="77402200000", mat_d_val_y="79966000000", mat_status=1
                 ))
                 materials_to_add.append(tbl_materials(
-                   mat_fm_id=2, mat_name="Aluminium", mat_a_val="0.2", mat_b_val="0.4",
-                    mat_c_val="0.6", mat_d_val="0.8", mat_status=1
+                   mat_fm_id=2, mat_name="Aluminium", mat_a_val_d="2680", mat_b_val_d="2700",
+                    mat_c_val_d="2720", mat_d_val_d="0", mat_a_val_y="68947600000", mat_b_val_y="74456800000",
+                    mat_c_val_y="79966000000", mat_d_val_y="0", mat_status=1                   
                 ))
             if "Neoprene Rubber" not in existing_names:
                 materials_to_add.append(tbl_materials(
-                   mat_fm_id=1, mat_name="Neoprene Rubber", mat_a_val="0.1", mat_b_val="0.3",
-                    mat_c_val="0.5", mat_d_val="0.7", mat_status=1
+                   mat_fm_id=1, mat_name="Neoprene Rubber", mat_a_val_d="1250", mat_b_val_d="1260",
+                    mat_c_val_d="1290", mat_d_val_d="1300", mat_a_val_y="100000", mat_b_val_y="200000",
+                    mat_c_val_y="400000", mat_d_val_y="500000", mat_status=1
                 ))
                 materials_to_add.append(tbl_materials(
-                   mat_fm_id=2, mat_name="Neoprene Rubber", mat_a_val="0.1", mat_b_val="0.3",
-                    mat_c_val="0.5", mat_d_val="0.7", mat_status=1
+                   mat_fm_id=2, mat_name="Neoprene Rubber", mat_a_val_d="1250", mat_b_val_d="1275",
+                    mat_c_val_d="1300", mat_d_val_d="0", mat_a_val_y="100000", mat_b_val_y="300000",
+                    mat_c_val_y="500000", mat_d_val_y="0", mat_status=1                   
                 ))
-
+                
             if "Teflon" not in existing_names:
-                 materials_to_add.append(tbl_materials(
-                  mat_fm_id=1, mat_name="Teflon", mat_a_val="0.15", mat_b_val="0.35",
-                    mat_c_val="0.55", mat_d_val="0.75", mat_status=1
+                materials_to_add.append(tbl_materials(
+                   mat_fm_id=1, mat_name="Teflon", mat_a_val_d="2180", mat_b_val_d="2188",
+                    mat_c_val_d="2212", mat_d_val_d="2220", mat_a_val_y="4.00e+08", mat_b_val_y="4.50e+08",
+                    mat_c_val_y="5.50e+08", mat_d_val_y="6.00e+08", mat_status=1
                 ))
-                 materials_to_add.append(tbl_materials(
-                  mat_fm_id=2, mat_name="Teflon", mat_a_val="0.15", mat_b_val="0.35",
-                    mat_c_val="0.55", mat_d_val="0.75", mat_status=1
+                materials_to_add.append(tbl_materials(
+                   mat_fm_id=2, mat_name="Teflon", mat_a_val_d="2180", mat_b_val_d="2200",
+                    mat_c_val_d="2220", mat_d_val_d="0", mat_a_val_y="4.00e+08", mat_b_val_y="5.00e+08",
+                    mat_c_val_y="6.00e+08", mat_d_val_y="0", mat_status=1                   
                 ))
 
             if "Nylon" not in existing_names:
-                 materials_to_add.append(tbl_materials(
-                   mat_fm_id=1, mat_name="Nylon", mat_a_val="0.25", mat_b_val="0.45",
-                    mat_c_val="0.65", mat_d_val="0.85", mat_status=1
+                materials_to_add.append(tbl_materials(
+                   mat_fm_id=1, mat_name="Nylon", mat_a_val_d="1050", mat_b_val_d="1075",
+                    mat_c_val_d="1125", mat_d_val_d="1150", mat_a_val_y="2.00e+09", mat_b_val_y="2.50e+09",
+                    mat_c_val_y="3.50e+09", mat_d_val_y="4.00e+09", mat_status=1
                 ))
-                 materials_to_add.append(tbl_materials(
-                   mat_fm_id=2, mat_name="Nylon", mat_a_val="0.25", mat_b_val="0.45",
-                    mat_c_val="0.65", mat_d_val="0.85", mat_status=1
+                materials_to_add.append(tbl_materials(
+                   mat_fm_id=2, mat_name="Nylon", mat_a_val_d="1050", mat_b_val_d="1100",
+                    mat_c_val_d="1150", mat_d_val_d="0", mat_a_val_y="2.00E+09", mat_b_val_y="3.00E+09",
+                    mat_c_val_y="4.00E+09", mat_d_val_y="0", mat_status=1                   
                 ))
+                
             if "SS-304 Grade ABS Silicon" not in existing_names:
-                 materials_to_add.append(tbl_materials(
-                   mat_fm_id=1, mat_name="SS-304 Grade ABS Silicon", mat_a_val="0.25", mat_b_val="0.45",
-                    mat_c_val="0.65", mat_d_val="0.85", mat_status=1
+                materials_to_add.append(tbl_materials(
+                   mat_fm_id=1, mat_name="SS-304 Grade ABS Silicon", mat_a_val_d="7900", mat_b_val_d="7915",
+                    mat_c_val_d="7945", mat_d_val_d="7960", mat_a_val_y="1.93e+11", mat_b_val_y="1.95e+11",
+                    mat_c_val_y="1.98e+11", mat_d_val_y="2.00e+11", mat_status=1
                 ))
-                 materials_to_add.append(tbl_materials(
-                   mat_fm_id=2, mat_name="SS-304 Grade ABS Silicon", mat_a_val="0.25", mat_b_val="0.45",
-                    mat_c_val="0.65", mat_d_val="0.85", mat_status=1
+                materials_to_add.append(tbl_materials(
+                   mat_fm_id=2, mat_name="SS-304 Grade ABS Silicon", mat_a_val_d="7900", mat_b_val_d="7930",
+                    mat_c_val_d="7960", mat_d_val_d="0", mat_a_val_y="1.93E+11", mat_b_val_y="1.96E+11",
+                    mat_c_val_y="2.00E+11", mat_d_val_y="0", mat_status=1                   
                 ))
             # Add to session and commit to the database
             if materials_to_add:
@@ -120,7 +135,7 @@ def newmat():
 @app.route('/abcd', methods=['GET', 'POST'])
 def abcd():
     if request.method=='POST':
-        print("========================")
+        # print("========================")
         ddlfuntion = request.form.get('ddlfuntion') # id 
         materials = tbl_materials.query.filter(
         and_(
@@ -130,26 +145,36 @@ def abcd():
         # Retrieve form data
         matid = request.form.get('ddlmaterials') # id
         # print(ddlmaterials)
-        a_value = request.form.get('a_value')
-        b_value = request.form.get('b_value')
-        c_value = request.form.get('c_value')
-        d_value = request.form.get('d_value')
+        a_value_d = request.form.get('a_value_d')
+        b_value_d = request.form.get('b_value_d')
+        c_value_d = request.form.get('c_value_d')
+        d_value_d = request.form.get('d_value_d')
+
+        a_value_y = request.form.get('a_value_y')
+        b_value_y = request.form.get('b_value_y')
+        c_value_y = request.form.get('c_value_y')
+        d_value_y = request.form.get('d_value_y')
         # Find the material with mat_id=1
         material_to_update = tbl_materials.query.get(matid)
 
         if material_to_update:
             # Update the existing material
             # material_to_update.mat_name = material
-            material_to_update.mat_a_val = a_value.strip()
-            material_to_update.mat_b_val = b_value.strip()
-            material_to_update.mat_c_val = c_value.strip()
-            material_to_update.mat_d_val = d_value.strip()
+            material_to_update.mat_a_val_d = a_value_d.strip()
+            material_to_update.mat_b_val_d = b_value_d.strip()
+            material_to_update.mat_c_val_d = c_value_d.strip()
+            material_to_update.mat_d_val_d = d_value_d.strip()
+
+            material_to_update.mat_a_val_y = a_value_y.strip()
+            material_to_update.mat_b_val_y = b_value_y.strip()
+            material_to_update.mat_c_val_y = c_value_y.strip()
+            material_to_update.mat_d_val_y = d_value_y.strip()
             # material_to_update.mat_status = 1            
             db.session.commit()
             myMsg = "Material updated successfully!"
         else:
             myMsg = "Material with ID=1 not found!"
-        return render_template('abcd.html',materials=materials, s1=matid,s2=ddlfuntion,a=a_value,b=b_value,c=c_value,d=d_value,myMsg=myMsg)
+        return render_template('abcd.html',materials=materials, s1=matid,s2=ddlfuntion,a=a_value_d,b=b_value_d,c=c_value_d,d=d_value_d,myMsg=myMsg,a1=a_value_y,b1=b_value_y,c1=c_value_y,d1=d_value_y)
     return render_template('abcd.html')
 
 from app_fn import GetFuns
@@ -257,37 +282,36 @@ def index():
             material = tbl_materials.query.filter_by(mat_id=ddlmaterials).first()
             if material:
                 mat_name = material.mat_name if material else None
-                a = safe_float(material.mat_a_val)
-                b = safe_float(material.mat_b_val)
-                c = safe_float(material.mat_c_val)
-                d = safe_float(material.mat_d_val)
-
-                # print(f"mat_a_val: {a}")
-                # print(f"mat_b_val: {b}")
-                # print(f"mat_c_val: {c}")
-                # print(f"mat_d_val: {d}")
-
+                a_d = safe_float(material.mat_a_val_d)
+                b_d = safe_float(material.mat_b_val_d)
+                c_d = safe_float(material.mat_c_val_d)
+                d_d = safe_float(material.mat_d_val_d)
+                a_y = safe_float(material.mat_a_val_y)
+                b_y = safe_float(material.mat_b_val_y)
+                c_y = safe_float(material.mat_c_val_y)
+                d_y = safe_float(material.mat_d_val_y)
+                
             # material = tbl_materials.query.filter_by(mat_id=ddlmaterials).first()
             if(ddlfuntion == '1'): #Trapezoidal 
                 # a, b, c, d = 2680, 2690, 2710, 2720  
                 # alpha cut
                 if a1 != '' and a2 != '' and a3 != '':
-                    GetFuzzyFunction_aplha(a,b,c,d,a1,a2,a3,g1,mat_name,"Density")
-                    GetFuzzyFunction_aplha(a,b,c,d,a1,a2,a3,g3,mat_name,"Young's Modulus")
+                    GetFuzzyFunction_aplha(a_d,b_d,c_d,d_d,a1,a2,a3,g1,mat_name,"Density")
+                    GetFuzzyFunction_aplha(a_y,b_y,c_y,d_y,a1,a2,a3,g3,mat_name,"Young's Modulus")
                 if a4 != '' and a5 != '' and a6 != '':                    
                     # alpha - alpha dash cut
-                    GetFuzzyFunction_aplha_alpha_dash(a,b,c,d,a1,a2,a3,a4,a5,a6,g2,mat_name,"Density")
-                    GetFuzzyFunction_aplha_alpha_dash(a,b,c,d,a1,a2,a3,a4,a5,a6,g4,mat_name,"Young's Modulus")                
+                    GetFuzzyFunction_aplha_alpha_dash(a_d,b_d,c_d,d_d,a1,a2,a3,a4,a5,a6,g2,mat_name,"Density")
+                    GetFuzzyFunction_aplha_alpha_dash(a_y,b_y,c_y,d_y,a1,a2,a3,a4,a5,a6,g4,mat_name,"Young's Modulus")                
             elif(ddlfuntion == '2'): #Triangular
                 # a, b, c = 68947600000, 74456800000, 79966000000
                 # a, b, c = 100000, 300000, 500000
                 if a1 != '' and a2 != '' and a3 != '':
-                    GetFuzzyFunction_aplha2(a,b,c,a1,a2,a3,g1,mat_name,"Density")
-                    GetFuzzyFunction_aplha2(a,b,c,a1,a2,a3,g3,mat_name,"Young's Modulus")
+                    GetFuzzyFunction_aplha2(a_d,b_d,c_d,a1,a2,a3,g1,mat_name,"Density")
+                    GetFuzzyFunction_aplha2(a_y,b_y,c_y,a1,a2,a3,g3,mat_name,"Young's Modulus")
                 if a4 != '' and a5 != '' and a6 != '':                    
                     # alpha - alpha dash cut
-                    GetFuzzyFunction_aplha_alpha_dash2(a,b,c,a1,a2,a3,a4,a5,a6,g2,mat_name,"Density")
-                    GetFuzzyFunction_aplha_alpha_dash2(a,b,c,a1,a2,a3,a4,a5,a6,g4,mat_name,"Young's Modulus")                
+                    GetFuzzyFunction_aplha_alpha_dash2(a_d,b_d,c_d,a1,a2,a3,a4,a5,a6,g2,mat_name,"Density")
+                    GetFuzzyFunction_aplha_alpha_dash2(a_y,b_y,c_y,a1,a2,a3,a4,a5,a6,g4,mat_name,"Young's Modulus")                
                 
             return render_template('index.html', g1=g1,g2=g2,g3=g3,g4=g4,a1=a1,a2=a2,a3=a3,a4=a4,a5=a5,a6=a6,materials=materials,s1=ddlmaterials,s2=ddlfuntion,alpha_id=alpha_id,is_update=is_update)     
     return render_template('index.html',g1=g1,g2=g2,g3=g3,g4=g4, s1=None)
@@ -360,10 +384,14 @@ def get_material_data(mat_id,fm_id):
     alpha_record = tbl_materials.query.filter((tbl_materials.mat_fm_id == fm_id) & (tbl_materials.mat_id == mat_id)).first()
     if alpha_record:
         return {
-            "alpha1": alpha_record.mat_a_val,
-            "alpha2": alpha_record.mat_b_val,
-            "alpha3": alpha_record.mat_c_val,
-            "alphadash1": alpha_record.mat_d_val,            
+            "a_val_d": alpha_record.mat_a_val_d,
+            "b_val_d": alpha_record.mat_b_val_d,
+            "c_val_d": alpha_record.mat_c_val_d,
+            "d_val_d": alpha_record.mat_d_val_d,     
+            "a_val_y": alpha_record.mat_a_val_y,
+            "b_val_y": alpha_record.mat_b_val_y,
+            "c_val_y": alpha_record.mat_c_val_y,
+            "d_val_y": alpha_record.mat_d_val_y,       
         }
     else:
         return {}, 204  # No content found

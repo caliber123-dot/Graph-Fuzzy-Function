@@ -267,25 +267,34 @@
                     </select>
                     <div class="content21" style="display: block;width: 100%;margin-top: 10px;">
                         <!-- <label><u>Add Material:</u></label> -->
-                        <table style="width: 100%">                            
+                        <table style="width: 100%">   
+                            <tr>
+                                <td></td>
+                                <th>Density</th>
+                                <th>Young's modulus</th>
+                            </tr>                         
                             <tr>
                                 <td><b>a:</b></td>
-                                <td><input type="text" id="a_value" name="a_value" value="{{a}}" placeholder="Enter a value" required></td>
+                                <td ><input type="text" id="a_value_d" name="a_value_d" value="{{a}}" placeholder="Enter a value" required></td>
+                                <td ><input type="text" id="a_value_y" name="a_value_y" value="{{a1}}" placeholder="Enter a value" required></td>
                             </tr>
                             <tr>
                                 <td><b>b:</b></td>
-                                <td><input type="text" id="b_value" name="b_value" value="{{b}}" placeholder="Enter b value" required></td>
+                                <td><input type="text" id="b_value_d" name="b_value_d" value="{{b}}" placeholder="Enter b value" required></td>
+                                <td><input type="text" id="b_value_y" name="b_value_y" value="{{b1}}" placeholder="Enter b value" required></td>
                             </tr>
                             <tr>
                                 <td><b>c:</b></td>
-                                <td><input type="text" id="c_value" name="c_value" value="{{c}}" placeholder="Enter c value" required></td>
+                                <td><input type="text" id="c_value_d" name="c_value_d" value="{{c}}" placeholder="Enter c value" required></td>
+                                <td><input type="text" id="c_value_y" name="c_value_y" value="{{c1}}" placeholder="Enter c value" required></td>
                             </tr>
                             <tr>
                                 <td><b>d:</b></td>
-                                <td><input type="text" id="d_value" name="d_value" value="{{d}}" placeholder="Enter d value"></td>
+                                <td><input type="text" id="d_value_d" name="d_value_d" value="{{d}}" placeholder="Enter d value"></td>
+                                <td><input type="text" id="d_value_y" name="d_value_y" value="{{d1}}" placeholder="Enter d value"></td>
                             </tr>
                             <tr>
-                                <td colspan="2"><input type="submit" onclick="return MyValidate()" 
+                                <td colspan="3"><input type="submit" onclick="return MyValidate()" 
                                         style="width: 100%;background-color: green;color: white;padding: 10px;" value="Changes"></td>
                                 
                             </tr>
