@@ -20,16 +20,18 @@ def GetFuzzyFunction_aplha(a_val, b_val, c_val, d_val, a1, a2, a3, g_name, mater
     # Calculate α-cut points
     x = []
     x_bar = []
-    for α in alpha_values:
-        if α == 1:
-            x_val = b
-            x_bar_val = c
+    
+    for alpha in alpha_values:
+        if alpha == 1.0:
+            # Flat top between b and c
+            x.append(b)
+            x_bar.append(c)
         else:
-            x_val = a + (b - a) * α
-            x_bar_val = d - (d - c) * α
-
-        x.append(x_val)
-        x_bar.append(x_bar_val)
+            # Sloped sides
+            left = a + (b - a) * alpha
+            right = d - (d - c) * alpha
+            x.append(left)
+            x_bar.append(right)
 
     # Plotting
     plt.figure(figsize=(10, 6))
@@ -40,20 +42,22 @@ def GetFuzzyFunction_aplha(a_val, b_val, c_val, d_val, a1, a2, a3, g_name, mater
 
     for i in range(len(alpha_values)):
         color = colors[i % len(colors)]
+        # Slightly extended α-cut lines
         extension = 0.05  # 5% extension
         x_len = x_bar[i] - x[i]
         x_start = x[i] - x_len * extension
         x_end = x_bar[i] + x_len * extension
-        # Draw α-cut line
+        # Horizontal α-cut line
         plt.hlines(alpha_values[i], x_start, x_end, color=color, linestyles="dotted", linewidth=1.5)
-        # Black dots
+        # Dots at α-cut ends
         plt.scatter([x[i], x_bar[i]], [alpha_values[i], alpha_values[i]], color="black")
         # Label formatting
         x_val_str = f"{x[i]:.{precisions[i]}f}"
         x_bar_val_str = f"{x_bar[i]:.{precisions[i]}f}"
         alpha_val_str = f"{alpha_values[i]:.{precisions[i]}f}"
-        plt.text(x[i] - 1e3, alpha_values[i] + 0.03, f"({x_val_str}, {alpha_val_str})", fontsize=8)
-        plt.text(x_bar[i] + 1e3, alpha_values[i] + 0.03, f"({x_bar_val_str}, {alpha_val_str})", fontsize=8)
+        # Use smaller dynamic offset for this scale (±1 unit)
+        plt.text(x[i] - 1, alpha_values[i] + 0.03, f"({x_val_str}, {alpha_val_str})", fontsize=8)
+        plt.text(x_bar[i] + 1, alpha_values[i] + 0.03, f"({x_bar_val_str}, {alpha_val_str})", fontsize=8)
         # Vertical dashed lines
         plt.vlines(x[i], 0, alpha_values[i], color="green", linestyle="dashed")
         plt.vlines(x_bar[i], 0, alpha_values[i], color="green", linestyle="dashed")
@@ -134,7 +138,7 @@ def GetFuzzyFunction_aplha_alpha_dash(a_val, b_val, c_val, d_val, a1, a2, a3, a4
         plt.vlines(x[i], 0, alpha[i], color="green", linestyle="dashed", linewidth=1)
         plt.vlines(x_bar[i], 0, alpha_dash[i], color="green", linestyle="dashed", linewidth=1)
 
-    # Trapezoid parameter guides
+        # Trapezoid parameter guides
     plt.axvline(a, color='gray', linestyle="--", label="a (Min)")
     plt.axvline(b, color='gray', linestyle="--", label="b (Peak)")
     plt.axvline(c, color='gray', linestyle="--", label="c (Peak)")

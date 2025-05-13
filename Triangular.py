@@ -6,7 +6,9 @@ def GetFuzzyFunction_aplha2(a_val, b_val, c_val, a1, a2, a3, g_name, material, m
     # Triangular Membership Function Points (Young's Modulus for Aluminium)
     # a, b, c = 68947600000, 74456800000, 79966000000
     a, b, c = a_val, b_val, c_val
-    
+    # print(a)
+    # print(b)
+    # print(c)
     # alpha_values = [0.35, 0.45, 0.56]
     alpha_values = [a1, a2, a3]
 
@@ -38,8 +40,15 @@ def GetFuzzyFunction_aplha2(a_val, b_val, c_val, a1, a2, a3, g_name, material, m
         x_val_str = f"{x[i]:.{precisions[i]}f}"
         x_bar_val_str = f"{x_bar[i]:.{precisions[i]}f}"
         alpha_val_str = f"{alpha_values[i]:.{precisions[i]}f}"
-        plt.text(x[i] - 1e8, alpha_values[i] + 0.03, f"({x_val_str}, {alpha_val_str})", fontsize=8)
-        plt.text(x_bar[i] + 1e8, alpha_values[i] + 0.03, f"({x_bar_val_str}, {alpha_val_str})", fontsize=8)
+        # plt.text(x[i] - 1e8, alpha_values[i] + 0.03, f"({x_val_str}, {alpha_val_str})", fontsize=8)
+        # plt.text(x_bar[i] + 1e8, alpha_values[i] + 0.03, f"({x_bar_val_str}, {alpha_val_str})", fontsize=8)
+        # Vertical dashed lines from base to dot
+        # Text near each black dot
+        plt.text(x[i] - 10000, alpha_values[i] + 0.03, f"({x_val_str}, {alpha_val_str})", fontsize=8)
+        plt.text(x_bar[i] + 10000, alpha_values[i] + 0.03, f"({x_bar_val_str}, {alpha_val_str})", fontsize=8)
+
+
+
         # Vertical lines from 0 to the black dots
         plt.vlines(x[i], 0, alpha_values[i], color="green", linestyle="dashed")
         plt.vlines(x_bar[i], 0, alpha_values[i], color="green", linestyle="dashed")
@@ -79,7 +88,6 @@ def GetFuzzyFunction_aplha_alpha_dash2(a_val, b_val, c_val, a1, a2, a3, a4, a5, 
     # Triangular Membership Function Points (Young's Modulus for Aluminium)
     # a, b, c = 68947600000, 74456800000, 79966000000
     a, b, c = a_val, b_val, c_val    
-        
     # User input
     # alpha_input = input("Enter α values (comma separated, e.g. 0.3001, 0.4002, 0.5003): ")
     # alpha_dash_input = input("Enter α' values (comma separated, e.g. 0.3501, 0.4802, 0.5403): ")
@@ -96,12 +104,11 @@ def GetFuzzyFunction_aplha_alpha_dash2(a_val, b_val, c_val, a1, a2, a3, a4, a5, 
     x_bar = [c - (c - b) * alpha_dash[i] for i in range(len(alpha_dash))]
 
     # Margin to extend lines left and right
-    x_extend = 1e9  # Large enough for visible extension
-
+    # x_extend = 1e9  # Large enough for visible extension
+    x_extend = 1e5  # Reasonable extension for this scale
     # Plotting
     plt.figure(figsize=(10, 6))
     plt.plot([a, b, c], [0, 1, 0], label="Triangular MF", color="blue", linewidth=2)
-
     colors = ['red', 'purple', 'orange', 'green', 'brown', 'cyan']
 
     for i in range(len(alpha)):
@@ -146,3 +153,71 @@ def GetFuzzyFunction_aplha_alpha_dash2(a_val, b_val, c_val, a1, a2, a3, a4, a5, 
     g = "static/img/" + g_name
     plt.savefig(g)
     plt.close() 
+
+
+def Getapha_dash2Test():
+    a, b, c = 68947600000, 74456800000, 79966000000
+    # User input
+    # alpha_input = input("Enter α values (comma separated, e.g. 0.3001, 0.4002, 0.5003): ")
+    # alpha_dash_input = input("Enter α' values (comma separated, e.g. 0.3501, 0.4802, 0.5403): ")
+
+    # alpha = [float(x.strip()) for x in alpha_input.split(',')]
+    # alpha_dash = [float(x.strip()) for x in alpha_dash_input.split(',')]
+
+    # Precision handling for formatted label display
+    prec_alpha = [len(str(x).split('.')[-1]) if'.' in str(x) else 0 for x in alpha]
+    prec_alpha_dash = [len(str(x).split('.')[-1]) if '.' in str(x) else 0 for x in alpha_dash]
+
+    # Calculate α cut lower bounds and α′ cut upper bounds
+    x = [a + (b - a) * alpha[i] for i in range(len(alpha))]
+    x_bar = [c - (c - b) * alpha_dash[i] for i in range(len(alpha_dash))]
+
+    # Margin to extend lines left and right
+    x_extend = 1e9  # Large enough for visible extension
+
+    # Plotting
+    plt.figure(figsize=(10, 6))
+    plt.plot([a, b, c], [0, 1, 0], label="Triangular MF", color="blue", linewidth=2)
+
+    colors = ['red', 'purple', 'orange', 'green', 'brown', 'cyan']
+
+    for i in range(len(alpha)):
+        color = colors[i % len(colors)]
+
+    # Extended line beyond actual cut points
+        x_start = x[i] - x_extend
+        x_end = x_bar[i] + x_extend
+
+    # Draw extended slanted α–α′ cut line
+        plt.plot([x_start, x_end], [alpha[i], alpha_dash[i]],
+        color=color, linestyle="--", linewidth=1.5)
+
+        # Draw dots at actual cut positions
+        plt.scatter([x[i], x_bar[i]], [alpha[i], alpha_dash[i]], color="black")
+
+        # Labels at actual cut points
+        plt.text(x[i] - 0.3e9, alpha[i] + 0.02,
+        f"({x[i]:.{prec_alpha[i]}f}, {alpha[i]:.{prec_alpha[i]}f})", fontsize=8)
+        plt.text(x_bar[i] + 0.3e9, alpha_dash[i] + 0.02,
+        f"({x_bar[i]:.{prec_alpha_dash[i]}f}, {alpha_dash[i]:.{prec_alpha_dash[i]}f})", fontsize=8)
+
+        # Vertical dashed lines at actual points
+        plt.vlines(x[i], 0, alpha[i], color="green", linestyle="dashed", linewidth=1)
+        plt.vlines(x_bar[i], 0, alpha_dash[i], color="green", linestyle="dashed", linewidth=1)
+
+    # Labels and formatting
+    plt.title("Triangular MF α – α′ Cut Plane for Young's Modulus of Aluminium", fontsize=14)
+    plt.xlabel("Young's Modulus (N/m²)", fontsize=12)
+    plt.ylabel("Membership Degree (μ)", fontsize=12)
+
+    plt.axhline(0, color='black', linewidth=0.5, linestyle='--')
+    plt.axvline(a, color='gray', linestyle="--", label="a (Min)")
+    plt.axvline(b, color='gray', linestyle="--", label="b (Peak)")
+    plt.axvline(c, color='gray', linestyle="--", label="c (Max)")
+
+    plt.legend()
+    plt.grid(alpha=0.4)
+    plt.gca().spines['bottom'].set_position('zero')
+    plt.gca().tick_params(axis='y', which='both', direction='out', pad=3)
+    plt.tight_layout()
+    plt.show()
