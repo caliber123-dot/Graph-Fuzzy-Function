@@ -236,7 +236,7 @@
     </style>
 </head>
 
-<body>
+<body id="mbody">
     <h1>Study on Natural Frequency of Oscillation of Unilink Flexible Robot using Fuzzy Function</h1>
     <ul>
         <li><a href="/">Home</a></li>
@@ -275,8 +275,8 @@
                             </tr>                         
                             <tr>
                                 <td><b>a:</b></td>
-                                <td ><input type="text" id="a_value_d" name="a_value_d" value="{{a}}" placeholder="Enter a value" required></td>
-                                <td ><input type="text" id="a_value_y" name="a_value_y" value="{{a1}}" placeholder="Enter a value" required></td>
+                                <td ><input type="text" id="a_value_d" name="a_value_d" value="{{a}}" placeholder="Enter a value" required readonly style="cursor: not-allowed;background-color: #eee;"></td>
+                                <td ><input type="text" id="a_value_y" name="a_value_y" value="{{a1}}" placeholder="Enter a value" required readonly style="cursor: not-allowed;background-color: #eee"></td>
                             </tr>
                             <tr>
                                 <td><b>b:</b></td>
@@ -290,8 +290,8 @@
                             </tr>
                             <tr>
                                 <td><b>d:</b></td>
-                                <td><input type="text" id="d_value_d" name="d_value_d" value="{{d}}" placeholder="Enter d value"></td>
-                                <td><input type="text" id="d_value_y" name="d_value_y" value="{{d1}}" placeholder="Enter d value"></td>
+                                <td><input type="text" id="d_value_d" name="d_value_d" value="{{d}}" placeholder="Enter d value" readonly style="cursor: not-allowed;background-color: #eee"></td>
+                                <td><input type="text" id="d_value_y" name="d_value_y" value="{{d1}}" placeholder="Enter d value" readonly style="cursor: not-allowed;background-color: #eee"></td>
                             </tr>
                             <tr>
                                 <td colspan="3"><input type="submit" onclick="return MyValidate()" 
@@ -301,26 +301,17 @@
                         </table>
                         <label style="color: red;margin-top: 10px;">{{myMsg}}</label>
                     </div>
-                </div>
-                <!-- <div class="form-group">
-                    <label><u>Fuzzy Membership Function:</u></label>                    
-                </div> -->
-                <!-- <div class="form-group">                   
-                </div> -->
-                
-                <!-- <div class="form-group">
-                    <button type="submit" id="alphaButton" class="change-bg-btn">
-                        {{ 'Update Alpha Graph' if is_update else 'Create Alpha Graph' }}
-                    </button>
-                    <input type="text" name="alpha_id" id="alpha_id" value="{{alpha_id}}" style="display: none;">
-                    
-                </div> -->
+                </div>                
 
                 <div class="form-group color-panel" style="float: left;">
                     <label for="startColor">Change Background Color:</label>
-                    <input type="color" id="startColor" value="#ff9966">
-                    <button type="button" class="apply-gradient-btn" onclick="changeBackground()">
-                        Apply Color
+                    Back Color: <input type="color" id="startColor2" value="#ff9a9e">
+                    <button type="button" class="apply-gradient-btn" onclick="changeBackground(1)">
+                        Apply
+                    </button>
+                    <hr>Front Color: <input type="color" id="startColor" value="#fafafa">
+                    <button type="button" class="apply-gradient-btn" onclick="changeBackground(2)">
+                        Apply
                     </button>
                 </div>
             </div>
@@ -396,8 +387,9 @@
     </script>
 
     <script>
-        function changeBackground() {
+        function changeBackground(mval) {
             const startColor = document.getElementById('startColor').value;
+            const startColor2 = document.getElementById('startColor2').value;
             const colors = [
                 'linear-gradient(to right, #42e695, #3bb2b8)',
                 'linear-gradient(to right, #ff7eb3, #ff758c)',
@@ -406,7 +398,10 @@
                 'linear-gradient(to right, #fff, #f1f1f1)'
             ];
             // let randomColor = colors[Math.floor(Math.random() * colors.length)];
-            document.getElementById('mainContainer').style.background = startColor;
+           if (mval == 1)
+                document.getElementById('mbody').style.background = startColor2;
+            else if (mval == 2)
+                document.getElementById('mainContainer').style.background = startColor;
         }
         
     </script>

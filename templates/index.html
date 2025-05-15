@@ -257,7 +257,7 @@
                             Function.</option>
                     </select>
                 </div>
-               
+
                 <div class="form-group">
                     <label><u>Materials:</u></label>
                     <select name="ddlmaterials" id="ddlmaterials" required>
@@ -266,9 +266,9 @@
                         <option value="{{ mat.mat_id }}" {% if s1|int==mat.mat_id %}selected{% endif %}>{{ mat.mat_name
                             }}</option>
                         {% endfor %}
-                    </select>                    
+                    </select>
                 </div>
-                
+
                 <div class="form-group" style="display: none;">
                     <label><u>Graph of:</u></label>
                     <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" style="width: 20px;" checked>
@@ -281,8 +281,16 @@
                         <option value="Youngs modulus" {% if s2=="Youngs modulus" %}selected{% endif %}>Young's modulus</option>
                     </select> -->
                 </div>
-                <label class="form-group"><u>The Alpha Value:</u></label>
-                <label style="color: red;font-size: 14px;">* After decimal enter only 4-digits value.</label>
+                <div class="form-group">
+                <span class="form-group"><u><b>The Alpha Value:</b></u></span>
+                <button type="button" class="apply-gradient-btn" style="float: right;margin-right: 80px;" onclick="clearValued()"> Clear</button>
+                </div>
+                
+                <div style="color: red;font-size: 15px;font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">
+                    <label>* eg: α is 0.3,0.4,0.5 & α' is 0.33,0.44,0.55 </label>
+                    <label>* After decimal enter only 4-digits value.</label>
+                </div>
+
                 <table>
                     <tr>
                         <td><b>α1:</b></td>
@@ -327,15 +335,18 @@
                         {{ 'Update Alpha Graph' if is_update else 'Create Alpha Graph' }}
                     </button>
                     <input type="text" name="alpha_id" id="alpha_id" value="{{alpha_id}}" style="display: none;">
-                   
+
                 </div>
 
                 <div class="form-group color-panel" style="float: left;">
                     <label for="startColor">Change Background Color:</label>
-                    <input type="color" id="startColor2" value="#ff9a9e">
-                    <input type="color" id="startColor" value="#fafafa">
-                    <button type="button" class="apply-gradient-btn" onclick="changeBackground()">
-                        Apply Color
+                    Back Color: <input type="color" id="startColor2" value="#ff9a9e">
+                    <button type="button" class="apply-gradient-btn" onclick="changeBackground(1)">
+                        Apply
+                    </button>
+                    <hr>Front Color: <input type="color" id="startColor" value="#fafafa">
+                    <button type="button" class="apply-gradient-btn" onclick="changeBackground(2)">
+                        Apply
                     </button>
                 </div>
             </div>
@@ -433,7 +444,18 @@
     </script>
 
     <script>
-        function changeBackground() {
+        function clearValued()
+        {
+            document.getElementById("alpha1").value =  "";
+            document.getElementById("alpha2").value = "";
+            document.getElementById("alpha3").value =  "";
+            document.getElementById("alphadash1").value =  "";
+            document.getElementById("alphadash2").value =  "";
+            document.getElementById("alphadash3").value = "";
+            document.getElementById("alphaButton").textContent = "Create Alpha Graph";
+            document.getElementById("alphaButton").style.backgroundColor = "#28a745";  // Green
+        }
+        function changeBackground(mval) {
             const startColor = document.getElementById('startColor').value;
             const startColor2 = document.getElementById('startColor2').value;
             const colors = [
@@ -444,8 +466,11 @@
                 'linear-gradient(to right, #fff, #f1f1f1)'
             ];
             // let randomColor = colors[Math.floor(Math.random() * colors.length)];
-            document.getElementById('mainContainer').style.background = startColor;
-            document.getElementById('mbody').style.background = startColor2;
+            if (mval == 1)
+                document.getElementById('mbody').style.background = startColor2;
+            else if (mval == 2)
+                document.getElementById('mainContainer').style.background = startColor;
+
         }
         var coll = document.getElementsByClassName("collapsible");
         var i;
@@ -462,7 +487,7 @@
             });
         }
     </script>
-    
+
     <script src="static/js/code.js"></script>
     <script src="static/js/script.js"></script>
     <!-- jsPDF save in one file -->

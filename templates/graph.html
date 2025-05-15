@@ -311,10 +311,13 @@
 
                 <div class="form-group color-panel" style="float: left;">
                     <label for="startColor">Change Background Color:</label>
-                    <input type="color" id="startColor2" value="#ff9a9e">
-                    <input type="color" id="startColor" value="#fafafa">
-                    <button type="button" class="apply-gradient-btn" onclick="changeBackground()">
-                        Apply Color
+                    Back Color: <input type="color" id="startColor2" value="#ff9a9e">
+                    <button type="button" class="apply-gradient-btn" onclick="changeBackground(1)">
+                        Apply
+                    </button>
+                    <hr>Front Color: <input type="color" id="startColor" value="#fafafa">
+                    <button type="button" class="apply-gradient-btn" onclick="changeBackground(2)">
+                        Apply
                     </button>
                 </div>
             </div>
@@ -425,7 +428,7 @@
     </script>
 
     <script>
-        function changeBackground() {
+        function changeBackground(mval) {
             const startColor = document.getElementById('startColor').value;
             const startColor2 = document.getElementById('startColor2').value;
             const colors = [
@@ -435,9 +438,11 @@
                 'linear-gradient(to right, #a1c4fd, #c2e9fb)',
                 'linear-gradient(to right, #fff, #f1f1f1)'
             ];
-            // let randomColor = colors[Math.floor(Math.random() * colors.length)];
-            document.getElementById('mainContainer').style.background = startColor;
-            document.getElementById('mbody').style.background = startColor2;
+            // let randomColor = colors[Math.floor(Math.random() * colors.length)];           
+            if (mval == 1)
+                document.getElementById('mbody').style.background = startColor2;
+            else if (mval == 2)
+                document.getElementById('mainContainer').style.background = startColor;
         }
     </script>
     <script src="static/js/code.js"></script>
