@@ -26,18 +26,16 @@ function fetchAlphaData() {
             document.getElementById("alphadash11").value = data.alpha1 || "";
             document.getElementById("alphadash22").value = data.alpha2 || "";
             document.getElementById("alphadash33").value = data.alpha3 || "";
-            
-            if(data.cut_id == "1")
-            {
+
+            if (data.cut_id == "1") {
                 document.getElementById("tr1").style.display = "block";
                 document.getElementById("tr2").style.display = "block";
                 document.getElementById("tr3").style.display = "block";
                 document.getElementById("tr4").style.display = "none";
                 document.getElementById("tr5").style.display = "none";
                 document.getElementById("tr6").style.display = "none";
-            }                
-            else if(data.cut_id == "2")
-            {
+            }
+            else if (data.cut_id == "2") {
                 document.getElementById("tr1").style.display = "none";
                 document.getElementById("tr2").style.display = "none";
                 document.getElementById("tr3").style.display = "none";
@@ -61,6 +59,59 @@ function clearAlphaFields() {
     ["alpha1", "alpha2", "alpha3", "alphadash1", "alphadash2", "alphadash3"].forEach(id => {
         document.getElementById(id).value = "";
     });
+}
+
+function ExportToExcel() {
+    const imageIds = ['gr1', 'gr2', 'gr3', 'gr4'];
+    const arrexp = [];
+    
+    // Collect image filenames
+    for (const id of imageIds) {
+        const img = document.getElementById(id);
+        if (img && !img.src.toLowerCase().endsWith('.avif')) {
+            arrexp.push(img.alt);
+        }
+    }
+
+    // Show loading state
+    const exportBtn = document.querySelector('[onclick="ExportToExcel()"]');
+    exportBtn.disabled = true;
+    exportBtn.textContent = 'Exporting...';
+
+    fetch(`/export_excel/${encodeURIComponent(arrexp[0])}/${encodeURIComponent(arrexp[1])}`)
+        .then(async response => {
+            if (!response.ok) {
+                const error = await response.json().catch(() => ({ error: response.statusText }));
+                throw new Error(error.message || 'Export failed');
+            }
+            return response.blob();
+        })
+        .then(blob => {
+            // Create download link
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'exported_charts.xlsx';
+            document.body.appendChild(a);
+            a.click();
+
+            // Show success message
+            alert('Excel file exported successfully!');
+            
+            // Clean up
+            setTimeout(() => {
+                URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+            }, 100);
+        })
+        .catch(error => {
+            console.error('Export error:', error);
+            alert(`Export failed: ${error.message}`);
+        })
+        .finally(() => {
+            exportBtn.disabled = false;
+            exportBtn.textContent = 'Export to Excel';
+        });
 }
 
 // Add event listener to run the fetch when material is selected

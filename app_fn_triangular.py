@@ -170,10 +170,3 @@ def export_table_image(g_name, alpha , fn_dict, alpha_cuts, alpha_dash_cuts):
         as_attachment=True,
         mimetype='image/png'
     )
-
-    # return send_file(
-    #     img_bytes,
-    #     download_name='Alpha_Cut_Table_Clean.png',
-    #     as_attachment=True,
-    #     mimetype='image/png'
-    # )

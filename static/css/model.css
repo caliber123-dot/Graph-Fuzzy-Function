@@ -82,7 +82,18 @@
   .close3 {
     position: absolute;
     top: 100px;
-    right: 25px;
+    right: 40px;
+    background-color: darkgreen;
+    color: white;
+    font-weight: bold;
+    padding: 10px;
+    border: 2px solid #ccc;    
+    border-radius: 20px;
+  }
+  .close4 {
+    position: absolute;
+    top: 100px;
+    right: 160px;
     background-color: darkgreen;
     color: white;
     font-weight: bold;

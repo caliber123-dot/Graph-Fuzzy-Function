@@ -496,35 +496,53 @@ def get_materials(function_id):
 
     return jsonify(material_list)
 from export import export_images_to_excel
+from werkzeug.utils import secure_filename
 @app.route('/export_excel/<string:file1>/<string:file2>')
-def export_excel(file1,file2):
-    # Fetch the first matching record for that material
-    # export_images_to_excel(file1,file2)   
-    # Output Excel file (temporary)
+def export_excel(file1, file2):
     try:
-        output_excel = 'temp_export.xlsx' 
-        export_images_to_excel(
-        img1="static/img/" + file1,
-        img2="static/img/" + file2,
-        output_excel=output_excel,
-        max_width=600,  # Custom max width
-        max_height=400  # Custom max height
-        )
-        # Send the Excel file as response
-        return send_file(
-            output_excel,
-            as_attachment=True,
-            download_name='exported_images.xlsx',
-            mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-            )
+        # Secure the filenames and create full paths
+        img1_path = os.path.join('static', 'img', secure_filename(file1))
+        img2_path = os.path.join('static', 'img', secure_filename(file2))
         
+        # Verify images exist
+        if not all([os.path.exists(img1_path), os.path.exists(img2_path)]):
+            return {"error": "One or both images not found"}, 404
+
+        # Create absolute path for temp Excel
+        output_path = os.path.abspath('temp_export.xlsx')
+        
+        # Generate Excel
+        export_images_to_excel(
+            img1=img1_path,
+            img2=img2_path,
+            output_excel=output_path,
+            max_width=600,
+            max_height=400
+        )
+
+        # Verify Excel was created
+        if not os.path.exists(output_path):
+            return {"error": "Failed to create Excel file"}, 500
+
+        # Send file with proper headers
+        return send_file(
+            output_path,
+            as_attachment=True,
+            download_name='exported_data.xlsx',
+            mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            conditional=True
+        )
+
     except Exception as e:
-        return {'error': str(e)}, 500
+        return {"error": f"Server error: {str(e)}"}, 500
+        
     finally:
-        # Clean up temporary Excel file
-        if os.path.exists(output_excel):
-            os.remove(output_excel)
-    
+        # Clean up temp file
+        if os.path.exists(output_path):
+            try:
+                os.remove(output_path)
+            except:
+                pass
 
 @app.route('/exportimage')
 def exportimage():
