@@ -1,9 +1,10 @@
-from flask import Flask, render_template, request , jsonify
+from flask import Flask, render_template, request , jsonify, send_file
 from waitress import serve
 from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import and_
 import os
+
 
 app = Flask(__name__)
 
@@ -178,11 +179,13 @@ def abcd():
     return render_template('abcd.html')
 
 from app_fn import GetFuns
-from barchat import GetBarChat
+from barchat import GetBarChat, GetBarChat2
+from app_fn_triangular import GetFunsTriangular,GetFunsTriangular2, export_table_image
 @app.route('/graph', methods=['GET', 'POST'])
 # @app.route('/graph')
 def graph():    
     g1 = g2 = g3 = g4 = 'basic.avif' # Default Graph Image
+    alpha = ''
     alpha_cuts = ''
     alpha_dash_cuts= ''
     fn_dict_dash = fn_dict = ''
@@ -205,8 +208,19 @@ def graph():
         a4 = safe_float(request.form.get('alpha_dash1'))
         a5 = safe_float(request.form.get('alpha_dash2'))
         a6 = safe_float(request.form.get('alpha_dash3'))     
+        # material = tbl_materials.query.filter_by(mat_id=ddlmat_ID).first()
+        # mat_name = material.mat_name if material else None
         material = tbl_materials.query.filter_by(mat_id=ddlmat_ID).first()
-        mat_name = material.mat_name if material else None
+        if material:
+            mat_name = material.mat_name if material else None
+            a_d = safe_float(material.mat_a_val_d)
+            b_d = safe_float(material.mat_b_val_d)
+            c_d = safe_float(material.mat_c_val_d)
+            d_d = safe_float(material.mat_d_val_d)
+            a_y = safe_float(material.mat_a_val_y)
+            b_y = safe_float(material.mat_b_val_y)
+            c_y = safe_float(material.mat_c_val_y)
+            d_y = safe_float(material.mat_d_val_y)
         # print("Material Name =====>>>>", mat_name)
         fun_type = ''
         if(ddlfuntion == '1'):   
@@ -215,20 +229,41 @@ def graph():
             fun_type = "Triangular"
         show_alpha="d-hide"
         show_alpha_dash="d-hide"
-        if(ddlalphacut == "1"):
+        t1 = "Alpha_Table.png"
+        t2 = "Alpha_Table_Dash.png"
+        # Select Alpha Cut: ddlalphacut
+        if(ddlalphacut == "1"): #Alpha Cut
+            t2 = "basic.avif"
             alpha_cuts = [a1, a2, a3]        
-            fn_dict = GetFuns(alpha_cuts)
+            if(ddlfuntion == '1'): # Trapezoidal
+                fn_dict = GetFuns(alpha_cuts,a_y,b_y,c_y,d_y,a_d,b_d,c_d,d_d)
+                # print(fn_dict)
+                export_table_image(t1, "Table : α-Cut",fn_dict, alpha_cuts, None)
+            else: # Triangular
+                fn_dict = GetFunsTriangular(alpha_cuts,a_y,b_y,c_y,a_d,b_d,c_d)
+                export_table_image(t1, "Table : α-Cut",fn_dict, alpha_cuts, None)
             g2 = 'Bar_alpha' + 'MF' + '.png' 
             g1 = GetBarChat(alpha_cuts, fn_dict, g2, mat_name, 1, fun_type)
             show_alpha = "d-show"
-        elif(ddlalphacut == "2"):
-            # Alpha dash code
+        elif(ddlalphacut == "2"): #Alpha dash Cuts 
+            t1 = "basic.avif"
+            # alpha_cuts = [a1, a2, a3]   
+            # alpha_cuts = ''
+            alpha = [a1, a2, a3] #alpha_cuts
+            # print(alpha_cuts)   
             alpha_dash_cuts = [a4, a5, a6]        
-            fn_dict_dash = GetFuns(alpha_dash_cuts)
+            # fn_dict_dash = GetFuns(alpha_dash_cuts)            
+            if(ddlfuntion == '1'): # Trapezoidal
+                fn_dict_dash = GetFuns(alpha_dash_cuts,a_y,b_y,c_y,d_y,a_d,b_d,c_d,d_d)                
+                export_table_image(t2, "Table : α-α'-Cut",fn_dict_dash, alpha, alpha_dash_cuts)
+            else: # Triangular
+                fn_dict_dash = GetFunsTriangular2(alpha,alpha_dash_cuts,a_y,b_y,c_y,a_d,b_d,c_d)
+                export_table_image(t2, "Table : α-α'-Cut",fn_dict_dash, alpha, alpha_dash_cuts)
+                # print(fn_dict_dash)
             g4 = 'Bar_alpha_dash' + 'MF' + '.png' 
-            g3 = GetBarChat(alpha_dash_cuts, fn_dict_dash, g4, mat_name, 2, fun_type)
+            g3 = GetBarChat2(alpha,alpha_dash_cuts, fn_dict_dash, g4, mat_name, 2, fun_type)
             show_alpha_dash = "d-show"
-        return render_template('graph.html',fn_dict= fn_dict,alpha_cuts=alpha_cuts,alpha_dash_cuts=alpha_dash_cuts,fn_dict_dash=fn_dict_dash,g1=g1,g2=g2,g3=g3,g4=g4,a1=a1,a2=a2,a3=a3,a4=a4,a5=a5,a6=a6,s1=ddlmat_ID,s2=ddlfuntion,s3=ddlalphacut,materials=materials,show_alpha=show_alpha,show_alpha_dash=show_alpha_dash)
+        return render_template('graph.html',fn_dict= fn_dict,alpha_cuts=alpha_cuts,alpha=alpha,alpha_dash_cuts=alpha_dash_cuts,fn_dict_dash=fn_dict_dash,g1=g1,g2=g2,g3=g3,g4=g4,a1=a1,a2=a2,a3=a3,a4=a4,a5=a5,a6=a6,s1=ddlmat_ID,s2=ddlfuntion,s3=ddlalphacut,materials=materials,show_alpha=show_alpha,show_alpha_dash=show_alpha_dash,t1=t1,t2=t2)
     
     return render_template('graph.html',g1=g1,g2=g2,g3=g3,g4=g4,s1=None)
 
@@ -429,9 +464,15 @@ def get_alpha_data_cut(mat_id,fm_id,cut_id):
             })
         elif cut_id == 2:
             return jsonify({
+                "alpha1": alpha_record.alpha_alpha1,
+                "alpha2": alpha_record.alpha_alpha2,
+                "alpha3": alpha_record.alpha_alpha3,
                 "alphadash1": alpha_record.alpha_alphadash1,
                 "alphadash2": alpha_record.alpha_alphadash2,
                 "alphadash3": alpha_record.alpha_alphadash3,
+                # "alphadash11": f"{ alpha_record.alpha_alpha1}-{ alpha_record.alpha_alphadash1}",
+                # "alphadash22": f"{alpha_record.alpha_alpha2 }-{ alpha_record.alpha_alphadash2}",
+                # "alphadash33": f"{alpha_record.alpha_alpha3 }-{ alpha_record.alpha_alphadash3}",
                 "cut_id": cut_id
             })
         else:
@@ -454,6 +495,41 @@ def get_materials(function_id):
     ]
 
     return jsonify(material_list)
+from export import export_images_to_excel
+@app.route('/export_excel/<string:file1>/<string:file2>')
+def export_excel(file1,file2):
+    # Fetch the first matching record for that material
+    # export_images_to_excel(file1,file2)   
+    # Output Excel file (temporary)
+    try:
+        output_excel = 'temp_export.xlsx' 
+        export_images_to_excel(
+        img1="static/img/" + file1,
+        img2="static/img/" + file2,
+        output_excel=output_excel,
+        max_width=600,  # Custom max width
+        max_height=400  # Custom max height
+        )
+        # Send the Excel file as response
+        return send_file(
+            output_excel,
+            as_attachment=True,
+            download_name='exported_images.xlsx',
+            mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            )
+        
+    except Exception as e:
+        return {'error': str(e)}, 500
+    finally:
+        # Clean up temporary Excel file
+        if os.path.exists(output_excel):
+            os.remove(output_excel)
+    
+
+@app.route('/exportimage')
+def exportimage():
+    export_table_image("Alpha_Table.png",None,None)
+    return "<h1>Tables image success.</h1>"
 
 if __name__ == '__main__':
     # app.run(host="0.0.0.0", port=8000, debug=True)

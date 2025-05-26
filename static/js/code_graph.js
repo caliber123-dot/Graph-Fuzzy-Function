@@ -22,6 +22,10 @@ function fetchAlphaData() {
             document.getElementById("alphadash1").value = data.alphadash1 || "";
             document.getElementById("alphadash2").value = data.alphadash2 || "";
             document.getElementById("alphadash3").value = data.alphadash3 || "";
+
+            document.getElementById("alphadash11").value = data.alpha1 || "";
+            document.getElementById("alphadash22").value = data.alpha2 || "";
+            document.getElementById("alphadash33").value = data.alpha3 || "";
             
             if(data.cut_id == "1")
             {
@@ -46,7 +50,7 @@ function fetchAlphaData() {
             // document.getElementById("alphaButton").style.backgroundColor = "#007bff";  // Blue
         })
         .catch(error => {
-            clearAlphaFields();
+            // clearAlphaFields();
             console.log("No alpha data found.");
             // document.getElementById("alphaButton").textContent = "Create Alpha Graph";
             // document.getElementById("alphaButton").style.backgroundColor = "#28a745";  // Green

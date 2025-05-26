@@ -1,13 +1,14 @@
 # Define parameters for the trapezoidal function
 import math
 
-# print('Young modulus:')
-def GetFuns(alpha_cuts):
+# For Trapezoidal fn
+def GetFuns(alpha_cuts, a_y,b_y,c_y,d_y,a_d,b_d,c_d,d_d):
     # alpha_cuts = [0.3, 0.4, 0.5]
-    a = 68.95 #Min
-    b = 72.46 #peak
-    c = 76.46 #upper peak
-    d =79.46 #Max   
+    # print('Young modulus:')
+    a = a_y #Min
+    b = b_y #peak
+    c = c_y #upper peak
+    d = d_y #Max   
     Y_min_list = []
     Y_max_list = []
     for alpha in alpha_cuts:
@@ -17,10 +18,10 @@ def GetFuns(alpha_cuts):
         Y_max_list.append(Y_max)
 
     # print('Density:')
-    a2 = 2.66  # Minimum value (kg/m³)
-    b2 = 2.68  # Lower bound of plateau (kg/m³)
-    c2 = 2.72  # Upper bound of plateau (kg/m³)
-    d2 = 2.74  # Maximum value (kg/m³)
+    a2 = a_d  # Minimum value (kg/m³)
+    b2 = b_d  # Lower bound of plateau (kg/m³)
+    c2 = c_d  # Upper bound of plateau (kg/m³)
+    d2 = d_d  # Maximum value (kg/m³)
     d_min_list = []
     d_max_list = []
     for alpha in alpha_cuts:
