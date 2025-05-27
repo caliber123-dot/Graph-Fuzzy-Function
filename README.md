@@ -3,6 +3,9 @@
 A lightweight, interactive web application to visualize and compute fuzzy membership functions (trapezoidal and triangular) for material properties like density and Young's modulus using Python, Flask, and Plotly.js.
 
 ---
+<h3>🌐 Web Link:</h3>
+
+<h4> Live Site: https://graph-fuzzy-function-ny47.onrender.com/ </h4>
 
 ## 🚀 Features
 
@@ -122,7 +125,7 @@ Output: Membership (0–1)
 | Layer         | Technology     |
 |---------------|----------------|
 | Backend       | Flask (Python) |
-| Frontend      | Plotly.js      |
+| Frontend      | HTML, CSS, JS  |
 | Database      | PostgreSQL     |
 | ORM           | SQLAlchemy     |
 | Image Export  | matplotlib     |
