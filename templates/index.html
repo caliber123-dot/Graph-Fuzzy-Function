@@ -301,44 +301,116 @@
                     <tr>
                         <td><b>α1:</b></td>
                         <td><input type="text" id="alpha1" name="alpha1" value="{{a1}}"
-                                placeholder="Enter Alpha Value α1" required
-                                onkeypress="return validateOneToFourDecimals(this)"></td>
+                                placeholder="Enter Alpha Value α1" required list="alpha1-options" autocomplete="off"
+                                onkeypress="return validateOneToFourDecimals(this)">
+                            <datalist id="alpha1-options">
+                                <option value="0.1">
+                                <option value="0.2">
+                                <option value="0.3">
+                                <option value="0.4">
+                                <option value="0.5">
+                                <option value="0.6">
+                                <option value="0.7">
+                                <option value="0.8">
+                                <option value="0.9">
+                            </datalist>
+                        </td>
                     </tr>
                     <tr>
                         <td><b>α2:</b></td>
                         <td><input type="text" id="alpha2" name="alpha2" value="{{a2}}"
-                                placeholder="Enter Alpha Value α2" required
-                                onkeypress="return validateOneToFourDecimals(this)"></td>
+                                placeholder="Enter Alpha Value α2" required list="alpha2-options" autocomplete="off"
+                                onkeypress="return validateOneToFourDecimals(this)">
+                            <datalist id="alpha2-options">
+                                <option value="0.1">
+                                <option value="0.2">
+                                <option value="0.3">
+                                <option value="0.4">
+                                <option value="0.5">
+                                <option value="0.6">
+                                <option value="0.7">
+                                <option value="0.8">
+                                <option value="0.9">
+                            </datalist>
+                        </td>
                     </tr>
                     <tr>
                         <td><b>α3:</b></td>
                         <td><input type="text" id="alpha3" name="alpha3" value="{{a3}}"
-                                placeholder="Enter Alpha Value α3" required
-                                onkeypress="return validateOneToFourDecimals(this)"></td>
+                                placeholder="Enter Alpha Value α3" required list="alpha3-options" autocomplete="off"
+                                onkeypress="return validateOneToFourDecimals(this)">
+                            <datalist id="alpha3-options">
+                                <option value="0.1">
+                                <option value="0.2">
+                                <option value="0.3">
+                                <option value="0.4">
+                                <option value="0.5">
+                                <option value="0.6">
+                                <option value="0.7">
+                                <option value="0.8">
+                                <option value="0.9">
+                            </datalist>
+                        </td>
                     </tr>
                     <tr>
                         <td><b>α'1:</b></td>
                         <td><input type="text" name="alpha_dash1" id="alphadash1" value="{{a4}}"
-                                placeholder="Enter Alpha Dash α'1" onkeypress="return validateOneToFourDecimals(this)">
+                                list="alpha_dash1-options" autocomplete="off" placeholder="Enter Alpha Dash α'1"
+                                onkeypress="return validateOneToFourDecimals(this)">
+                            <datalist id="alpha_dash1-options">
+                                <option value="0.11">
+                                <option value="0.22">
+                                <option value="0.33">
+                                <option value="0.44">
+                                <option value="0.55">
+                                <option value="0.66">
+                                <option value="0.77">
+                                <option value="0.88">
+                                <option value="0.99">
+                            </datalist>
                         </td>
                     </tr>
                     <tr>
                         <td><b>α'2:</b></td>
                         <td><input type="text" name="alpha_dash2" id="alphadash2" value="{{a5}}"
-                                placeholder="Enter Alpha Dash α'2" onkeypress="return validateOneToFourDecimals(this)">
+                                list="alpha_dash2-options" autocomplete="off" placeholder="Enter Alpha Dash α'2"
+                                onkeypress="return validateOneToFourDecimals(this)">
+                            <datalist id="alpha_dash2-options">
+                                <option value="0.11">
+                                <option value="0.22">
+                                <option value="0.33">
+                                <option value="0.44">
+                                <option value="0.55">
+                                <option value="0.66">
+                                <option value="0.77">
+                                <option value="0.88">
+                                <option value="0.99">
+                            </datalist>
                         </td>
                     </tr>
                     <tr>
                         <td><b>α'3:</b></td>
                         <td><input type="text" name="alpha_dash3" id="alphadash3" value="{{a6}}"
-                                placeholder="Enter Alpha Dash α'3" onkeypress="return validateOneToFourDecimals(this)">
+                                list="alpha_dash3-options" autocomplete="off" placeholder="Enter Alpha Dash α'3"
+                                onkeypress="return validateOneToFourDecimals(this)">
+                            <datalist id="alpha_dash3-options">
+                                <option value="0.11">
+                                <option value="0.22">
+                                <option value="0.33">
+                                <option value="0.44">
+                                <option value="0.55">
+                                <option value="0.66">
+                                <option value="0.77">
+                                <option value="0.88">
+                                <option value="0.99">
+                            </datalist>
                         </td>
                     </tr>
                 </table>
 
                 <div class="form-group">
                     <button type="submit" id="alphaButton" class="change-bg-btn">
-                        {{ 'Update Alpha Graph' if is_update else 'Create Alpha Graph' }}
+                        {{ 'Create Alpha Graph' if is_update else 'Create Alpha Graph' }}
                     </button>
                     <input type="text" name="alpha_id" id="alpha_id" value="{{alpha_id}}" style="display: none;">
 

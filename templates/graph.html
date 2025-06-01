@@ -269,46 +269,138 @@
                     <tr id="tr1" class="tr_display {{ show_alpha }}">
                         <!-- <tr id="tr1" class="tr_display"> -->
                         <td style="width: 20%;"><b>α1:</b></td>
-                        <td ><input type="text" id="alpha1" name="alpha1" value="{{a1}}" readonly
-                                placeholder="View Alpha Value α1" required 
-                                onkeypress="return validateOneToFourDecimals(this)"></td>
+                        <td><input type="text" list="alpha1-options" id="alpha1" name="alpha1" value="{{a1}}"
+                                placeholder="View Alpha Value α1" required autocomplete="off"
+                                onkeypress="return validateOneToFourDecimals(this)">
+                            <datalist id="alpha1-options">
+                                <option value="0.2">
+                                <option value="0.3">
+                                <option value="0.4">
+                                <option value="0.5">
+                                <option value="0.6">
+                                <option value="0.7">
+                                <option value="0.8">
+                            </datalist>
+                        </td>
                     </tr>
                     <tr id="tr2" class="tr_display {{ show_alpha }}">
                         <td style="width: 20%;"><b>α2:</b></td>
-                        <td><input type="text" id="alpha2" name="alpha2" value="{{a2}}" readonly
-                                placeholder="View Alpha Value α2" required
-                                onkeypress="return validateOneToFourDecimals(this)"></td>
+                        <td><input type="text" list="alpha2-options" id="alpha2" name="alpha2" value="{{a2}}"
+                                placeholder="View Alpha Value α2" required autocomplete="off"
+                                onkeypress="return validateOneToFourDecimals(this)">
+                            <datalist id="alpha2-options">
+                                <option value="0.2">
+                                <option value="0.3">
+                                <option value="0.4">
+                                <option value="0.5">
+                                <option value="0.6">
+                                <option value="0.7">
+                                <option value="0.8">
+                            </datalist>
+                        </td>
                     </tr>
                     <tr id="tr3" class="tr_display {{ show_alpha }}">
                         <td style="width: 20%;"><b>α3:</b></td>
-                        <td><input type="text" id="alpha3" name="alpha3" value="{{a3}}" readonly
-                                placeholder="View Alpha Value α3" required
-                                onkeypress="return validateOneToFourDecimals(this)"></td>
+                        <td><input type="text" list="alpha3-options" id="alpha3" name="alpha3" value="{{a3}}"
+                                placeholder="View Alpha Value α3" required autocomplete="off"
+                                onkeypress="return validateOneToFourDecimals(this)">
+                            <datalist id="alpha3-options">
+                                <option value="0.2">
+                                <option value="0.3">
+                                <option value="0.4">
+                                <option value="0.5">
+                                <option value="0.6">
+                                <option value="0.7">
+                                <option value="0.8">
+                            </datalist>
+                        </td>
                     </tr>
                     <tr id="tr4" class="tr_display {{ show_alpha_dash }}">
                         <td style="width: 20%;"><b>α-α'1:</b></td>
-                        <td><input type="text" name="alpha_dash11" id="alphadash11" value="{{a1}}" readonly style="width: 40%;float: left;"
-                                placeholder="View Alpha Value α-α'1"> -
-                            <input type="text" name="alpha_dash1" id="alphadash1" value="{{a4}}" readonly style="width: 40%;"
+                        <td><input type="text" list="alpha11-options" name="alpha_dash11" id="alphadash11"
+                                value="{{a1}}" style="width: 40%;float: left;" placeholder="View Alpha Value α-α'1"
+                                autocomplete="off">
+                            <datalist id="alpha11-options">
+                                <option value="0.2">
+                                <option value="0.3">
+                                <option value="0.4">
+                                <option value="0.5">
+                                <option value="0.6">
+                                <option value="0.7">
+                                <option value="0.8">
+                            </datalist>
+                            -
+                            <input type="text" list="alpha_dash1-options" name="alpha_dash1" id="alphadash1"
+                                value="{{a4}}" autocomplete="off" style="width: 40%;"
                                 placeholder="View Alpha Value α-α'1">
-                            
-                            </td>
+                            <datalist id="alpha_dash1-options">
+                                <option value="0.22">
+                                <option value="0.33">
+                                <option value="0.44">
+                                <option value="0.55">
+                                <option value="0.66">
+                                <option value="0.77">
+                                <option value="0.88">
+                            </datalist>
+                        </td>
                     </tr>
                     <tr id="tr5" class="tr_display {{ show_alpha_dash }}">
                         <td style="width: 20%;"><b>α-α'2:</b></td>
-                        <td><input type="text" name="alpha_dash22" id="alphadash22" value="{{a2}}" readonly style="width: 40%;float: left;"
-                                placeholder="View Alpha Value α-α'1"> -
-                            <input type="text" name="alpha_dash2" id="alphadash2" value="{{a5}}" readonly style="width: 40%;"
+                        <td><input type="text" name="alpha_dash22" id="alphadash22" value="{{a2}}"
+                                list="alpha22-options" autocomplete="off" style="width: 40%;float: left;"
+                                placeholder="View Alpha Value α-α'1">
+                            <datalist id="alpha22-options">
+                                <option value="0.2">
+                                <option value="0.3">
+                                <option value="0.4">
+                                <option value="0.5">
+                                <option value="0.6">
+                                <option value="0.7">
+                                <option value="0.8">
+                            </datalist>
+                            -
+                            <input type="text" name="alpha_dash2" id="alphadash2" value="{{a5}}"
+                                list="alpha_dash2-options" autocomplete="off" style="width: 40%;"
                                 placeholder="View Alpha Value α-α'2">
-                            </td>
+                            <datalist id="alpha_dash2-options">
+                                <option value="0.22">
+                                <option value="0.33">
+                                <option value="0.44">
+                                <option value="0.55">
+                                <option value="0.66">
+                                <option value="0.77">
+                                <option value="0.88">
+                            </datalist>
+                        </td>
                     </tr>
                     <tr id="tr6" class="tr_display {{ show_alpha_dash }}">
                         <td style="width: 20%;"><b>α-α'3:</b></td>
-                        <td><input type="text" name="alpha_dash33" id="alphadash33" value="{{a3}}" readonly style="width: 40%;float: left;"
-                                placeholder="View Alpha Value α-α'1"> -
-                            <input type="text" name="alpha_dash3" id="alphadash3" value="{{a6}}" readonly style="width: 40%;"
+                        <td><input type="text" name="alpha_dash33" id="alphadash33" value="{{a3}}"
+                                list="alpha33-options" autocomplete="off" style="width: 40%;float: left;"
+                                placeholder="View Alpha Value α-α'1">
+                            <datalist id="alpha33-options">
+                                <option value="0.2">
+                                <option value="0.3">
+                                <option value="0.4">
+                                <option value="0.5">
+                                <option value="0.6">
+                                <option value="0.7">
+                                <option value="0.8">
+                            </datalist>
+                            -
+                            <input type="text" name="alpha_dash3" id="alphadash3" value="{{a6}}"
+                                list="alpha_dash3-options" autocomplete="off" style="width: 40%;"
                                 placeholder="View Alpha Value α-α'3">
-                            </td>
+                            <datalist id="alpha_dash3-options">
+                                <option value="0.22">
+                                <option value="0.33">
+                                <option value="0.44">
+                                <option value="0.55">
+                                <option value="0.66">
+                                <option value="0.77">
+                                <option value="0.88">
+                            </datalist>
+                        </td>
                     </tr>
                 </table>
                 <div class="form-group">
@@ -343,12 +435,12 @@
                 <!-- <input type="hidden" id="fn_dict" value="{{fn_dict}}">
                 <input type="hidden" id="fn_dict_dash" value="{{fn_dict_dash}}"> -->
                 <input type="hidden" id="fn_dict" value="{{ fn_dict_dash if not fn_dict else fn_dict }}">
-                 <!-- <input type="hidden" id="file1" value=""> -->
+                <!-- <input type="hidden" id="file1" value=""> -->
             </div>
             <div id="ShowTable" class="right-section" style="border: 3px solid #ccc;min-height: 400px;">
                 <div class="graph-box tr_display {{ show_alpha }}" id="table1">Table : α-Cut
-                    <img id="gr1" src="static/img/{{t1}}" 
-                        onclick="onMyPopup(this)" style="width: 100%;height: auto;" alt="{{t1}}">
+                    <img id="gr1" src="static/img/{{t1}}" onclick="onMyPopup(this)" style="width: 100%;height: auto;"
+                        alt="{{t1}}">
                     <!-- <table class="table3"
                         style="width: 100%;height: 200px;margin-top: 15px;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
                         <tr style="background-color: #fafafa;">
@@ -375,8 +467,8 @@
                         alt="{{g2}}">
                 </div>
                 <div class="graph-box tr_display {{ show_alpha_dash }}" id="table2">Table : α-α'-Cut
-                    <img id="gr3" src="static/img/{{t2}}" 
-                        onclick="onMyPopup(this)" style="width: 100%;height: auto;" alt="{{t2}}">
+                    <img id="gr3" src="static/img/{{t2}}" onclick="onMyPopup(this)" style="width: 100%;height: auto;"
+                        alt="{{t2}}">
                     <!-- <table class="table3"
                         style="width: 100%;height: 200px;margin-top: 15px;font-size: 16px;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
                         <tr style="background-color: #fafafa;">
@@ -397,8 +489,9 @@
                         {% endfor %}
                     </table> -->
                 </div>
-                <div class="graph-box tr_display {{ show_alpha_dash }}">Bar Chart : α-α'-Cut<img id="gr4" src="static/img/{{g4}}"
-                        onclick="onMyPopup(this)" style="width: 100%;height: auto;" alt="{{g4}}"></div>
+                <div class="graph-box tr_display {{ show_alpha_dash }}">Bar Chart : α-α'-Cut<img id="gr4"
+                        src="static/img/{{g4}}" onclick="onMyPopup(this)" style="width: 100%;height: auto;"
+                        alt="{{g4}}"></div>
             </div>
             <!-- ========== 2222 ======== -->
             <button type="button" onclick="onDownloadPdf()" class="close3">Export to PDF</button>

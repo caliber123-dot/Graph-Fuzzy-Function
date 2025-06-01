@@ -22,7 +22,7 @@ function fetchAlphaData() {
             document.getElementById("alphadash2").value = data.alphadash2 || "";
             document.getElementById("alphadash3").value = data.alphadash3 || "";
             document.getElementById("alpha_id").value = data.alpha_id || "";
-            document.getElementById("alphaButton").textContent = "Update Alpha Graph";
+            // document.getElementById("alphaButton").textContent = "Update Alpha Graph";
             document.getElementById("alphaButton").style.backgroundColor = "#007bff";  // Blue
         })
         .catch(error => {
