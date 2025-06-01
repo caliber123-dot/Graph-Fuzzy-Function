@@ -339,6 +339,12 @@
 
                 }
             </style>
+            <div>
+                <!-- <input type="hidden" id="fn_dict" value="{{fn_dict}}">
+                <input type="hidden" id="fn_dict_dash" value="{{fn_dict_dash}}"> -->
+                <input type="hidden" id="fn_dict" value="{{ fn_dict_dash if not fn_dict else fn_dict }}">
+                 <!-- <input type="hidden" id="file1" value=""> -->
+            </div>
             <div id="ShowTable" class="right-section" style="border: 3px solid #ccc;min-height: 400px;">
                 <div class="graph-box tr_display {{ show_alpha }}" id="table1">Table : α-Cut
                     <img id="gr1" src="static/img/{{t1}}" 
@@ -404,7 +410,8 @@
             <!-- The Modal -->
             <div id="myModal" class="modal">
                 <span class="close" style="float: right;">&times;</span>
-                <button type="button" onclick="onDownload()" class="close2">Save Graph</button>
+                <button type="button" onclick="onDownload()" class="close2">Save Img</button>
+                <button type="button" onclick="onDownloadPdf2()" class="close22">Save Pdf</button>
                 <img class="modal-content" id="img01" style="margin-bottom: 50px;">
 
             </div>
@@ -537,6 +544,69 @@
                 reader.onerror = reject;
                 reader.readAsDataURL(blob);
             });
+        }
+
+    </script>
+
+    <script>
+        // Initialize jsPDF
+        // const { jsPDF } = window.jspdf;
+        async function onDownloadPdf2() {
+            const imageIds = ['img01']; // ID of current images
+            const pdf = new jsPDF();
+            let imagesAdded = 0; // Track how many images were successfully added
+            try {
+                for (let i = 0; i < imageIds.length; i++) {
+                    const img = document.getElementById(imageIds[i]);
+
+                    // Skip if image is .avif
+                    if (img.src.toLowerCase().endsWith('.avif')) {
+                        console.warn(`Skipping AVIF image: ${imageIds[i]}`);
+                        continue;
+                    }
+                    const response = await fetch(img.src);
+                    const blob = await response.blob();
+
+                    // Check MIME type (alternative check if extension missing)
+                    if (blob.type === 'image/avif') {
+                        console.warn(`Skipping AVIF image (MIME type detected): ${imageIds[i]}`);
+                        continue;
+                    }
+                    const imgData = await blobToBase64(blob);
+
+                    // Calculate position (2 images per page)
+                    const x = 15;
+                    const y = (imagesAdded % 2 === 0) ? 15 : 120;
+                    const width = 180;
+                    const height = 100;
+
+                    pdf.addImage(imgData, getImageFormat(blob), x, y, width, height);
+                    imagesAdded++;
+
+                    // Add new page after every 2 images
+                    if (imagesAdded % 2 === 0 && i !== imageIds.length - 1) {
+                        pdf.addPage();
+                    }
+                }
+
+                if (imagesAdded === 0) {
+                    alert('No compatible images found (skipped AVIF).');
+                    return;
+                }
+
+                const fileHandle = await window.showSaveFilePicker({
+                    suggestedName: 'graphs.pdf',
+                    types: [{ description: 'PDF', accept: { 'application/pdf': ['.pdf'] } }],
+                });
+                const writable = await fileHandle.createWritable();
+                await writable.write(await pdf.output('arraybuffer'));
+                await writable.close();
+                alert('PDF saved successfully!');
+
+            } catch (error) {
+                console.error('Error saving PDF:', error);
+                alert('Failed to save PDF.');
+            }
         }
 
     </script>

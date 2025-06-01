@@ -64,7 +64,8 @@ function clearAlphaFields() {
 function ExportToExcel() {
     const imageIds = ['gr1', 'gr2', 'gr3', 'gr4'];
     const arrexp = [];
-    
+    const fnDict = document.getElementById('fn_dict').value;
+    // alert(fnDict);
     // Collect image filenames
     for (const id of imageIds) {
         const img = document.getElementById(id);
@@ -72,13 +73,22 @@ function ExportToExcel() {
             arrexp.push(img.alt);
         }
     }
+    const formData = new FormData();
+    // formData.append('alpha_cuts', alphaCuts);
+    formData.append('fn_dict', fnDict);
+    formData.append('file1', arrexp[1]);
+    // alert(arrexp[1])
 
     // Show loading state
     const exportBtn = document.querySelector('[onclick="ExportToExcel()"]');
     exportBtn.disabled = true;
     exportBtn.textContent = 'Exporting...';
 
-    fetch(`/export_excel/${encodeURIComponent(arrexp[0])}/${encodeURIComponent(arrexp[1])}`)
+    // fetch(`/export_excel/${encodeURIComponent(arrexp[0])}/${encodeURIComponent(arrexp[1])}`)
+    fetch('/export_excel', {
+        method: 'POST',
+        body: formData // Automatically sets 'multipart/form-data'
+    })
         .then(async response => {
             if (!response.ok) {
                 const error = await response.json().catch(() => ({ error: response.statusText }));
@@ -97,7 +107,7 @@ function ExportToExcel() {
 
             // Show success message
             alert('Excel file exported successfully!');
-            
+
             // Clean up
             setTimeout(() => {
                 URL.revokeObjectURL(url);

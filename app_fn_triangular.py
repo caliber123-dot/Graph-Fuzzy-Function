@@ -49,6 +49,7 @@ def GetFunsTriangular(alpha_cuts,a_y,b_y,c_y,a_d,b_d,c_d):
     print("Function 3 :",fn3_list)
     print("Function 4 :",fn4_list)    
     fn_dict = {
+        'α': alpha_cuts,
         "fn1": fn1_list,
         "fn2": fn2_list,
         "fn3": fn3_list,
@@ -94,18 +95,10 @@ def GetFunsTriangular2(alpha_cuts,alpha_dash_cuts,a_y,b_y,c_y,a_d,b_d,c_d):
     fn3 = format_list(fn3)
     fn4 = format_list(fn4)
 
-    # print("Function 1 :",fn1)
-    # print("Function 2 :",fn2)
-    # print("Function 3 :",fn3)
-    # print("Function 4 :",fn4)
-    # 4) Build a pandas DataFrame to display the results
-    # data = {
-    #     "fn1": fn1,
-    #     "fn2": fn2,
-    #     "fn3": fn3,
-    #     "fn4": fn4
-    # }
+    alpha_dash_alpha = [f"{a}-{b}" for a, b in zip(alpha_cuts, alpha_dash_cuts)]
+
     fn_dict = {
+    'α-α': alpha_dash_alpha,
     'fn1': [round(float(v), 4) for v in fn1],
     'fn2': [round(float(v), 4) for v in fn2],
     'fn3': [round(float(v), 4) for v in fn3],

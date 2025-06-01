@@ -79,6 +79,16 @@
     padding: 10px;
     border: 2px solid #ccc;    
   }
+  .close22 {
+    position: absolute;
+    top: 65px;
+    left: 35px;
+    background-color: darkgreen;
+    color: white;
+    font-weight: bold;
+    padding: 10px;
+    border: 2px solid #ccc;    
+  }
   .close3 {
     position: absolute;
     top: 100px;
