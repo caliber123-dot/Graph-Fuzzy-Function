@@ -249,6 +249,12 @@
         <li><a href="/newmat">New Material</a></li>
         <li><a href="/newbar">New BarChart</a></li>
     </ul>
+    <div>
+                <input type="hidden" id="fn_dict" value="{{fn_dict}}">
+                <input type="hidden" id="fn_dict_dash" value="{{fn_dict_dash}}">
+                <!-- <input type="hidden" id="fn_dict" value="{{ fn_dict_dash if not fn_dict else fn_dict }}"> -->
+                <!-- <input type="hidden" id="file1" value=""> -->
+            </div>
     <form action="/" method="POST">
         <div class="container" id="mainContainer">
             <div class="left-section">
@@ -304,15 +310,9 @@
                                 placeholder="Enter Alpha Value α1" required list="alpha1-options" autocomplete="off"
                                 onkeypress="return validateOneToFourDecimals(this)">
                             <datalist id="alpha1-options">
-                                <option value="0.1">
-                                <option value="0.2">
-                                <option value="0.3">
-                                <option value="0.4">
-                                <option value="0.5">
-                                <option value="0.6">
-                                <option value="0.7">
-                                <option value="0.8">
-                                <option value="0.9">
+                                {% for val1 in alpha_val1 %}
+                                <option value="{{ val1.av_alpha}}"></option>
+                                {% endfor %}
                             </datalist>
                         </td>
                     </tr>
@@ -322,15 +322,9 @@
                                 placeholder="Enter Alpha Value α2" required list="alpha2-options" autocomplete="off"
                                 onkeypress="return validateOneToFourDecimals(this)">
                             <datalist id="alpha2-options">
-                                <option value="0.1">
-                                <option value="0.2">
-                                <option value="0.3">
-                                <option value="0.4">
-                                <option value="0.5">
-                                <option value="0.6">
-                                <option value="0.7">
-                                <option value="0.8">
-                                <option value="0.9">
+                                {% for val1 in alpha_val1 %}
+                                <option value="{{ val1.av_alpha}}"></option>
+                                {% endfor %}
                             </datalist>
                         </td>
                     </tr>
@@ -340,15 +334,9 @@
                                 placeholder="Enter Alpha Value α3" required list="alpha3-options" autocomplete="off"
                                 onkeypress="return validateOneToFourDecimals(this)">
                             <datalist id="alpha3-options">
-                                <option value="0.1">
-                                <option value="0.2">
-                                <option value="0.3">
-                                <option value="0.4">
-                                <option value="0.5">
-                                <option value="0.6">
-                                <option value="0.7">
-                                <option value="0.8">
-                                <option value="0.9">
+                                {% for val1 in alpha_val1 %}
+                                <option value="{{ val1.av_alpha}}"></option>
+                                {% endfor %}
                             </datalist>
                         </td>
                     </tr>
@@ -358,15 +346,9 @@
                                 list="alpha_dash1-options" autocomplete="off" placeholder="Enter Alpha Dash α'1"
                                 onkeypress="return validateOneToFourDecimals(this)">
                             <datalist id="alpha_dash1-options">
-                                <option value="0.11">
-                                <option value="0.22">
-                                <option value="0.33">
-                                <option value="0.44">
-                                <option value="0.55">
-                                <option value="0.66">
-                                <option value="0.77">
-                                <option value="0.88">
-                                <option value="0.99">
+                                {% for val2 in alpha_val2 %}
+                                <option value="{{ val2.av_alpha}}"></option>
+                                {% endfor %}
                             </datalist>
                         </td>
                     </tr>
@@ -376,15 +358,9 @@
                                 list="alpha_dash2-options" autocomplete="off" placeholder="Enter Alpha Dash α'2"
                                 onkeypress="return validateOneToFourDecimals(this)">
                             <datalist id="alpha_dash2-options">
-                                <option value="0.11">
-                                <option value="0.22">
-                                <option value="0.33">
-                                <option value="0.44">
-                                <option value="0.55">
-                                <option value="0.66">
-                                <option value="0.77">
-                                <option value="0.88">
-                                <option value="0.99">
+                                {% for val2 in alpha_val2 %}
+                                <option value="{{ val2.av_alpha}}"></option>
+                                {% endfor %}
                             </datalist>
                         </td>
                     </tr>
@@ -394,15 +370,9 @@
                                 list="alpha_dash3-options" autocomplete="off" placeholder="Enter Alpha Dash α'3"
                                 onkeypress="return validateOneToFourDecimals(this)">
                             <datalist id="alpha_dash3-options">
-                                <option value="0.11">
-                                <option value="0.22">
-                                <option value="0.33">
-                                <option value="0.44">
-                                <option value="0.55">
-                                <option value="0.66">
-                                <option value="0.77">
-                                <option value="0.88">
-                                <option value="0.99">
+                                {% for val2 in alpha_val2 %}
+                                <option value="{{ val2.av_alpha}}"></option>
+                                {% endfor %}
                             </datalist>
                         </td>
                     </tr>
@@ -431,17 +401,18 @@
 
             <div class="right-section">
                 <div class="graph-box"><label>α-Cut for Density</label><img id="gr1" src="static/img/{{g1}}" id="myImg"
-                        onclick="onMyPopup(this)" style="width: 100%;height: auto;" alt="g2.png">
+                        onclick="onMyPopup(this)" style="width: 100%;height: auto;" alt="{{g1}}">
                 </div>
                 <div class="graph-box"><label>α-α'-Cut for Density</label> <img id="gr2" src="static/img/{{g2}}"
-                        onclick="onMyPopup(this)" style="width: 100%;height: auto;" alt="g2.png"></div>
+                        onclick="onMyPopup(this)" style="width: 100%;height: auto;" alt="{{g2}}"></div>
                 <div class="graph-box"><label>α-Cut for Young's modulus</label><img id="gr3" src="static/img/{{g3}}"
-                        id="myImg3" onclick="onMyPopup(this)" style="width: 100%;height: auto;" alt="g1.png">
+                        id="myImg3" onclick="onMyPopup(this)" style="width: 100%;height: auto;" alt="{{g3}}">
                 </div>
                 <div class="graph-box"><label>α-α'-Cut for Young's modulus</label><img id="gr4" src="static/img/{{g4}}"
-                        onclick="onMyPopup(this)" style="width: 100%;height: auto;" alt="g1.png"></div>
+                        onclick="onMyPopup(this)" style="width: 100%;height: auto;" alt="{{g4}}"></div>
             </div>
-            <button type="button" onclick="onDownloadPdf()" class="close3">Save Graph in 1 PDF</button>
+            <button type="button" onclick="onDownloadPdf()" class="close3">Export to PDF</button>
+            <button type="button" onclick="ExportToExcel()" class="close4">Export to Excel</button>
             <!-- The Modal -->
             <div id="myModal" class="modal">
                 <span class="close" style="float: right;">&times;</span>
@@ -652,7 +623,7 @@
 
     <script>
         // Initialize jsPDF
-        // const { jsPDF } = window.jspdf;
+        // const { jsPDF2 } = window.jspdf;
         async function onDownloadPdf2() {
             const imageIds = ['img01']; // ID of current images
             const pdf = new jsPDF();

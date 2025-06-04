@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import and_
 import os
-
+from sqlalchemy import asc
 
 app = Flask(__name__)
 
@@ -41,6 +41,11 @@ class tbl_alpha(db.Model):
     alpha_alphadash3 = db.Column(db.Float, nullable=True)
     alpha_status = db.Column(db.Integer, nullable=False)
 
+class tbl_alpha_val(db.Model):
+    av_id = db.Column(db.Integer, primary_key=True)
+    av_alpha = db.Column(db.Float, nullable=False)
+    av_status = db.Column(db.Integer, nullable=False) # 1: alpha & 2: alpha dash
+
 # Initialize the database
 @app.route('/init_db')
 def init_db():
@@ -48,6 +53,7 @@ def init_db():
         with app.app_context():
              # Drop tbl_materials table if it exists
             tbl_materials.__table__.drop(db.engine, checkfirst=True)
+            tbl_alpha_val.__table__.drop(db.engine, checkfirst=True)
             db.create_all()
             # List of material names to check and insert
             material_names = ["Aluminium", "Neoprene Rubber", "Teflon", "Nylon", "SS-304 Grade ABS Silicon"]
@@ -114,9 +120,32 @@ def init_db():
                     mat_c_val_d="7960", mat_d_val_d="0", mat_a_val_y="1.93E+11", mat_b_val_y="1.96E+11",
                     mat_c_val_y="2.00E+11", mat_d_val_y="0", mat_status=1                   
                 ))
+            alpha_val_to_add = []
+            alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.1,av_status=1))
+            alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.2,av_status=1))
+            alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.3,av_status=1))
+            alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.4,av_status=1))
+            alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.5,av_status=1))
+            alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.6,av_status=1))
+            alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.7,av_status=1))
+            alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.8,av_status=1))
+            alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.9,av_status=1))
+
+            alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.11,av_status=2))
+            alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.22,av_status=2))
+            alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.33,av_status=2))
+            alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.44,av_status=2))
+            alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.55,av_status=2))
+            alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.66,av_status=2))
+            alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.77,av_status=2))
+            alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.88,av_status=2))
+            alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.99,av_status=2))
             # Add to session and commit to the database
-            if materials_to_add:
-                db.session.add_all(materials_to_add)
+            if materials_to_add or alpha_val_to_add:
+                if materials_to_add:
+                    db.session.add_all(materials_to_add)
+                if alpha_val_to_add:
+                    db.session.add_all(alpha_val_to_add)
                 db.session.commit()
                 print("Material added successfully.")    
                 return "<h1>Tables created and materials inserted successfully.</h1>", 200    
@@ -178,7 +207,7 @@ def abcd():
         return render_template('abcd.html',materials=materials, s1=matid,s2=ddlfuntion,a=a_value_d,b=b_value_d,c=c_value_d,d=d_value_d,myMsg=myMsg,a1=a_value_y,b1=b_value_y,c1=c_value_y,d1=d_value_y)
     return render_template('abcd.html')
 
-from app_fn import GetFuns, GetFuns2
+from app_fn import GetFuns, GetFuns2, GetMinMax, GetMinMax2
 from barchat import GetBarChat, GetBarChat2
 from app_fn_triangular import GetFunsTriangular,GetFunsTriangular2, export_table_image
 @app.route('/graph', methods=['GET', 'POST'])
@@ -190,6 +219,8 @@ def graph():
     alpha_dash_cuts= ''
     fn_dict_dash = fn_dict = ''
     # materials = tbl_materials.query.filter_by(mat_status=1).all()  # Only active materials
+    alpha_val1 = tbl_alpha_val.query.filter_by(av_status=1).order_by(asc(tbl_alpha_val.av_alpha)).all()
+    alpha_val2 = tbl_alpha_val.query.filter_by(av_status=2).order_by(asc(tbl_alpha_val.av_alpha)).all()
     if request.method=='POST':
         ddlfuntion = request.form.get('ddlfuntion')  # ID
         ddlmat_ID = request.form.get('ddlmaterials') # ID 
@@ -266,9 +297,33 @@ def graph():
             g4 = 'Bar_alpha_dash' + 'MF' + '.png' 
             g3 = GetBarChat2(alpha,alpha_dash_cuts, fn_dict_dash, g4, mat_name, 2, fun_type)
             show_alpha_dash = "d-show"
-        return render_template('graph.html',fn_dict= fn_dict,alpha_cuts=alpha_cuts,alpha=alpha,alpha_dash_cuts=alpha_dash_cuts,fn_dict_dash=fn_dict_dash,g1=g1,g2=g2,g3=g3,g4=g4,a1=a1,a2=a2,a3=a3,a4=a4,a5=a5,a6=a6,s1=ddlmat_ID,s2=ddlfuntion,s3=ddlalphacut,materials=materials,show_alpha=show_alpha,show_alpha_dash=show_alpha_dash,t1=t1,t2=t2)
+        add_Alpha_val(a1, alpha_val1)
+        add_Alpha_val(a2, alpha_val1)
+        add_Alpha_val(a3, alpha_val1)
+        alpha_val_to_add = []            
+        for new_val in arr1:
+            print(new_val)
+            alpha_val_to_add.append(tbl_alpha_val(av_alpha=new_val,av_status=1))            
+        add_Alpha_val2(a4, alpha_val2)
+        add_Alpha_val2(a5, alpha_val2)
+        add_Alpha_val2(a6, alpha_val2)
+        for new_val2 in arr2:
+            print(new_val2)
+            alpha_val_to_add.append(tbl_alpha_val(av_alpha=new_val2,av_status=2))            
+            # if alpha_val_to_add:
+        if alpha_val_to_add:
+            db.session.add_all(alpha_val_to_add)
+            db.session.commit()
+            print("Alpha added successfully.") 
+            if len(arr1) > 0 :
+                alpha_val1 = tbl_alpha_val.query.filter_by(av_status=1).order_by(asc(tbl_alpha_val.av_alpha)).all()
+            if len(arr2) > 0 :
+                alpha_val2 = tbl_alpha_val.query.filter_by(av_status=2).order_by(asc(tbl_alpha_val.av_alpha)).all()
+        arr1.clear()
+        arr2.clear()
+        return render_template('graph.html',fn_dict= fn_dict,alpha_cuts=alpha_cuts,alpha=alpha,alpha_dash_cuts=alpha_dash_cuts,fn_dict_dash=fn_dict_dash,g1=g1,g2=g2,g3=g3,g4=g4,a1=a1,a2=a2,a3=a3,a4=a4,a5=a5,a6=a6,s1=ddlmat_ID,s2=ddlfuntion,s3=ddlalphacut,materials=materials,show_alpha=show_alpha,show_alpha_dash=show_alpha_dash,t1=t1,t2=t2,alpha_val1=alpha_val1,alpha_val2=alpha_val2)
     
-    return render_template('graph.html',g1=g1,g2=g2,g3=g3,g4=g4,s1=None)
+    return render_template('graph.html',g1=g1,g2=g2,g3=g3,g4=g4,s1=None, alpha_val1=alpha_val1,alpha_val2=alpha_val2)
 
 # from AlphaDensity import alphaDensityFun
 # from AlphaYoung import alphaYoungFun
@@ -278,9 +333,11 @@ from Triangular import GetFuzzyFunction_aplha2, GetFuzzyFunction_aplha_alpha_das
 # from TriangularYoung import TriangularYoungFun
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    # alpha = [0.313, 0.455, 0.585]
+    fn_dict_dash = fn_dict = ''
     # materials = tbl_materials.query.filter_by(mat_status=1).all()  # Only active materials    
     g1 = g2 = g3 = g4 = 'basic.avif' # Default Graph Image
+    alpha_val1 = tbl_alpha_val.query.filter_by(av_status=1).order_by(asc(tbl_alpha_val.av_alpha)).all()
+    alpha_val2 = tbl_alpha_val.query.filter_by(av_status=2).order_by(asc(tbl_alpha_val.av_alpha)).all()
     if request.method=='POST':
         ddlfuntion = request.form.get('ddlfuntion') # id 
         materials = tbl_materials.query.filter(
@@ -292,6 +349,7 @@ def index():
         ddlmaterials = request.form.get('ddlmaterials') # id
         # print(ddlmaterials)        
         # material = request.form.get('material') # textbox
+        # fn_dict = ''
         material = '' # Not use
         if material.strip() != '':
             # Add Materials:
@@ -332,14 +390,21 @@ def index():
             # material = tbl_materials.query.filter_by(mat_id=ddlmaterials).first()
             if(ddlfuntion == '1'): #Trapezoidal 
                 # a, b, c, d = 2680, 2690, 2710, 2720  
+                # alpha_cuts = [0.3, 0.4, 0.5]
                 # alpha cut
+                alpha_cuts=[]
                 if a1 != '' and a2 != '' and a3 != '':
+                    alpha_cuts = [a1,a2,a3]
                     GetFuzzyFunction_aplha(a_d,b_d,c_d,d_d,a1,a2,a3,g1,mat_name,"Density")
                     GetFuzzyFunction_aplha(a_y,b_y,c_y,d_y,a1,a2,a3,g3,mat_name,"Young's Modulus")
+                    fn_dict = GetMinMax(alpha_cuts,a_y,b_y,c_y,d_y,a_d,b_d,c_d,d_d)
+                    print(fn_dict)
                 if a4 != '' and a5 != '' and a6 != '':                    
                     # alpha - alpha dash cut
+                    alpha_dash = [a4,a5,a6]
                     GetFuzzyFunction_aplha_alpha_dash(a_d,b_d,c_d,d_d,a1,a2,a3,a4,a5,a6,g2,mat_name,"Density")
-                    GetFuzzyFunction_aplha_alpha_dash(a_y,b_y,c_y,d_y,a1,a2,a3,a4,a5,a6,g4,mat_name,"Young's Modulus")                
+                    GetFuzzyFunction_aplha_alpha_dash(a_y,b_y,c_y,d_y,a1,a2,a3,a4,a5,a6,g4,mat_name,"Young's Modulus")    
+                    fn_dict_dash = GetMinMax2(alpha_cuts, a_y,b_y,c_y,d_y,a_d,b_d,c_d,d_d,alpha_dash)            
             elif(ddlfuntion == '2'): #Triangular
                 # a, b, c = 68947600000, 74456800000, 79966000000
                 # a, b, c = 100000, 300000, 500000
@@ -350,9 +415,57 @@ def index():
                     # alpha - alpha dash cut
                     GetFuzzyFunction_aplha_alpha_dash2(a_d,b_d,c_d,a1,a2,a3,a4,a5,a6,g2,mat_name,"Density")
                     GetFuzzyFunction_aplha_alpha_dash2(a_y,b_y,c_y,a1,a2,a3,a4,a5,a6,g4,mat_name,"Young's Modulus")                
-                
-            return render_template('index.html', g1=g1,g2=g2,g3=g3,g4=g4,a1=a1,a2=a2,a3=a3,a4=a4,a5=a5,a6=a6,materials=materials,s1=ddlmaterials,s2=ddlfuntion,alpha_id=alpha_id,is_update=is_update)     
-    return render_template('index.html',g1=g1,g2=g2,g3=g3,g4=g4, s1=None)
+            # search_value = 0.51
+            add_Alpha_val(a1, alpha_val1)
+            add_Alpha_val(a2, alpha_val1)
+            add_Alpha_val(a3, alpha_val1)
+            alpha_val_to_add = []            
+            for new_val in arr1:
+                print(new_val)
+                alpha_val_to_add.append(tbl_alpha_val(av_alpha=new_val,av_status=1))            
+            add_Alpha_val2(a4, alpha_val2)
+            add_Alpha_val2(a5, alpha_val2)
+            add_Alpha_val2(a6, alpha_val2)
+            for new_val2 in arr2:
+                print(new_val2)
+                alpha_val_to_add.append(tbl_alpha_val(av_alpha=new_val2,av_status=2))            
+            # if alpha_val_to_add:
+            if alpha_val_to_add:
+                db.session.add_all(alpha_val_to_add)
+                db.session.commit()
+                print("Alpha added successfully.") 
+                if len(arr1) > 0 :
+                    alpha_val1 = tbl_alpha_val.query.filter_by(av_status=1).order_by(asc(tbl_alpha_val.av_alpha)).all()
+                if len(arr2) > 0 :
+                    alpha_val2 = tbl_alpha_val.query.filter_by(av_status=2).order_by(asc(tbl_alpha_val.av_alpha)).all()
+            arr1.clear()
+            arr2.clear()
+            # exists = any(item.av_alpha == search_value for item in alpha_val1)
+            # print(f"Does {search_value} exist? {exists}")
+            return render_template('index.html', g1=g1,g2=g2,g3=g3,g4=g4,a1=a1,a2=a2,a3=a3,a4=a4,a5=a5,a6=a6,materials=materials,s1=ddlmaterials,s2=ddlfuntion,alpha_id=alpha_id,is_update=is_update,alpha_val1=alpha_val1,alpha_val2=alpha_val2, fn_dict=fn_dict,fn_dict_dash=fn_dict_dash)     
+    return render_template('index.html',g1=g1,g2=g2,g3=g3,g4=g4, s1=None, alpha_val1=alpha_val1,alpha_val2=alpha_val2)
+global arr1, arr2
+# r1 = 0
+arr1 = []
+arr2 = []
+def add_Alpha_val(search_val, alpha_val1):
+    global arr1  # Declare globals inside the function to modify them
+    exists = any(item.av_alpha == search_val for item in alpha_val1)
+    if exists:
+        print(f"Does {search_val} exist? {exists}")
+    else:
+        # print("Add new record.")
+        arr1.append(search_val)
+        
+def add_Alpha_val2(search_val, alpha_val2):
+    global arr2  # Declare globals inside the function to modify them
+    exists = any(item.av_alpha == search_val for item in alpha_val2)
+    if exists:
+        print(f"Does {search_val} exist? {exists}")
+    else:
+        arr2.append(search_val)
+        
+
 def add_Materials(ddlmaterials,material):
     myMsg = ''  
     a_value = safe_float(request.form.get('a_value'))
@@ -498,55 +611,9 @@ def get_materials(function_id):
     ]
 
     return jsonify(material_list)
-from export import export_images_to_excel
+from export import export_images_to_excel, export_images_to_excel2
 from werkzeug.utils import secure_filename
-# @app.route('/export_excel/<string:file1>/<string:file2>')
-# def export_excel(file1, file2):
-#     try:
-#         print(file1)
-#         # Secure the filenames and create full paths
-#         img1_path = os.path.join('static', 'img', secure_filename(file1))
-#         img2_path = os.path.join('static', 'img', secure_filename(file2))
-        
-#         # Verify images exist
-#         if not all([os.path.exists(img1_path), os.path.exists(img2_path)]):
-#             return {"error": "One or both images not found"}, 404
 
-#         # Create absolute path for temp Excel
-#         output_path = os.path.abspath('temp_export.xlsx')
-        
-#         # Generate Excel
-#         export_images_to_excel(
-#             img1=img1_path,
-#             img2=img2_path,
-#             output_excel=output_path,
-#             max_width=600,
-#             max_height=400
-#         )
-
-#         # Verify Excel was created
-#         if not os.path.exists(output_path):
-#             return {"error": "Failed to create Excel file"}, 500
-
-#         # Send file with proper headers
-#         return send_file(
-#             output_path,
-#             as_attachment=True,
-#             download_name='exported_data.xlsx',
-#             mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-#             conditional=True
-#         )
-
-#     except Exception as e:
-#         return {"error": f"Server error: {str(e)}"}, 500
-        
-#     finally:
-#         # Clean up temp file
-#         if os.path.exists(output_path):
-#             try:
-#                 os.remove(output_path)
-#             except:
-#                 pass
 
 @app.route('/export_excel', methods=['POST'])
 def export_excel():
@@ -606,6 +673,68 @@ def export_excel():
 def exportimage():
     export_table_image("Alpha_Table.png",None,None)
     return "<h1>Tables image success.</h1>"
+
+# From Index
+@app.route('/export_excel2', methods=['POST'])
+def export_excel2():
+    try:
+        fn_dict = request.form.get('fn_dict')
+        fn_dict_dash = request.form.get('fn_dict_dash')
+        file1 = request.form.get('file1')
+        file2 = request.form.get('file2')
+        file3 = request.form.get('file3')
+        file4 = request.form.get('file4')
+        # print("file1>>",file1)
+        # print("fn_dict_dash>>",fn_dict_dash)
+                    
+        # Secure the filenames and create full paths
+        img1_path = os.path.join('static', 'img', secure_filename(file1))
+        img2_path = os.path.join('static', 'img', secure_filename(file2))
+        img3_path = os.path.join('static', 'img', secure_filename(file3))
+        img4_path = os.path.join('static', 'img', secure_filename(file4))
+        
+        # Verify images exist
+        if not all([os.path.exists(img1_path), os.path.exists(img2_path)]):
+            return {"error": "One or both images not found"}, 404
+
+        # Create absolute path for temp Excel
+        output_path = os.path.abspath('temp_export.xlsx')
+        
+        # Generate Excel
+        export_images_to_excel2(
+            img1=img1_path,
+            img2=img2_path, img3=img3_path, img4=img4_path,
+            output_excel=output_path,
+            max_width=600,
+            max_height=400,
+            fn_dict=fn_dict,
+            fn_dict_dash=fn_dict_dash
+        )
+
+        # Verify Excel was created
+        if not os.path.exists(output_path):
+            return {"error": "Failed to create Excel file"}, 500
+
+        # Send file with proper headers
+        return send_file(
+            output_path,
+            as_attachment=True,
+            download_name='exported_data.xlsx',
+            mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            conditional=True
+        )
+
+    except Exception as e:
+        return {"error": f"Server error: {str(e)}"}, 500
+        
+    finally:
+        # Clean up temp file
+        if os.path.exists(output_path):
+            try:
+                os.remove(output_path)
+            except:
+                pass
+
 
 if __name__ == '__main__':
     # app.run(host="0.0.0.0", port=8000, debug=True)

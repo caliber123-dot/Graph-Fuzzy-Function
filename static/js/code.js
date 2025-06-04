@@ -39,7 +39,6 @@ function clearAlphaFields() {
     });
 }
 
-
 // Add event listener to run the fetch when material is selected
 document.getElementById("ddlmaterials").addEventListener("change", fetchAlphaData);
 // document.getElementById("ddlfuntion").addEventListener("change", fetchAlphaData); // optional if you want dynamic update when fm_id is changed
@@ -69,6 +68,73 @@ document.getElementById("ddlfuntion").addEventListener("change", function () {
     }
 });
 
+//For Index Page
+function ExportToExcel() {
+    const imageIds = ['gr1', 'gr2', 'gr3', 'gr4'];
+    const arrexp = [];
+    const fnDict = document.getElementById('fn_dict').value;
+    const fnDictDash = document.getElementById('fn_dict_dash').value;
+    // alert(fnDict);
+    // Collect image filenames
+    for (const id of imageIds) {
+        const img = document.getElementById(id);
+        if (img && !img.src.toLowerCase().endsWith('.avif')) {
+            arrexp.push(img.alt);
+        }
+    }
+    const formData = new FormData();
+    // formData.append('alpha_cuts', alphaCuts);
+    formData.append('fn_dict', fnDict);
+    formData.append('fn_dict_dash', fnDictDash);
+    formData.append('file1', arrexp[0]);
+    formData.append('file2', arrexp[1]);
+    formData.append('file3', arrexp[2]);
+    formData.append('file4', arrexp[3]);
+    // alert(arrexp[1])
 
+    // Show loading state
+    const exportBtn = document.querySelector('[onclick="ExportToExcel()"]');
+    exportBtn.disabled = true;
+    exportBtn.textContent = 'Exporting...';
+
+    // fetch(`/export_excel/${encodeURIComponent(arrexp[0])}/${encodeURIComponent(arrexp[1])}`)
+    fetch('/export_excel2', {
+        method: 'POST',
+        body: formData // Automatically sets 'multipart/form-data'
+    })
+        .then(async response => {
+            if (!response.ok) {
+                const error = await response.json().catch(() => ({ error: response.statusText }));
+                throw new Error(error.message || 'Export failed');
+            }
+            return response.blob();
+        })
+        .then(blob => {
+            // Create download link
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'exported_charts.xlsx';
+            document.body.appendChild(a);
+            a.click();
+
+            // Show success message
+            alert('Excel file exported successfully!');
+
+            // Clean up
+            setTimeout(() => {
+                URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+            }, 100);
+        })
+        .catch(error => {
+            console.error('Export error:', error);
+            alert(`Export failed: ${error.message}`);
+        })
+        .finally(() => {
+            exportBtn.disabled = false;
+            exportBtn.textContent = 'Export to Excel';
+        });
+}
 
    

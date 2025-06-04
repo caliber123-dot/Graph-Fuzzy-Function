@@ -273,13 +273,9 @@
                                 placeholder="View Alpha Value α1" required autocomplete="off"
                                 onkeypress="return validateOneToFourDecimals(this)">
                             <datalist id="alpha1-options">
-                                <option value="0.2">
-                                <option value="0.3">
-                                <option value="0.4">
-                                <option value="0.5">
-                                <option value="0.6">
-                                <option value="0.7">
-                                <option value="0.8">
+                                {% for val1 in alpha_val1 %}
+                                <option value="{{ val1.av_alpha}}"></option>
+                                {% endfor %}
                             </datalist>
                         </td>
                     </tr>
@@ -289,13 +285,9 @@
                                 placeholder="View Alpha Value α2" required autocomplete="off"
                                 onkeypress="return validateOneToFourDecimals(this)">
                             <datalist id="alpha2-options">
-                                <option value="0.2">
-                                <option value="0.3">
-                                <option value="0.4">
-                                <option value="0.5">
-                                <option value="0.6">
-                                <option value="0.7">
-                                <option value="0.8">
+                                {% for val1 in alpha_val1 %}
+                                <option value="{{ val1.av_alpha}}"></option>
+                                {% endfor %}
                             </datalist>
                         </td>
                     </tr>
@@ -305,13 +297,9 @@
                                 placeholder="View Alpha Value α3" required autocomplete="off"
                                 onkeypress="return validateOneToFourDecimals(this)">
                             <datalist id="alpha3-options">
-                                <option value="0.2">
-                                <option value="0.3">
-                                <option value="0.4">
-                                <option value="0.5">
-                                <option value="0.6">
-                                <option value="0.7">
-                                <option value="0.8">
+                                {% for val1 in alpha_val1 %}
+                                <option value="{{ val1.av_alpha}}"></option>
+                                {% endfor %}
                             </datalist>
                         </td>
                     </tr>
@@ -321,30 +309,18 @@
                                 value="{{a1}}" style="width: 40%;float: left;" placeholder="View Alpha Value α-α'1"
                                 autocomplete="off">
                             <datalist id="alpha11-options">
-                                <option value="0.1">
-                                <option value="0.2">
-                                <option value="0.3">
-                                <option value="0.4">
-                                <option value="0.5">
-                                <option value="0.6">
-                                <option value="0.7">
-                                <option value="0.8">
-                                <option value="0.9">
+                                {% for val1 in alpha_val1 %}
+                                <option value="{{ val1.av_alpha}}"></option>
+                                {% endfor %}
                             </datalist>
                             -
                             <input type="text" list="alpha_dash1-options" name="alpha_dash1" id="alphadash1"
                                 value="{{a4}}" autocomplete="off" style="width: 40%;"
                                 placeholder="View Alpha Value α-α'1">
                             <datalist id="alpha_dash1-options">
-                                <option value="0.11">
-                                <option value="0.22">
-                                <option value="0.33">
-                                <option value="0.44">
-                                <option value="0.55">
-                                <option value="0.66">
-                                <option value="0.77">
-                                <option value="0.88">
-                                <option value="0.99">
+                                {% for val2 in alpha_val2 %}
+                                <option value="{{ val2.av_alpha}}"></option>
+                                {% endfor %}
                             </datalist>
                         </td>
                     </tr>
@@ -354,30 +330,18 @@
                                 list="alpha22-options" autocomplete="off" style="width: 40%;float: left;"
                                 placeholder="View Alpha Value α-α'1">
                             <datalist id="alpha22-options">
-                                <option value="0.1">
-                                <option value="0.2">
-                                <option value="0.3">
-                                <option value="0.4">
-                                <option value="0.5">
-                                <option value="0.6">
-                                <option value="0.7">
-                                <option value="0.8">
-                                <option value="0.9">
+                                {% for val1 in alpha_val1 %}
+                                <option value="{{ val1.av_alpha}}"></option>
+                                {% endfor %}
                             </datalist>
                             -
                             <input type="text" name="alpha_dash2" id="alphadash2" value="{{a5}}"
                                 list="alpha_dash2-options" autocomplete="off" style="width: 40%;"
                                 placeholder="View Alpha Value α-α'2">
                             <datalist id="alpha_dash2-options">
-                                <option value="0.11">
-                                <option value="0.22">
-                                <option value="0.33">
-                                <option value="0.44">
-                                <option value="0.55">
-                                <option value="0.66">
-                                <option value="0.77">
-                                <option value="0.88">
-                                <option value="0.99">
+                                {% for val2 in alpha_val2 %}
+                                <option value="{{ val2.av_alpha}}"></option>
+                                {% endfor %}
                             </datalist>
                         </td>
                     </tr>
@@ -387,30 +351,18 @@
                                 list="alpha33-options" autocomplete="off" style="width: 40%;float: left;"
                                 placeholder="View Alpha Value α-α'1">
                             <datalist id="alpha33-options">
-                                <option value="0.1">
-                                <option value="0.2">
-                                <option value="0.3">
-                                <option value="0.4">
-                                <option value="0.5">
-                                <option value="0.6">
-                                <option value="0.7">
-                                <option value="0.8">
-                                <option value="0.9">
+                                {% for val1 in alpha_val1 %}
+                                <option value="{{ val1.av_alpha}}"></option>
+                                {% endfor %}
                             </datalist>
                             -
                             <input type="text" name="alpha_dash3" id="alphadash3" value="{{a6}}"
                                 list="alpha_dash3-options" autocomplete="off" style="width: 40%;"
                                 placeholder="View Alpha Value α-α'3">
                             <datalist id="alpha_dash3-options">
-                                <option value="0.11">
-                                <option value="0.22">
-                                <option value="0.33">
-                                <option value="0.44">
-                                <option value="0.55">
-                                <option value="0.66">
-                                <option value="0.77">
-                                <option value="0.88">
-                                <option value="0.99">
+                                {% for val2 in alpha_val2 %}
+                                <option value="{{ val2.av_alpha}}"></option>
+                                {% endfor %}
                             </datalist>
                         </td>
                     </tr>

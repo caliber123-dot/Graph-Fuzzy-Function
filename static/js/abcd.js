@@ -34,7 +34,7 @@ document.getElementById("ddlmaterials").addEventListener("change", fetchAlphaDat
 
 document.getElementById("ddlfuntion").addEventListener("change", function () {
     const functionId = this.value;
-    // clearAlphaFields();
+    clearAlphaFields();
     if (functionId) {
         fetch(`/get_materials/${functionId}`)
             .then(response => {
@@ -56,3 +56,9 @@ document.getElementById("ddlfuntion").addEventListener("change", function () {
             });
     }
 });
+
+function clearAlphaFields() {
+    ["a_value_d", "a_value_y", "b_value_d", "b_value_y", "c_value_d", "c_value_y","d_value_d","d_value_y"].forEach(id => {
+        document.getElementById(id).value = "";
+    });
+}

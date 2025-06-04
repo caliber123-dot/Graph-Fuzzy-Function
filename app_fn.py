@@ -107,3 +107,86 @@ def GetFuns2(alpha_cuts, a_y,b_y,c_y,d_y,a_d,b_d,c_d,d_d,alpha1):
         "fn4": fn4_list
     }
     return fn_dict
+
+# For Alpha >> Get Min amd Max Value for Trapezoidal Graph
+def GetMinMax(alpha_cuts, a_y,b_y,c_y,d_y,a_d,b_d,c_d,d_d):
+    a = a_y #Min
+    b = b_y #peak
+    c = c_y #upper peak
+    d = d_y #Max   
+    Y_min_list = []
+    Y_max_list = []
+    for alpha in alpha_cuts:
+        Y_min = a + (b - a) * alpha
+        Y_max = d - (d - c) * alpha 
+        Y_min_list.append(Y_min)
+        Y_max_list.append(Y_max)
+
+    # print('Density:')
+    a2 = a_d  # Minimum value (kg/m³)
+    b2 = b_d  # Lower bound of plateau (kg/m³)
+    c2 = c_d  # Upper bound of plateau (kg/m³)
+    d2 = d_d  # Maximum value (kg/m³)
+    d_min_list = []
+    d_max_list = []
+    for alpha in alpha_cuts:
+        d_min = a2 + (b2 - a2) * alpha
+        d_max = d2 - (d2 - c2) * alpha 
+        d_min_list.append(d_min)
+        d_max_list.append(d_max)
+    
+        
+    fn_dict = {
+        'α': alpha_cuts,
+        "Ymin": Y_min_list,
+        "Ymax": Y_max_list,
+        "dmin": d_min_list,
+        "dmax": d_max_list
+    }
+    return fn_dict
+
+# For Alpha dash >> Get Min amd Max Value for Trapezoidal Graph
+def GetMinMax2(alpha_cuts, a_y,b_y,c_y,d_y,a_d,b_d,c_d,d_d,alpha_dash):
+    # alpha_cuts = [0.3, 0.4, 0.5]
+    # print('Young modulus:')
+    a = a_y #Min
+    b = b_y #peak
+    c = c_y #upper peak
+    d = d_y #Max   
+    Y_min_list = []
+    Y_max_list = []
+    # for alpha in alpha_cuts:
+    #     Y_min = a + (b - a) * alpha
+    #     Y_max = d - (d - c) * alpha 
+    #     Y_min_list.append(Y_min)
+    #     Y_max_list.append(Y_max)
+    for alpha1, alpha2 in zip(alpha_cuts, alpha_dash):
+        Y_min = a + (b - a) * alpha1
+        Y_max = d - (d - c) * alpha2
+        Y_min_list.append(Y_min)
+        Y_max_list.append(Y_max)
+
+    # print('Density:')
+    a2 = a_d  # Minimum value (kg/m³)
+    b2 = b_d  # Lower bound of plateau (kg/m³)
+    c2 = c_d  # Upper bound of plateau (kg/m³)
+    d2 = d_d  # Maximum value (kg/m³)
+    d_min_list = []
+    d_max_list = []
+    # for alpha in alpha_cuts:
+    for alpha1, alpha2 in zip(alpha_cuts, alpha_dash):
+        d_min = a2 + (b2 - a2) * alpha1
+        d_max = d2 - (d2 - c2) * alpha2 
+        d_min_list.append(d_min)
+        d_max_list.append(d_max)
+           
+        # print("alpha:>>>>>", alpha1)
+        alpha_dash_alpha = [f"{a}-{b}" for a, b in zip(alpha_cuts,alpha_dash)]
+    fn_dict = {
+        "α-α": alpha_dash_alpha,
+        "Ymin": Y_min_list,
+        "Ymax": Y_max_list,
+        "dmin": d_min_list,
+        "dmax": d_max_list
+    }
+    return fn_dict
