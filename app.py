@@ -1,17 +1,22 @@
-from flask import Flask, render_template, request , jsonify, send_file
+from flask import Flask, render_template, request , jsonify, send_file, redirect, url_for, flash, session
 from waitress import serve
 from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import and_
 import os
 from sqlalchemy import asc
+import re
+import bcrypt
+from datetime import datetime
 
 app = Flask(__name__)
 
 load_dotenv() # Load variables from .env file
-# app.secret_key = os.getenv('SECRET_KEY')
+app.secret_key = os.getenv('SECRET_KEY')
+# app.secret_key = secrets.token_hex(16)  # Generate a secure random SECRET_KEY
 # Configure the PostgreSQL connection
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
+# app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///fuzzyfuction.db'  # SQLite database file
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -45,6 +50,20 @@ class tbl_alpha_val(db.Model):
     av_id = db.Column(db.Integer, primary_key=True)
     av_alpha = db.Column(db.Float, nullable=False)
     av_status = db.Column(db.Integer, nullable=False) # 1: alpha & 2: alpha dash
+
+# Define User model
+class User(db.Model):
+    __tablename__ = 'tbl_register'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    full_name = db.Column(db.String(100), nullable=False)
+    username_email = db.Column(db.String(100), unique=True, nullable=False)
+    is_email = db.Column(db.Boolean, nullable=False)
+    password = db.Column(db.LargeBinary, nullable=False)
+    user_phone = db.Column(db.LargeBinary, nullable=True)
+    user_type = db.Column(db.String(20), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
 
 # Initialize the database
 @app.route('/init_db')
@@ -209,15 +228,19 @@ def abcd():
 
 from app_fn import GetFuns, GetFuns2, GetMinMax, GetMinMax2
 from barchat import GetBarChat, GetBarChat2
-from app_fn_triangular import GetFunsTriangular,GetFunsTriangular2, export_table_image
+from app_fn_triangular import GetFunsTriangular,GetFunsTriangular2, export_table_image,GetMinMax_Tri,GetMinMax_Tri2
 @app.route('/graph', methods=['GET', 'POST'])
 # @app.route('/graph')
 def graph():    
+    if 'user_id' not in session:
+        flash('Please login first', 'error')
+        return redirect(url_for('login'))
     g1 = g2 = g3 = g4 = 'basic.avif' # Default Graph Image
     alpha = ''
     alpha_cuts = ''
     alpha_dash_cuts= ''
     fn_dict_dash = fn_dict = ''
+    filename=''
     # materials = tbl_materials.query.filter_by(mat_status=1).all()  # Only active materials
     alpha_val1 = tbl_alpha_val.query.filter_by(av_status=1).order_by(asc(tbl_alpha_val.av_alpha)).all()
     alpha_val2 = tbl_alpha_val.query.filter_by(av_status=2).order_by(asc(tbl_alpha_val.av_alpha)).all()
@@ -252,6 +275,29 @@ def graph():
             b_y = safe_float(material.mat_b_val_y)
             c_y = safe_float(material.mat_c_val_y)
             d_y = safe_float(material.mat_d_val_y)
+
+            if(ddlfuntion == '1'): #Trapezoidal
+                if mat_name == 'Aluminium':
+                    filename = "TRAP_" + "AL"
+                elif mat_name == 'Neoprene Rubber':
+                    filename = "TRAP_" + "NR"
+                elif mat_name == 'Teflon':
+                    filename = "TRAP_" + "TF"
+                elif mat_name == 'Nylon':
+                    filename = "TRAP_" + "NL"
+                elif mat_name == 'SS-304 Grade ABS Silicon':
+                    filename = "TRAP_" + "SS304"
+            if(ddlfuntion == '2'): #Triangular
+                if mat_name == 'Aluminium':
+                    filename = "TRIA_" + "AL"
+                elif mat_name == 'Neoprene Rubber':
+                    filename = "TRIA_" + "NR"
+                elif mat_name == 'Teflon':
+                    filename = "TRIA_" + "TF"
+                elif mat_name == 'Nylon':
+                    filename = "TRIA_" + "NL"
+                elif mat_name == 'SS-304 Grade ABS Silicon':
+                    filename = "TRIA_" + "SS304"
         # print("Material Name =====>>>>", mat_name)
         fun_type = ''
         if(ddlfuntion == '1'):   
@@ -260,8 +306,8 @@ def graph():
             fun_type = "Triangular"
         show_alpha="d-hide"
         show_alpha_dash="d-hide"
-        t1 = "Alpha_Table.png"
-        t2 = "Alpha_Table_Dash.png"
+        t1 = filename + "_Alpha_Table.png"
+        t2 = filename + "_Alpha_Table_Dash.png"
         # Select Alpha Cut: ddlalphacut
         if(ddlalphacut == "1"): #Alpha Cut
             t2 = "basic.avif"
@@ -274,7 +320,7 @@ def graph():
                 fn_dict = GetFunsTriangular(alpha_cuts,a_y,b_y,c_y,a_d,b_d,c_d)
                 # print(fn_dict)
                 export_table_image(t1, "Table : α-Cut",fn_dict, alpha_cuts, None)
-            g2 = 'Bar_alpha' + 'MF' + '.png' 
+            g2 = filename + '_Bar_alpha' + '.png' 
             g1 = GetBarChat(alpha_cuts, fn_dict, g2, mat_name, 1, fun_type)
             show_alpha = "d-show"
         elif(ddlalphacut == "2"): #Alpha dash Cuts 
@@ -294,7 +340,7 @@ def graph():
                 # print(fn_dict_dash)
                 export_table_image(t2, "Table : α-α'-Cut",fn_dict_dash, alpha, alpha_dash_cuts)
                 # print(fn_dict_dash)
-            g4 = 'Bar_alpha_dash' + 'MF' + '.png' 
+            g4 = filename + '_Bar_alpha_dash' + '.png' 
             g3 = GetBarChat2(alpha,alpha_dash_cuts, fn_dict_dash, g4, mat_name, 2, fun_type)
             show_alpha_dash = "d-show"
         add_Alpha_val(a1, alpha_val1)
@@ -331,8 +377,11 @@ from Trapezoidal import GetFuzzyFunction_aplha, GetFuzzyFunction_aplha_alpha_das
 from Triangular import GetFuzzyFunction_aplha2, GetFuzzyFunction_aplha_alpha_dash2
 # from TriangularDensity import TriangularDensity
 # from TriangularYoung import TriangularYoungFun
-@app.route('/', methods=['GET', 'POST'])
-def index():
+@app.route('/home', methods=['GET', 'POST'])
+def home():
+    if 'user_id' not in session:
+        flash('Please login first', 'error')
+        return redirect(url_for('login'))
     fn_dict_dash = fn_dict = ''
     # materials = tbl_materials.query.filter_by(mat_status=1).all()  # Only active materials    
     g1 = g2 = g3 = g4 = 'basic.avif' # Default Graph Image
@@ -370,12 +419,38 @@ def index():
                 is_update = True
             else:
                 is_update = False    
-            # Create Alpha Graph
-            g1 = 'Alpha_' + 'Density' + '.png'   
-            g3 = 'Alpha_' + 'Young' + '.png' 
-            g2 = 'Alpha_dash_' + 'Density' + '.png'  
-            g4 = 'Alpha_dash_' + 'Young' + '.png' 
+            filename=''
             material = tbl_materials.query.filter_by(mat_id=ddlmaterials).first()
+            if material:
+                mat_name = material.mat_name if material else None            
+                if(ddlfuntion == '1'): #Trapezoidal
+                    if mat_name == 'Aluminium':
+                        filename = "TRAP_" + "AL"
+                    elif mat_name == 'Neoprene Rubber':
+                        filename = "TRAP_" + "NR"
+                    elif mat_name == 'Teflon':
+                        filename = "TRAP_" + "TF"
+                    elif mat_name == 'Nylon':
+                        filename = "TRAP_" + "NL"
+                    elif mat_name == 'SS-304 Grade ABS Silicon':
+                        filename = "TRAP_" + "SS304"
+                if(ddlfuntion == '2'): #Triangular
+                    if mat_name == 'Aluminium':
+                        filename = "TRIA_" + "AL"
+                    elif mat_name == 'Neoprene Rubber':
+                        filename = "TRIA_" + "NR"
+                    elif mat_name == 'Teflon':
+                        filename = "TRIA_" + "TF"
+                    elif mat_name == 'Nylon':
+                        filename = "TRIA_" + "NL"
+                    elif mat_name == 'SS-304 Grade ABS Silicon':
+                        filename = "TRIA_" + "SS304"
+            # Create Alpha Graph
+            g1 = filename + '_Alpha_' + 'Density' + '.png'   
+            g3 = filename + '_Alpha_' + 'Young' + '.png' 
+            g2 = filename + '_Alpha_dash_' + 'Density' + '.png'  
+            g4 = filename + '_Alpha_dash_' + 'Young' + '.png' 
+            
             if material:
                 mat_name = material.mat_name if material else None
                 a_d = safe_float(material.mat_a_val_d)
@@ -409,12 +484,16 @@ def index():
                 # a, b, c = 68947600000, 74456800000, 79966000000
                 # a, b, c = 100000, 300000, 500000
                 if a1 != '' and a2 != '' and a3 != '':
+                    alpha_cuts = [a1,a2,a3]
                     GetFuzzyFunction_aplha2(a_d,b_d,c_d,a1,a2,a3,g1,mat_name,"Density")
                     GetFuzzyFunction_aplha2(a_y,b_y,c_y,a1,a2,a3,g3,mat_name,"Young's Modulus")
+                    fn_dict = GetMinMax_Tri(alpha_cuts,a_y,b_y,c_y,a_d,b_d,c_d)
                 if a4 != '' and a5 != '' and a6 != '':                    
                     # alpha - alpha dash cut
+                    alpha_dash = [a4,a5,a6]
                     GetFuzzyFunction_aplha_alpha_dash2(a_d,b_d,c_d,a1,a2,a3,a4,a5,a6,g2,mat_name,"Density")
-                    GetFuzzyFunction_aplha_alpha_dash2(a_y,b_y,c_y,a1,a2,a3,a4,a5,a6,g4,mat_name,"Young's Modulus")                
+                    GetFuzzyFunction_aplha_alpha_dash2(a_y,b_y,c_y,a1,a2,a3,a4,a5,a6,g4,mat_name,"Young's Modulus") 
+                    fn_dict_dash = GetMinMax_Tri2(alpha_cuts, a_y,b_y,c_y,a_d,b_d,c_d,alpha_dash)                           
             # search_value = 0.51
             add_Alpha_val(a1, alpha_val1)
             add_Alpha_val(a2, alpha_val1)
@@ -684,6 +763,7 @@ def export_excel2():
         file2 = request.form.get('file2')
         file3 = request.form.get('file3')
         file4 = request.form.get('file4')
+        # filename = request.form.get('filename')
         # print("file1>>",file1)
         # print("fn_dict_dash>>",fn_dict_dash)
                     
@@ -735,6 +815,102 @@ def export_excel2():
             except:
                 pass
 
+@app.route('/')
+def index():
+    return render_template('home.html', current_user=None)
+
+@app.route('/', endpoint='contact')
+def hello_world():
+    return render_template('index.html', current_user=None)
+
+@app.route('/profile', endpoint='profile')
+def hello_world():
+    return render_template('profile.html', current_user=None)
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        # Get form data
+        full_name = request.form.get('full_name')
+        username_email = request.form.get('username_email')
+        password = request.form.get('password')
+        confirm_password = request.form.get('confirm_password')
+        # master_password = request.form.get('master_password')
+        
+        # Validate form data
+        if not all([full_name, username_email, password, confirm_password]):
+            flash('All fields are required', 'error')
+            return render_template('register.html')
+        
+        # Validate username/email format
+        email_pattern = re.compile(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+        is_email = bool(email_pattern.match(username_email))
+        
+        if password != confirm_password:
+            flash('Passwords do not match', 'error')
+            return render_template('register.html')
+            
+        # Check if user already exists
+        existing_user = User.query.filter_by(username_email=username_email).first()
+        
+        if existing_user:
+            flash('Username/Email already registered', 'error')
+            return render_template('register.html')
+            
+        # Hash passwords
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+        # hashed_master_password = bcrypt.hashpw(master_password.encode('utf-8'), bcrypt.gensalt()) if master_password else None
+        
+        # Create new user
+        new_user = User(
+            full_name=full_name,
+            username_email=username_email,
+            is_email=is_email,
+            password=hashed_password,
+            # master_password=hashed_master_password,
+            user_type='user'
+        )        
+        # Insert user into database
+        db.session.add(new_user)
+        db.session.commit()        
+        flash('Registration successful! Please login.', 'success')
+        return redirect(url_for('login'))    
+    return render_template('register.html', current_user=None)
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username_email = request.form.get('username_email')
+        password = request.form.get('password')
+        # master_password = request.form.get('master_password')
+        
+        if not all([username_email, password]):
+            flash('All fields are required', 'error')
+            return render_template('login.html')
+        
+        # Find user by username_email
+        user = User.query.filter_by(username_email=username_email).first()
+        
+        # Check if user exists and passwords match
+        if user and bcrypt.checkpw(password.encode('utf-8'), user.password):
+            # Create session for user
+            session['user_id'] = user.id
+            session['username_email'] = user.username_email
+            session['name'] = user.full_name
+            session['user_type'] = user.user_type
+            flash('Login successful!', 'success')
+            return redirect(url_for('home'))
+        else:
+            flash('Invalid credentials', 'error')
+            return render_template('login.html')
+    
+    return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    flash('You have been logged out', 'success')
+    return redirect(url_for('login'))
 
 if __name__ == '__main__':
     # app.run(host="0.0.0.0", port=8000, debug=True)

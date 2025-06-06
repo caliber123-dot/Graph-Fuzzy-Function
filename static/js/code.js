@@ -74,7 +74,44 @@ function ExportToExcel() {
     const arrexp = [];
     const fnDict = document.getElementById('fn_dict').value;
     const fnDictDash = document.getElementById('fn_dict_dash').value;
-    // alert(fnDict);
+    const Tfn = document.getElementById('ddlfuntion');
+    const Material = document.getElementById('ddlmaterials');
+    let filename = '';
+    if (Tfn.selectedIndex == 0) {
+        alert('Select Fuzzy Membership Function');
+        return;
+    }
+    if (Material.selectedIndex == 0) {
+        alert('Select Materials');
+        return;
+    }
+    else if (Tfn.selectedIndex == 1) {
+        const selectedMaterial = Material.options[Material.selectedIndex].text.trim();
+        // alert(selectedMaterial);               
+        if (selectedMaterial == 'Aluminium')
+            filename = "TRAP_" + "AL"
+        else if (selectedMaterial == 'Neoprene Rubber')
+            filename = "TRAP_" + "NR"
+        else if (selectedMaterial == 'Teflon')
+            filename = "TRAP_" + "TF"
+        else if (selectedMaterial == 'Nylon')
+            filename = "TRAP_" + "NL"
+        else if (selectedMaterial == 'SS-304 Grade ABS Silicon')
+            filename = "TRAP_" + "SS304"
+    }
+    else if (Tfn.selectedIndex == 2) {
+        const selectedMaterial = Material.options[Material.selectedIndex].text.trim();
+        if (selectedMaterial == 'Aluminium')
+            filename = "TRIA_" + "AL"
+        else if (selectedMaterial == 'Neoprene Rubber')
+            filename = "TRIA_" + "NR"
+        else if (selectedMaterial == 'Teflon')
+            filename = "TRIA_" + "TF"
+        else if (selectedMaterial == 'Nylon')
+            filename = "TRIA_" + "NL"
+        else if (selectedMaterial == 'SS-304 Grade ABS Silicon')
+            filename = "TRIA_" + "SS304"
+    }
     // Collect image filenames
     for (const id of imageIds) {
         const img = document.getElementById(id);
@@ -90,8 +127,12 @@ function ExportToExcel() {
     formData.append('file2', arrexp[1]);
     formData.append('file3', arrexp[2]);
     formData.append('file4', arrexp[3]);
-    // alert(arrexp[1])
-
+    // alert(fnDictDash)
+    if (filename == '')
+        filename = 'exported_charts';
+    // formData.append('filename', filename);
+    // filename
+    // alert(filename);
     // Show loading state
     const exportBtn = document.querySelector('[onclick="ExportToExcel()"]');
     exportBtn.disabled = true;
@@ -114,7 +155,7 @@ function ExportToExcel() {
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'exported_charts.xlsx';
+            a.download = filename + '_LineChart' + '.xlsx';
             document.body.appendChild(a);
             a.click();
 
@@ -137,4 +178,3 @@ function ExportToExcel() {
         });
 }
 
-   

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Login</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <style>
+        body {
+            background: linear-gradient(135deg, #e0e7ff 0%, #a5b4fc 100%);
+            min-height: 100vh;
+            /* display: flex; */
+            align-items: center;
+            justify-content: center;
+            /* padding: 20px; */
+            font-family: 'Nunito', sans-serif;
+        }
+        .form-container {
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            padding: 2.5rem;
+            max-width: 500px;
+            width: 100%;
+        }
+        .form-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #1e293b;
+            text-align: center;
+            margin-bottom: 1.2rem;
+        }
+        .form-control {
+            border-radius: 10px;
+            border: 1px solid #d1d5db;
+            padding: 0.75rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .form-control:focus {
+            border-color: #4f46e5;
+            box-shadow: 0 0 10px rgba(79, 70, 229, 0.2);
+            outline: none;
+        }
+        .btn-primary {
+            background: #4f46e5;
+            border: none;
+            border-radius: 10px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+        .btn-primary:hover {
+            background: #4338ca;
+            transform: translateY(-2px);
+        }
+        .form-label {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+        .form-check-label {
+            color: #1e293b;
+            font-weight: 400;
+        }
+        .login-link {
+            color: #4f46e5;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .login-link:hover {
+            color: #4338ca;
+            text-decoration: underline;
+        }
+        .form-section {
+            margin-bottom: 1.5rem;
+        }
+        .input-icon {
+            position: relative;
+        }
+        .input-icon i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6b7280;
+        }
+        .form-control.with-icon {
+            padding-left: 2.5rem;
+        }
+        @media (max-width: 576px) {
+            .form-container {
+                padding: 1.5rem;
+            }
+            .form-title {
+                font-size: 1.6rem;
+            }
+            .form-control {
+                font-size: 0.9rem;
+            }
+            .btn-primary {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                 <i class="bi bi-graph-up-arrow me-2"></i>Fuzzy Function Project
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('contact') }}">Contact</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    <!-- Theme Toggle -->
+                    <div class="theme-toggle me-3" id="theme-toggle"></div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    <div class="container mt-3">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <div class="form-container auth-card card mt-0" >
+        
+        <h2 class="form-title">Login here</h2>
+        <form id="loginForm" action="/login" method="POST">
+            <!-- Email -->
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <div class="input-icon">
+                    <i class="bi bi-envelope"></i>
+                    <input type="email" class="form-control with-icon" id="username_email" name="username_email" placeholder="e.g., john@example.com" required>
+                </div>
+            </div>
+
+            <!-- Password -->
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <div class="input-icon">
+                    <i class="bi bi-lock"></i>
+                    <input type="password" class="form-control with-icon" id="password" name="password" placeholder="Enter your password" required>
+                </div>
+            </div>
+
+            <!-- Master Password -->
+            
+
+            <!-- Remember Me -->
+            <div class="mb-3">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="rememberMe" name="rememberMe">
+                    <label class="form-check-label" for="rememberMe">Remember Me</label>
+                </div>
+            </div>
+
+            <!-- Login Button -->
+            <div class="d-grid mb-3">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-box-arrow-in-right me-2"></i>Login
+                </button>
+            </div>
+
+            <!-- Register Link -->
+            <div class="text-center">
+                <p>Don't have an account? <a href="/register" class="register-link">Register here</a></p>
+            </div>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Password visibility toggle for Master Password
+        const toggleMasterPassword = document.getElementById('toggleMasterPassword');
+        const masterPasswordInput = document.getElementById('masterPassword');
+
+        toggleMasterPassword.addEventListener('click', () => {
+            const type = masterPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            masterPasswordInput.setAttribute('type', type);
+            toggleMasterPassword.classList.toggle('bi-eye');
+            toggleMasterPassword.classList.toggle('bi-eye-slash');
+        });
+    </script>
+     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

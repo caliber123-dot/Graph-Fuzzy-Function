@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fuzzy Function Project - {% block title %}Home{% endblock %}</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f8f9fa;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background-color: #ffffff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .banner {
+            background: linear-gradient(135deg, #0052cc, #33bbff);
+            color: white;
+            /* padding: 5rem 0; */
+            /* border-radius: 0 0 30px 30px; */
+            position: relative;
+            overflow: hidden;
+        }
+
+        .banner::after {
+            /* content: ''; */
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.1"><path d="M0 50 Q25 25 50 50 T100 50" stroke="white" stroke-width="2" fill="none"/></svg>') repeat; */
+            opacity: 0.1;
+        }
+
+        .banner h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .banner p.lead {
+            font-size: 1.3rem;
+            font-weight: 400;
+        }
+
+        .btn-primary,
+        .btn-outline-light {
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover,
+        .btn-outline-light:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .feature-card {
+            border: none;
+            border-radius: 15px;
+            background: #fff;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-icon {
+            color: #0052cc;
+        }
+
+        .section-padding {
+            padding: 2rem 0;
+        }
+
+        footer {
+            background-color: #212529;
+            color: #fff;
+            padding: 1rem 0;
+            padding-top: 50px;
+        }
+
+        footer a {
+            color: #33bbff;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .banner h1 {
+                font-size: 2rem;
+            }
+
+            .banner p.lead {
+                font-size: 1.1rem;
+            }
+
+            .banner img {
+                max-height: 200px;
+                margin-top: 2rem;
+            }
+
+            .section-padding {
+                padding: 3rem 0;
+            }
+
+            .feature-card {
+                margin-bottom: 2rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    {% block additional_css %}{% endblock %}
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="bi bi-graph-up-arrow me-2"></i>Fuzzy Function Project
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == url_for('home') %}active{% endif %}" href="/">Home</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == url_for('graph') %}{% endif %}"
+                            href="{{ url_for('home') }}">Graph</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == url_for('contact') %}{% endif %}"
+                            href="{{ url_for('contact') }}">Contact</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    <!-- Theme Toggle -->
+                    <div class="theme-toggle me-3" id="theme-toggle">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <!-- Authentication Links -->
+                    <div class="ms-3">
+                        {% if session.get('user_id') %}
+                        <div class="dropdown">
+                            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="userDropdown"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-circle me-1"></i> {{ session.get('name') }}
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item" href="{{ url_for('profile') }}"><i
+                                            class="fas fa-user me-2"></i>Profile</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="{{ url_for('logout') }}"><i
+                                            class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                            </ul>
+                        </div>
+                        {% else %}
+                        <a href="/login" class="btn btn-outline-primary me-2"><i
+                                class="fas fa-sign-in-alt me-2"></i>Login</a>
+                        <a href="/register" class="btn btn-primary"><i class="fas fa-user-plus me-2"></i>Register</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    <div class="container mt-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}
+        <!-- Banner Section -->
+        <section class="banner">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-8">
+                        <h1><i class="bi bi-graph-up-arrow me-2"></i>Fuzzy Logic Material Analysis</h1>
+                        <p class="lead">Visualize and compute trapezoidal and triangular fuzzy membership functions for
+                            material properties like density and Young's modulus.</p>
+                        <div class="mt-4">
+                            <!-- <a href="{{ url_for('home') }}"  class="btn btn-primary btn-lg me-2"><i
+                                    class="fas fa-chart-line me-2"></i>Try Now</a> -->
+                            
+                            <a href="{{ url_for('home') }}" class="btn btn-outline-light btn-lg"><i
+                                    class="fas fa-user-plus me-2"></i>Get Started</a>
+                           
+                            <button class="btn btn-outline-dark btn-lg me-2 ms-2" onclick="downloadExe()"><i
+                                    class="fas fa-download me-2"></i>Download Standalone Apps</button>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 text-center">
+                        <!-- <img src="{{ url_for('static', filename='images/fuzzy-graph-placeholder.png') }}" alt="Fuzzy Function Graph" class="img-fluid rounded shadow" style="max-height: 300px;"> -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Welcome Section -->
+        <section class="section-padding">
+            <div class="container">
+                <div class="row text-center mb-5">
+                    <div class="col-12">
+                        {% if current_user.is_authenticated %}
+                        <h2>Welcome back, {{ current_user.name }}!</h2>
+                        <p class="lead">Explore fuzzy logic for material analysis with interactive graphs and fast
+                            computations.</p>
+                        {% else %}
+                        <h2>Welcome to Fuzzy Function Project</h2>
+                        <p class="lead">A lightweight web app for visualizing fuzzy membership functions, built for
+                            material science and engineering.</p>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div class="card feature-card h-100">
+                            <div class="card-header bg-primary text-white">
+                                <h4><i class="fas fa-star me-2"></i>Main Features</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="bi bi-graph-up-arrow fa-2x feature-icon me-3"></i>
+                                    <div>
+                                        <h5>Interactive Graphs</h5>
+                                        <p class="mb-0">Visualize trapezoidal and triangular fuzzy functions with
+                                            zooming and saving capabilities.</p>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="fas fa-sliders-h fa-2x feature-icon me-3"></i>
+                                    <div>
+                                        <h5>Flexible User Inputs</h5>
+                                        <p class="mb-0">Customize alpha values (α1, α2, α3, α'1, α'2, α'3) and material
+                                            properties like density.</p>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="fas fa-file-excel fa-3x feature-icon me-3"></i>
+                                    <div>
+                                        <h5>Excel Export</h5>
+                                        <p class="mb-0">Export generated graphs to Excel for further analysis (1.8–4.5s
+                                            processing).</p>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-book-open fa-2x feature-icon me-3"></i>
+                                    <div>
+                                        <h5>Academic Integration</h5>
+                                        <p class="mb-0">Based on fuzzy logic research, e.g., <em>Flexible Robot Control
+                                                Using Fuzzy Functions</em>.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="card feature-card h-100">
+                            <div class="card-header bg-primary text-white">
+                                <h4><i class="fas fa-tachometer-alt me-2"></i>Performance & Efficiency</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="fas fa-bolt fa-2x feature-icon me-3 ms-2"></i>
+                                    <div>
+                                        <h5>Fast Computations</h5>
+                                        <p class="mb-0">Graph generation in 0.5–2 seconds using vectorized NumPy
+                                            calculations.</p>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="fas fa-memory fa-2x feature-icon me-3"></i>
+                                    <div>
+                                        <h5>Low Memory Usage</h5>
+                                        <p class="mb-0">50–100 MB for graphs, peaking at 200 MB for Excel exports.</p>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-database fa-2x feature-icon me-3 ms-2"></i>
+                                    <div>
+                                        <h5>Efficient Database</h5>
+                                        <p class="mb-0">SQLite with SQLAlchemy, O(1) queries (12–18 ms).</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer bg-light text-center">
+                                <a href="/" target="_blank" class="btn btn-outline-primary"><i
+                                        class="fas fa-chart-line me-2"></i>Test Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Key Capabilities Section -->
+        <section class="section-padding bg-light1">
+            <div class="container">
+                <div class="row text-center mb-5">
+                    <div class="col-12">
+                        <h2>Key Capabilities</h2>
+                        <p class="lead">Advanced tools for fuzzy logic-based material analysis.</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="card feature-card h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-shapes fa-3x feature-icon mb-3"></i>
+                                <h4>Fuzzy Function Types</h4>
+                                <p>Support for trapezoidal and triangular membership functions for versatile analysis.
+                                </p>
+                                <a href="/" target="_blank" class="btn btn-outline-primary">
+                                    <i class="fas fa-chart-line me-2"></i>Try Functions
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card feature-card h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-sliders-h fa-3x feature-icon mb-3"></i>
+                                <h4>Predefined Examples</h4>
+                                <p>Quickly visualize fuzzy functions with built-in examples in app.py.</p>
+                                <a href="/" target="_blank" class="btn btn-outline-primary">
+                                    <i class="fas fa-play me-2"></i>Explore Examples
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card feature-card h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-cogs fa-3x feature-icon mb-3"></i>
+                                <h4>Optimized Performance</h4>
+                                <p>Vectorized NumPy, caching, and Web Workers for fast, efficient processing.</p>
+                                <a href="/" target="_blank" class="btn btn-outline-primary">
+                                    <i class="fas fa-tachometer-alt me-2"></i>Test Performance
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card feature-card h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-palette fa-3x feature-icon mb-3"></i>
+                                <h4>Customizable UI</h4>
+                                <p>Theme switcher and dynamic graph backgrounds for enhanced user experience.</p>
+                                <a href="/" target="_blank" class="btn btn-outline-primary">
+                                    <i class="fas fa-paint-brush me-2"></i>Customize Graphs
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card feature-card h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-server fa-3x feature-icon mb-3"></i>
+                                <h4>Lightweight Deployment</h4>
+                                <p>Hosted on Render.com with low CPU (0.1–0.25 vCPUs) and memory usage.</p>
+                                <a href="{{ url_for('register') }}" class="btn btn-outline-primary">
+                                    <i class="fas fa-user-plus me-2"></i>Get Started
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card feature-card h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-book-open fa-3x feature-icon mb-3"></i>
+                                <h4>Academic Grounding</h4>
+                                <p>Built on fuzzy logic research for decision-making under uncertainty.</p>
+                                <a href="/" target="_blank" class="btn btn-outline-primary">
+                                    <i class="fas fa-graduation-cap me-2"></i>Learn More
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5><i class="bi bi-graph-up-arrow me-2"></i>Fuzzy Function Project</h5>
+                    <p>Interactive fuzzy logic analysis for material properties, hosted on Render.com.</p>
+                </div>
+                <div class="col-md-3">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="{{ url_for('home') }}" target="_blank">Graph</a></li>
+                        <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Contact</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-map-marker-alt me-2"></i>26 Hingna, Nagpur</li>
+                        <li><i class="fas fa-phone me-2"></i>(123) 456-7890</li>
+                        <li><i class="fas fa-envelope me-2"></i>info@fuzzyfunction.com</li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center">
+                <p>© 2025 Fuzzy Function Project. MIT License.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    {% block additional_js %}{% endblock %}
+</body>
+
+</html>

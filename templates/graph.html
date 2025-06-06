@@ -221,11 +221,14 @@
 <body id="mbody">
     <h1>Study on Natural Frequency of Oscillation of Unilink Flexible Robot using Fuzzy Function</h1>
     <ul>
-        <li><a href="/">Home</a></li>
+        <li><a href="/home">Home</a></li>
         <li><a class="active" href="/graph">Bar Chart</a></li>
         <li><a href="/abcd">Edit in (a,b,c,d)</a></li>
-        <li><a href="/newmat">New Material</a></li>
-        <li><a href="/newbar">New BarChart</a></li>
+        <li style="display: none;"><a href="/newmat">New Material</a></li>
+        <li style="display: none;"><a href="/newbar">New BarChart</a></li>
+        
+        <li style="float: right;"><a href="/logout">Logout</a></li>
+        <li style="float: right;"><a href="">Welcome, {{ session.get('name') }}</a></li>
     </ul>
     <form action="/graph" method="POST">
         <div class="container" id="mainContainer">
@@ -270,8 +273,9 @@
                         <!-- <tr id="tr1" class="tr_display"> -->
                         <td style="width: 20%;"><b>α1:</b></td>
                         <td><input type="text" list="alpha1-options" id="alpha1" name="alpha1" value="{{a1}}"
-                                placeholder="View Alpha Value α1" required autocomplete="off"
-                                onkeypress="return validateOneToFourDecimals(this)">
+                                placeholder="Enter α1" required autocomplete="off"
+                                onkeypress="return validateZeroDecimalInput(event)"
+                                oninput="validateZeroDecimalFormat(this)" onblur="validateZeroDecimalFinal(this)">
                             <datalist id="alpha1-options">
                                 {% for val1 in alpha_val1 %}
                                 <option value="{{ val1.av_alpha}}"></option>
@@ -282,8 +286,9 @@
                     <tr id="tr2" class="tr_display {{ show_alpha }}">
                         <td style="width: 20%;"><b>α2:</b></td>
                         <td><input type="text" list="alpha2-options" id="alpha2" name="alpha2" value="{{a2}}"
-                                placeholder="View Alpha Value α2" required autocomplete="off"
-                                onkeypress="return validateOneToFourDecimals(this)">
+                                placeholder="Enter α2" required autocomplete="off"
+                                onkeypress="return validateZeroDecimalInput(event)"
+                                oninput="validateZeroDecimalFormat(this)" onblur="validateZeroDecimalFinal(this)">
                             <datalist id="alpha2-options">
                                 {% for val1 in alpha_val1 %}
                                 <option value="{{ val1.av_alpha}}"></option>
@@ -294,8 +299,9 @@
                     <tr id="tr3" class="tr_display {{ show_alpha }}">
                         <td style="width: 20%;"><b>α3:</b></td>
                         <td><input type="text" list="alpha3-options" id="alpha3" name="alpha3" value="{{a3}}"
-                                placeholder="View Alpha Value α3" required autocomplete="off"
-                                onkeypress="return validateOneToFourDecimals(this)">
+                                placeholder="Enter α3" required autocomplete="off"
+                                onkeypress="return validateZeroDecimalInput(event)"
+                                oninput="validateZeroDecimalFormat(this)" onblur="validateZeroDecimalFinal(this)">
                             <datalist id="alpha3-options">
                                 {% for val1 in alpha_val1 %}
                                 <option value="{{ val1.av_alpha}}"></option>
@@ -306,8 +312,9 @@
                     <tr id="tr4" class="tr_display {{ show_alpha_dash }}">
                         <td style="width: 20%;"><b>α-α'1:</b></td>
                         <td><input type="text" list="alpha11-options" name="alpha_dash11" id="alphadash11"
-                                value="{{a1}}" style="width: 40%;float: left;" placeholder="View Alpha Value α-α'1"
-                                autocomplete="off">
+                                value="{{a1}}" style="width: 40%;float: left;" placeholder="Enter α1"
+                                autocomplete="off" onkeypress="return validateZeroDecimalInput(event)"
+                                oninput="validateZeroDecimalFormat(this)" onblur="validateZeroDecimalFinal(this)">
                             <datalist id="alpha11-options">
                                 {% for val1 in alpha_val1 %}
                                 <option value="{{ val1.av_alpha}}"></option>
@@ -316,7 +323,8 @@
                             -
                             <input type="text" list="alpha_dash1-options" name="alpha_dash1" id="alphadash1"
                                 value="{{a4}}" autocomplete="off" style="width: 40%;"
-                                placeholder="View Alpha Value α-α'1">
+                                placeholder="Enter α'1" onkeypress="return validateZeroDecimalInput(event)"
+                                oninput="validateZeroDecimalFormat(this)" onblur="validateZeroDecimalFinal(this)">
                             <datalist id="alpha_dash1-options">
                                 {% for val2 in alpha_val2 %}
                                 <option value="{{ val2.av_alpha}}"></option>
@@ -328,7 +336,8 @@
                         <td style="width: 20%;"><b>α-α'2:</b></td>
                         <td><input type="text" name="alpha_dash22" id="alphadash22" value="{{a2}}"
                                 list="alpha22-options" autocomplete="off" style="width: 40%;float: left;"
-                                placeholder="View Alpha Value α-α'1">
+                                placeholder="Enter α2" onkeypress="return validateZeroDecimalInput(event)"
+                                oninput="validateZeroDecimalFormat(this)" onblur="validateZeroDecimalFinal(this)">
                             <datalist id="alpha22-options">
                                 {% for val1 in alpha_val1 %}
                                 <option value="{{ val1.av_alpha}}"></option>
@@ -337,7 +346,8 @@
                             -
                             <input type="text" name="alpha_dash2" id="alphadash2" value="{{a5}}"
                                 list="alpha_dash2-options" autocomplete="off" style="width: 40%;"
-                                placeholder="View Alpha Value α-α'2">
+                                placeholder="Enter α'2" onkeypress="return validateZeroDecimalInput(event)"
+                                oninput="validateZeroDecimalFormat(this)" onblur="validateZeroDecimalFinal(this)">
                             <datalist id="alpha_dash2-options">
                                 {% for val2 in alpha_val2 %}
                                 <option value="{{ val2.av_alpha}}"></option>
@@ -349,7 +359,8 @@
                         <td style="width: 20%;"><b>α-α'3:</b></td>
                         <td><input type="text" name="alpha_dash33" id="alphadash33" value="{{a3}}"
                                 list="alpha33-options" autocomplete="off" style="width: 40%;float: left;"
-                                placeholder="View Alpha Value α-α'1">
+                                placeholder="Enter α3" onkeypress="return validateZeroDecimalInput(event)"
+                                oninput="validateZeroDecimalFormat(this)" onblur="validateZeroDecimalFinal(this)">
                             <datalist id="alpha33-options">
                                 {% for val1 in alpha_val1 %}
                                 <option value="{{ val1.av_alpha}}"></option>
@@ -358,7 +369,8 @@
                             -
                             <input type="text" name="alpha_dash3" id="alphadash3" value="{{a6}}"
                                 list="alpha_dash3-options" autocomplete="off" style="width: 40%;"
-                                placeholder="View Alpha Value α-α'3">
+                                placeholder="Enter α'3" onkeypress="return validateZeroDecimalInput(event)"
+                                oninput="validateZeroDecimalFormat(this)" onblur="validateZeroDecimalFinal(this)">
                             <datalist id="alpha_dash3-options">
                                 {% for val2 in alpha_val2 %}
                                 <option value="{{ val2.av_alpha}}"></option>
@@ -487,6 +499,7 @@
         function onMyPopup(ctrl) {
             modal.style.display = "block";
             modalImg.src = ctrl.src;
+            modalImg.alt = ctrl.alt;
             // captionText.innerHTML = ctrl.alt;
         }
 
@@ -532,6 +545,44 @@
             // const imageIds = ['gr1', 'gr2', 'gr3']; // IDs of all images
             const pdf = new jsPDF();
             let imagesAdded = 0; // Track how many images were successfully added
+            const Tfn = document.getElementById('ddlfuntion');
+            const Material = document.getElementById('ddlmaterials');
+            let filename ='';
+            if (Tfn.selectedIndex == 0) {
+                alert('Select Fuzzy Membership Function');
+                return;
+            }
+            if (Material.selectedIndex == 0) {
+                alert('Select Materials');
+                return;
+            }
+            else if (Tfn.selectedIndex == 1){
+                const selectedMaterial = Material.options[Material.selectedIndex].text.trim();
+                // alert(selectedMaterial);               
+                if (selectedMaterial == 'Aluminium')
+                    filename = "TRAP_" + "AL"
+                else if(selectedMaterial == 'Neoprene Rubber')
+                    filename = "TRAP_" + "NR"
+                else if(selectedMaterial == 'Teflon')                   
+                    filename = "TRAP_" + "TF"
+                else if(selectedMaterial == 'Nylon')                   
+                    filename = "TRAP_" + "NL"
+                else if(selectedMaterial == 'SS-304 Grade ABS Silicon')                   
+                    filename = "TRAP_" + "SS304"
+            }
+            else if (Tfn.selectedIndex == 2){
+                const selectedMaterial = Material.options[Material.selectedIndex].text.trim();                
+                if (selectedMaterial == 'Aluminium')
+                    filename = "TRIA_" + "AL"
+                else if(selectedMaterial == 'Neoprene Rubber')
+                    filename = "TRIA_" + "NR"
+                else if(selectedMaterial == 'Teflon')                   
+                    filename = "TRIA_" + "TF"
+                else if(selectedMaterial == 'Nylon')                   
+                    filename = "TRIA_" + "NL"
+                else if(selectedMaterial == 'SS-304 Grade ABS Silicon')                   
+                    filename = "TRIA_" + "SS304"
+            }
             try {
                 for (let i = 0; i < imageIds.length; i++) {
                     const img = document.getElementById(imageIds[i]);
@@ -570,9 +621,12 @@
                     alert('No compatible images found (skipped AVIF).');
                     return;
                 }
+                if(filename == '')
+                    filename = 'graph';
 
                 const fileHandle = await window.showSaveFilePicker({
-                    suggestedName: 'bar_graph.pdf',
+                    // suggestedName: 'bar_graph.pdf',
+                    suggestedName: filename + '_BarChart' + '.pdf',
                     types: [{ description: 'PDF', accept: { 'application/pdf': ['.pdf'] } }],
                 });
                 const writable = await fileHandle.createWritable();
@@ -651,8 +705,12 @@
                     return;
                 }
 
+                const img01 = document.getElementById('img01');
+                const new_img01 = img01.alt.replace(/\.png$/, "");
+
                 const fileHandle = await window.showSaveFilePicker({
-                    suggestedName: 'graphs.pdf',
+                    // suggestedName: 'graphs.pdf',
+                    suggestedName: new_img01 + '.pdf',
                     types: [{ description: 'PDF', accept: { 'application/pdf': ['.pdf'] } }],
                 });
                 const writable = await fileHandle.createWritable();

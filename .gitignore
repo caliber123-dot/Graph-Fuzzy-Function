@@ -1,6 +1,7 @@
 myenv
 __pycache__
 info.txt
+instance/fuzzyfuction.db
 templates/demo.html
 templates/demo2.html
 .env

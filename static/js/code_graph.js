@@ -65,7 +65,44 @@ function ExportToExcel() {
     const imageIds = ['gr1', 'gr2', 'gr3', 'gr4'];
     const arrexp = [];
     const fnDict = document.getElementById('fn_dict').value;
-    // alert(fnDict);
+    const Tfn = document.getElementById('ddlfuntion');
+    const Material = document.getElementById('ddlmaterials');
+    let filename = '';
+    if (Tfn.selectedIndex == 0) {
+        alert('Select Fuzzy Membership Function');
+        return;
+    }
+    if (Material.selectedIndex == 0) {
+        alert('Select Materials');
+        return;
+    }
+    else if (Tfn.selectedIndex == 1) {
+        const selectedMaterial = Material.options[Material.selectedIndex].text.trim();
+        // alert(selectedMaterial);               
+        if (selectedMaterial == 'Aluminium')
+            filename = "TRAP_" + "AL"
+        else if (selectedMaterial == 'Neoprene Rubber')
+            filename = "TRAP_" + "NR"
+        else if (selectedMaterial == 'Teflon')
+            filename = "TRAP_" + "TF"
+        else if (selectedMaterial == 'Nylon')
+            filename = "TRAP_" + "NL"
+        else if (selectedMaterial == 'SS-304 Grade ABS Silicon')
+            filename = "TRAP_" + "SS304"
+    }
+    else if (Tfn.selectedIndex == 2) {
+        const selectedMaterial = Material.options[Material.selectedIndex].text.trim();
+        if (selectedMaterial == 'Aluminium')
+            filename = "TRIA_" + "AL"
+        else if (selectedMaterial == 'Neoprene Rubber')
+            filename = "TRIA_" + "NR"
+        else if (selectedMaterial == 'Teflon')
+            filename = "TRIA_" + "TF"
+        else if (selectedMaterial == 'Nylon')
+            filename = "TRIA_" + "NL"
+        else if (selectedMaterial == 'SS-304 Grade ABS Silicon')
+            filename = "TRIA_" + "SS304"
+    }
     // Collect image filenames
     for (const id of imageIds) {
         const img = document.getElementById(id);
@@ -78,6 +115,8 @@ function ExportToExcel() {
     formData.append('fn_dict', fnDict);
     formData.append('file1', arrexp[1]);
     // alert(arrexp[1])
+    if (filename == '')
+        filename = 'exported_charts';
 
     // Show loading state
     const exportBtn = document.querySelector('[onclick="ExportToExcel()"]');
@@ -101,7 +140,8 @@ function ExportToExcel() {
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'exported_charts.xlsx';
+            a.download = filename + '_BarChart' +'.xlsx';
+            // a.download = 'exported_charts.xlsx';
             document.body.appendChild(a);
             a.click();
 

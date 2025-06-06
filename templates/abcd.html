@@ -219,11 +219,14 @@
 <body id="mbody">
     <h1>Study on Natural Frequency of Oscillation of Unilink Flexible Robot using Fuzzy Function</h1>
     <ul>
-        <li><a href="/">Home</a></li>
+        <li><a href="/home">Home</a></li>
         <li><a href="/graph">Bar Chart</a></li>
         <li><a class="active2" href="/abcd">Edit in (a,b,c,d)</a></li>
-        <li><a href="/newmat">New Material</a></li>
-        <li><a href="/newbar">New BarChart</a></li>
+        <li style="display: none;"><a href="/newmat">New Material</a></li>
+        <li style="display: none;"><a href="/newbar">New BarChart</a></li>
+        
+        <li style="float: right;"><a href="/logout">Logout</a></li>
+        <li style="float: right;"><a href="">Welcome, {{ session.get('name') }}</a></li>
     </ul>
     <form action="/abcd" method="POST">
         <div class="container" id="mainContainer">
