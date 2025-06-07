@@ -699,6 +699,7 @@ def export_excel():
     try:
         fn_dict = request.form.get('fn_dict')
         file1 = request.form.get('file1')
+        filetitle = request.form.get('filetitle')
         # print("file1>>",file1)
         # print("fn_dict>>",fn_dict)
                     
@@ -720,7 +721,8 @@ def export_excel():
             output_excel=output_path,
             max_width=600,
             max_height=400,
-            fn_dict=fn_dict
+            fn_dict=fn_dict,
+            filetitle=filetitle
         )
 
         # Verify Excel was created
@@ -763,7 +765,7 @@ def export_excel2():
         file2 = request.form.get('file2')
         file3 = request.form.get('file3')
         file4 = request.form.get('file4')
-        # filename = request.form.get('filename')
+        filetitle = request.form.get('filetitle')
         # print("file1>>",file1)
         # print("fn_dict_dash>>",fn_dict_dash)
                     
@@ -788,7 +790,8 @@ def export_excel2():
             max_width=600,
             max_height=400,
             fn_dict=fn_dict,
-            fn_dict_dash=fn_dict_dash
+            fn_dict_dash=fn_dict_dash,
+            filetitle=filetitle
         )
 
         # Verify Excel was created

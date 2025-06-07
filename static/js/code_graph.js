@@ -118,6 +118,15 @@ function ExportToExcel() {
     if (filename == '')
         filename = 'exported_charts';
 
+    let filetitle = '';
+    const sm = Material.options[Material.selectedIndex].text.trim();
+    if (Tfn.selectedIndex == 1)
+        filetitle = "Trapezoidal Fuzzy Function for " + sm;
+    else if (Tfn.selectedIndex == 2)
+        filetitle = "Triangular Fuzzy Function for " + sm;
+
+    formData.append('filetitle', filetitle);
+
     // Show loading state
     const exportBtn = document.querySelector('[onclick="ExportToExcel()"]');
     exportBtn.disabled = true;
@@ -140,7 +149,7 @@ function ExportToExcel() {
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = filename + '_BarChart' +'.xlsx';
+            a.download = filename + '_BarChart' + '.xlsx';
             // a.download = 'exported_charts.xlsx';
             document.body.appendChild(a);
             a.click();

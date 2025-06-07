@@ -9,7 +9,8 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(to right, #ff9a9e, #fad0c4);
+            /* background: linear-gradient(to right, #ff9a9e, #fad0c4); */
+            background: linear-gradient(to right, #cee9b8, rgb(207, 217, 255));
             text-align: center;
             padding: 20px;
             padding-top: 0px;
@@ -212,17 +213,25 @@
             background-color: #111;
         }
 
-        .active {
+        .active2 {
             background-color: #04AA6D;
         }
     </style>
 </head>
 
 <body id="mbody">
+    <div class="loader" id="loader">
+        <div class="dots-container">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+        <div class="loader-text">Processing...</div>
+    </div>
     <h1>Study on Natural Frequency of Oscillation of Unilink Flexible Robot using Fuzzy Function</h1>
     <ul>
         <li><a href="/home">Home</a></li>
-        <li><a class="active" href="/graph">Bar Chart</a></li>
+        <li><a class="active2" href="/graph">Bar Chart</a></li>
         <li><a href="/abcd">Edit in (a,b,c,d)</a></li>
         <li style="display: none;"><a href="/newmat">New Material</a></li>
         <li style="display: none;"><a href="/newbar">New BarChart</a></li>
@@ -380,13 +389,13 @@
                     </tr>
                 </table>
                 <div class="form-group">
-                    <button type="submit" class="change-bg-btn" style="font-weight: 600;">Create Bar Graph</button>
+                    <button type="submit" class="change-bg-btn" style="font-weight: 600;" onclick="showLoader()">Create Bar Graph</button>
                     <!-- <input type="text" name="cut_id" id="cut_id" value="{{cut_id}}" style="display: none;"> -->
                 </div>
 
                 <div class="form-group color-panel" style="float: left;">
                     <label for="startColor">Change Background Color:</label>
-                    Back Color: <input type="color" id="startColor2" value="#ff9a9e">
+                    Back Color: <input type="color" id="startColor2" value="#cee9b8">
                     <button type="button" class="apply-gradient-btn" onclick="changeBackground(1)">
                         Apply
                     </button>
@@ -524,11 +533,38 @@
                 'linear-gradient(to right, #fff, #f1f1f1)'
             ];
             // let randomColor = colors[Math.floor(Math.random() * colors.length)];           
-            if (mval == 1)
-                document.getElementById('mbody').style.background = startColor2;
-            else if (mval == 2)
-                document.getElementById('mainContainer').style.background = startColor;
+            let selectedColor;
+            if (mval == 1) {
+                selectedColor = startColor2;
+                document.getElementById('mbody').style.background = selectedColor;
+                localStorage.setItem('mbodyBackground', selectedColor); // Save to localStorage
+            } else if (mval == 2) {
+                selectedColor = startColor;
+                document.getElementById('mainContainer').style.background = selectedColor;
+                localStorage.setItem('mainContainerBackground', selectedColor); // Save to localStorage
+            }
         }
+        // Function to apply saved background colors on page load
+        function applySavedBackgrounds() {
+            // alert('call this applySavedBackgrounds');
+            const mbodyBackground = localStorage.getItem('mbodyBackground');
+            const mainContainerBackground = localStorage.getItem('mainContainerBackground');
+
+            // const startColor = document.getElementById('startColor').value;
+            // const startColor2 = document.getElementById('startColor2').value;
+
+            if (mbodyBackground) {
+                document.getElementById('mbody').style.background = mbodyBackground;
+                document.getElementById('startColor2').value = mbodyBackground;
+            }
+            if (mainContainerBackground) {
+                document.getElementById('mainContainer').style.background = mainContainerBackground;
+                document.getElementById('startColor').value = mainContainerBackground;
+            }
+        }
+
+        // Call this function when the page loads
+        document.addEventListener('DOMContentLoaded', applySavedBackgrounds);
     </script>
     <script src="static/js/code.js"></script>
     <script src="static/js/code_graph.js"></script>

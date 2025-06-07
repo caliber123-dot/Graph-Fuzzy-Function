@@ -130,7 +130,16 @@ function ExportToExcel() {
     // alert(fnDictDash)
     if (filename == '')
         filename = 'exported_charts';
-    // formData.append('filename', filename);
+    
+    let filetitle = '';
+    const sm = Material.options[Material.selectedIndex].text.trim();
+    if (Tfn.selectedIndex == 1)    
+        filetitle = "Trapezoidal Fuzzy Function for " + sm;
+    else if (Tfn.selectedIndex == 2)
+        filetitle = "Triangular Fuzzy Function for " + sm;
+
+    // alert(filetitle);
+    formData.append('filetitle', filetitle);
     // filename
     // alert(filename);
     // Show loading state

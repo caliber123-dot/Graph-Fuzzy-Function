@@ -103,3 +103,35 @@ function validateZeroDecimalFinal(input) {
         errorElement.style.display = 'none';
     }
 }
+
+function showLoader() {
+    const loader = document.getElementById('loader');
+    loader.classList.add('active');
+}
+
+function hideLoader() {
+    const loader = document.getElementById('loader');
+    loader.classList.remove('active');
+}
+
+async function fetchData() {
+    const responseDiv = document.getElementById('response');
+    responseDiv.classList.remove('show');
+    responseDiv.textContent = '';
+    showLoader();
+    try {
+        // Simulate an API call with a 2-second delay
+        const response = await new Promise(resolve => {
+            setTimeout(() => {
+                resolve({ data: 'Data retrieved successfully!' });
+            }, 2000);
+        });
+        responseDiv.textContent = response.data;
+        responseDiv.classList.add('show');
+    } catch (error) {
+        responseDiv.textContent = 'Error retrieving data';
+        responseDiv.classList.add('show');
+    } finally {
+        hideLoader();
+    }
+}

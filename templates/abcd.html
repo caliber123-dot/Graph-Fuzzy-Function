@@ -9,7 +9,8 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(to right, #ff9a9e, #fad0c4);
+            /* background: linear-gradient(to right, #ff9a9e, #fad0c4); */
+            background: linear-gradient(to right, #cee9b8, rgb(207, 217, 255));
             text-align: center;
             padding: 20px;
             padding-top: 0px;
@@ -300,7 +301,7 @@
                     </div>
                 </div>
 
-                <div class="form-group color-panel" style="float: left;">
+                <div class="form-group color-panel" style="float: left;display: none;">
                     <label for="startColor">Change Background Color:</label>
                     Back Color: <input type="color" id="startColor2" value="#ff9a9e">
                     <button type="button" class="apply-gradient-btn" onclick="changeBackground(1)">
@@ -392,10 +393,10 @@
         <option value="2">Triangular Fuzzy Function.</option>
     </select> -->
 
-    <td>
+    <!-- <td>
         <input type="text" id="c_value_d" name="c_value_d" value="{{c}}" placeholder="Enter c value" required readonly
             class="readdata">
-    </td>
+    </td> -->
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -438,7 +439,27 @@
             else if (mval == 2)
                 document.getElementById('mainContainer').style.background = startColor;
         }
+        // Function to apply saved background colors on page load
+        function applySavedBackgrounds() {
+            // alert('call this applySavedBackgrounds');
+            const mbodyBackground = localStorage.getItem('mbodyBackground');
+            const mainContainerBackground = localStorage.getItem('mainContainerBackground');
 
+            // const startColor = document.getElementById('startColor').value;
+            // const startColor2 = document.getElementById('startColor2').value;
+
+            if (mbodyBackground) {
+                document.getElementById('mbody').style.background = mbodyBackground;
+                document.getElementById('startColor2').value = mbodyBackground;
+            }
+            if (mainContainerBackground) {
+                document.getElementById('mainContainer').style.background = mainContainerBackground;
+                document.getElementById('startColor').value = mainContainerBackground;
+            }
+        }
+
+        // Call this function when the page loads
+        document.addEventListener('DOMContentLoaded', applySavedBackgrounds);
     </script>
     <script src="static/js/abcd.js"></script>
     <script src="static/js/script.js"></script>

@@ -8,7 +8,7 @@ import pandas as pd
 from openpyxl.utils.dataframe import dataframe_to_rows
 from openpyxl.styles import Alignment, Font
 
-def export_images_to_excel(img1, img2, output_excel="output.xlsx", max_width=500, max_height=300,fn_dict=''):
+def export_images_to_excel(img1, img2, output_excel="output.xlsx", max_width=500, max_height=300,fn_dict='',filetitle=''):
     """
     Export two resized PNG images to an Excel file with proper temp file handling.
     """
@@ -35,7 +35,7 @@ def export_images_to_excel(img1, img2, output_excel="output.xlsx", max_width=500
         # Create workbook
         wb = Workbook()
         ws = wb.active
-        ws.title = "Images"
+        ws.title = "BarChart"
 
         # Function to resize image and return temp path
         def resize_image(img_path):
@@ -54,7 +54,7 @@ def export_images_to_excel(img1, img2, output_excel="output.xlsx", max_width=500
 
         # Add images to worksheet
         # ws.add_image(Image(resized_img1), "A24")
-        ws.add_image(Image(resized_img2), "A9")
+        ws.add_image(Image(resized_img2), "A10")
 
         # Prepare DataFrame for alpha-cuts
         # df = pd.DataFrame({
@@ -93,8 +93,13 @@ def export_images_to_excel(img1, img2, output_excel="output.xlsx", max_width=500
         # if fn_dict['α'] or fn_dict['α-α']:
         df = pd.DataFrame(data)
 
+        title_row = 1        
+        title_cell = ws.cell(row=title_row, column=1, value=filetitle)
+        title_cell.font = Font(bold=True, size=14)
+        title_cell.alignment = Alignment(horizontal='center')
+        ws.merge_cells(start_row=title_row, start_column=1, end_row=title_row, end_column=10)
         # Title row
-        title_row = 1
+        title_row = 2
         if(cutval == "alphacut"):
             title_cell = ws.cell(row=title_row, column=1, value="Table : α-Cut")
         else:
@@ -104,7 +109,7 @@ def export_images_to_excel(img1, img2, output_excel="output.xlsx", max_width=500
         ws.merge_cells(start_row=title_row, start_column=1, end_row=title_row, end_column=5)
 
          # Title row
-        title_row = 7
+        title_row = 8
         if(cutval == "alphacut"):
             title_cell = ws.cell(row=title_row, column=1, value="Bar Chart : α-Cut")
         else:
@@ -113,7 +118,7 @@ def export_images_to_excel(img1, img2, output_excel="output.xlsx", max_width=500
         title_cell.alignment = Alignment(horizontal='center')
         ws.merge_cells(start_row=title_row, start_column=1, end_row=title_row, end_column=5)
         # Insert DataFrame starting from a free area (e.g., row 32)
-        start_row = 2
+        start_row = 3
         for r_idx, row in enumerate(dataframe_to_rows(df, index=False, header=True), start=start_row):
             for c_idx, value in enumerate(row, start=1):
                 # ws.cell(row=r_idx, column=c_idx, value=value)
@@ -137,7 +142,7 @@ def export_images_to_excel(img1, img2, output_excel="output.xlsx", max_width=500
                 print(f"Warning: Could not delete temp file {temp_file}: {str(e)}")
 
 
-def export_images_to_excel2(img1, img2, img3, img4, output_excel="output.xlsx", max_width=500, max_height=300,fn_dict='',fn_dict_dash=''):
+def export_images_to_excel2(img1, img2, img3, img4, output_excel="output.xlsx", max_width=500, max_height=300,fn_dict='',fn_dict_dash='',filetitle=''):
     """
     Export two resized PNG images to an Excel file with proper temp file handling.
     """
@@ -159,7 +164,7 @@ def export_images_to_excel2(img1, img2, img3, img4, output_excel="output.xlsx", 
         # Create workbook
         wb = Workbook()
         ws = wb.active
-        ws.title = "Images"
+        ws.title = "Line Chart"
 
         # Function to resize image and return temp path
         def resize_image(img_path):
@@ -225,15 +230,21 @@ def export_images_to_excel2(img1, img2, img3, img4, output_excel="output.xlsx", 
         # if fn_dict['α'] or fn_dict['α-α']:
         df2 = pd.DataFrame(data2)
 
+        title_row = 1        
+        title_cell = ws.cell(row=title_row, column=1, value=filetitle)
+        title_cell.font = Font(bold=True, size=14)
+        title_cell.alignment = Alignment(horizontal='center')
+        ws.merge_cells(start_row=title_row, start_column=1, end_row=title_row, end_column=10)
+
         # Title row
-        title_row = 1
+        title_row = 2
         if(cutval == "alphacut"):
             title_cell = ws.cell(row=title_row, column=1, value="Table : α-Cut")
         title_cell.font = Font(bold=True)
         title_cell.alignment = Alignment(horizontal='center')
         ws.merge_cells(start_row=title_row, start_column=1, end_row=title_row, end_column=5)
 
-        title_row = 1
+        title_row = 2
         if(cutval2 == "alphadash"):
             title_cell = ws.cell(row=title_row, column=7, value="Table : α-α'-Cut")
         title_cell.font = Font(bold=True)
@@ -241,7 +252,7 @@ def export_images_to_excel2(img1, img2, img3, img4, output_excel="output.xlsx", 
         ws.merge_cells(start_row=title_row, start_column=7, end_row=title_row, end_column=11)
 
          # Title row
-        title_row = 7
+        title_row = 8
         if(cutval == "alphacut"):
             title_cell = ws.cell(row=title_row, column=1, value="Line Chart : α-Cut")
         else:
@@ -250,7 +261,7 @@ def export_images_to_excel2(img1, img2, img3, img4, output_excel="output.xlsx", 
         title_cell.alignment = Alignment(horizontal='center')
         ws.merge_cells(start_row=title_row, start_column=1, end_row=title_row, end_column=5)
         # Insert DataFrame starting from a free area (e.g., row 32)
-        start_row = 2
+        start_row = 3
         for r_idx, row in enumerate(dataframe_to_rows(df, index=False, header=True), start=start_row):
             for c_idx, value in enumerate(row, start=1):
                 # ws.cell(row=r_idx, column=c_idx, value=value)

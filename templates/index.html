@@ -9,7 +9,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(to right, #ff9a9e, #fad0c4);
+            background: linear-gradient(to right, #cee9b8, rgb(207, 217, 255));
             text-align: center;
             padding: 20px;
             padding-top: 0px;
@@ -26,6 +26,9 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
+            z-index: 500;
+            /* Below loader */
+            /* padding-top: 40px; */
         }
 
         .left-section {
@@ -39,6 +42,7 @@
             grid-template-columns: 1fr 1fr;
             grid-template-rows: 1fr 1fr;
             gap: 20px;
+            padding-top: 20px;
         }
 
         h1 {
@@ -215,7 +219,8 @@
             font-weight: 600;
         }
 
-        .active,
+        /* .active, */
+        .collapsible.active,
         .collapsible:hover {
             background-color: #555;
         }
@@ -242,6 +247,18 @@
 </head>
 
 <body id="mbody">
+    <div class="loader" id="loader">
+        <div class="dots-container">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+        <div class="loader-text">Processing...</div>
+    </div>
+    <!-- <div class="container">
+        <button onclick="fetchData()">Get Data</button>
+        <div id="response"></div>
+    </div> -->
     <h1>Study on Natural Frequency of Oscillation of Unilink Flexible Robot using Fuzzy Function</h1>
     <ul>
         <li><a class="active2" href="/home">Home</a></li>
@@ -397,7 +414,7 @@
                 </table>
 
                 <div class="form-group">
-                    <button type="submit" id="alphaButton" class="change-bg-btn">
+                    <button type="submit" id="alphaButton" class="change-bg-btn" onclick="showLoader()">
                         {{ 'Create Alpha Graph' if is_update else 'Create Alpha Graph' }}
                     </button>
                     <input type="text" name="alpha_id" id="alpha_id" value="{{alpha_id}}" style="display: none;">
@@ -406,7 +423,7 @@
 
                 <div class="form-group color-panel" style="float: left;">
                     <label for="startColor">Change Background Color:</label>
-                    Back Color: <input type="color" id="startColor2" value="#ff9a9e">
+                    Back Color: <input type="color" id="startColor2" value="#cee9b8">
                     <button type="button" class="apply-gradient-btn" onclick="changeBackground(1)">
                         Apply
                     </button>
@@ -442,6 +459,7 @@
 
             </div>
         </div>
+
     </form>
     <script>
         function MyValidate() {
@@ -534,12 +552,40 @@
                 'linear-gradient(to right, #fff, #f1f1f1)'
             ];
             // let randomColor = colors[Math.floor(Math.random() * colors.length)];
-            if (mval == 1)
-                document.getElementById('mbody').style.background = startColor2;
-            else if (mval == 2)
-                document.getElementById('mainContainer').style.background = startColor;
-
+            let selectedColor;
+            if (mval == 1) {
+                selectedColor = startColor2;
+                document.getElementById('mbody').style.background = selectedColor;
+                localStorage.setItem('mbodyBackground', selectedColor); // Save to localStorage
+            } else if (mval == 2) {
+                selectedColor = startColor;
+                document.getElementById('mainContainer').style.background = selectedColor;
+                localStorage.setItem('mainContainerBackground', selectedColor); // Save to localStorage
+            }
         }
+
+        // Function to apply saved background colors on page load
+        function applySavedBackgrounds() {
+            // alert('call this applySavedBackgrounds');
+            const mbodyBackground = localStorage.getItem('mbodyBackground');
+            const mainContainerBackground = localStorage.getItem('mainContainerBackground');
+
+            // const startColor = document.getElementById('startColor').value;
+            // const startColor2 = document.getElementById('startColor2').value;
+
+            if (mbodyBackground) {
+                document.getElementById('mbody').style.background = mbodyBackground;
+                document.getElementById('startColor2').value = mbodyBackground;
+            }
+            if (mainContainerBackground) {
+                document.getElementById('mainContainer').style.background = mainContainerBackground;
+                document.getElementById('startColor').value = mainContainerBackground;
+            }
+        }
+
+        // Call this function when the page loads
+        document.addEventListener('DOMContentLoaded', applySavedBackgrounds);
+
         var coll = document.getElementsByClassName("collapsible");
         var i;
 
@@ -746,6 +792,8 @@
         }
 
     </script>
+
+
 </body>
 
 </html>
