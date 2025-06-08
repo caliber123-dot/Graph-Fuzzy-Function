@@ -21,10 +21,10 @@ app = Flask(__name__, instance_relative_config=True)
 load_dotenv() # Load variables from .env file
 app.secret_key = os.getenv('SECRET_KEY')
 # app.secret_key = secrets.token_hex(16)  # Generate a secure random SECRET_KEY
-os.chmod(app.instance_path, 0o755)  # Ensure proper permissions (Linux example)
-# app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
+# os.chmod(app.instance_path, 0o755)  # Ensure proper permissions (Linux example)
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///fuzzyfunction.db'  # SQLite database file
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(app.instance_path, 'fuzzyfunction.db')
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(app.instance_path, 'fuzzyfunction.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -73,7 +73,7 @@ class User(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 
-# Initialize the database
+# Initialize the database for Sqlite db
 def init_db_1():
     """Initialize the database if it doesn't exist"""
     try:
@@ -953,6 +953,6 @@ def logout():
     return redirect(url_for('login'))
 
 if __name__ == '__main__':
-    init_db_1()
+    # init_db_1()
     # app.run(host="0.0.0.0", port=8000, debug=True)    
     serve(app, host="0.0.0.0", port=8000, threads=8)

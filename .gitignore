@@ -1,7 +1,6 @@
 myenv
 __pycache__
 info.txt
-instance/fuzzyfunction.db
 dwn/MaterialFuzzyApp.exe
 templates/demo.html
 templates/demo2.html
