@@ -21,7 +21,7 @@ app = Flask(__name__, instance_relative_config=True)
 load_dotenv() # Load variables from .env file
 app.secret_key = os.getenv('SECRET_KEY')
 # app.secret_key = secrets.token_hex(16)  # Generate a secure random SECRET_KEY
-
+os.chmod(app.instance_path, 0o755)  # Ensure proper permissions (Linux example)
 # app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///fuzzyfunction.db'  # SQLite database file
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(app.instance_path, 'fuzzyfunction.db')
