@@ -239,7 +239,7 @@
         <li style="float: right;"><a href="/logout">Logout</a></li>
         <li style="float: right;"><a href="">Welcome, {{ session.get('name') }}</a></li>
     </ul>
-    <form action="/graph" method="POST">
+    <form action="/graph" method="POST" onsubmit="return handleFormSubmit(event)">
         <div class="container" id="mainContainer">
             <div class="left-section">
                 <div class="form-group">
@@ -389,7 +389,7 @@
                     </tr>
                 </table>
                 <div class="form-group">
-                    <button type="submit" class="change-bg-btn" style="font-weight: 600;" onclick="showLoader()">Create Bar Graph</button>
+                    <button type="submit" class="change-bg-btn" style="font-weight: 600;" >Create Bar Graph</button>
                     <!-- <input type="text" name="cut_id" id="cut_id" value="{{cut_id}}" style="display: none;"> -->
                 </div>
 

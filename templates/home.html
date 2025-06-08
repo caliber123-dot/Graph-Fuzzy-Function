@@ -227,10 +227,10 @@
                         <div class="mt-4">
                             <!-- <a href="{{ url_for('home') }}"  class="btn btn-primary btn-lg me-2"><i
                                     class="fas fa-chart-line me-2"></i>Try Now</a> -->
-                            
+
                             <a href="{{ url_for('home') }}" class="btn btn-outline-light btn-lg"><i
                                     class="fas fa-user-plus me-2"></i>Get Started</a>
-                           
+
                             <button class="btn btn-outline-dark btn-lg me-2 ms-2" onclick="downloadExe()"><i
                                     class="fas fa-download me-2"></i>Download Standalone Apps</button>
                         </div>
@@ -465,6 +465,21 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Custom JS -->
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script>
+        function downloadExe() {
+            // Replace with your actual release tag (e.g., "v1.0.0") or use "latest" for newest
+            const releaseTag = "latest";
+            // const releaseTag = "tag";
+            const exeUrl = `https://github.com/caliber123-dot/Graph-Fuzzy-Function/releases/${releaseTag}/download/MaterialFuzzyApp.exe`;
+
+            const link = document.createElement('a');
+            link.href = exeUrl;
+            link.download = 'MaterialFuzzyApp.exe';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
     {% block additional_js %}{% endblock %}
 </body>
 

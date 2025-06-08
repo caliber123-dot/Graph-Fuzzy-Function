@@ -114,6 +114,20 @@ function hideLoader() {
     loader.classList.remove('active');
 }
 
+function handleFormSubmit(event) {
+    // Check if all fields are valid
+    const form = event.target;
+
+    if (form.checkValidity()) {
+        showLoader();  // call only if valid
+        return true;   // allow form to submit
+    } else {
+        event.preventDefault(); // stop form submission
+        form.reportValidity();  // show built-in validation messages
+        return false;
+    }
+}
+
 async function fetchData() {
     const responseDiv = document.getElementById('response');
     responseDiv.classList.remove('show');

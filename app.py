@@ -8,15 +8,23 @@ from sqlalchemy import asc
 import re
 import bcrypt
 from datetime import datetime
+from sqlalchemy import text  # Import the text function
 
-app = Flask(__name__)
+# app = Flask(__name__)
+app = Flask(__name__, instance_relative_config=True)
+
+# Path to database in instance folder
+# db_path = os.path.join(app.instance_path, 'fuzzyfunction.db')
+# print("Path :",db_path)
+# Path : H:\BCA_Projects\GUI.Graph\instance\fuzzyfunction.db
 
 load_dotenv() # Load variables from .env file
 app.secret_key = os.getenv('SECRET_KEY')
 # app.secret_key = secrets.token_hex(16)  # Generate a secure random SECRET_KEY
-# Configure the PostgreSQL connection
+
 # app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///fuzzyfuction.db'  # SQLite database file
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///fuzzyfunction.db'  # SQLite database file
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(app.instance_path, 'fuzzyfunction.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -66,6 +74,35 @@ class User(db.Model):
 
 
 # Initialize the database
+def init_db_1():
+    """Initialize the database if it doesn't exist"""
+    try:
+        # Create instance folder if it doesn't exist
+        os.makedirs(app.instance_path, exist_ok=True)
+        
+        db_file = os.path.join(app.instance_path, 'fuzzyfunction.db')
+        
+        # Check if database file exists and is accessible
+        if not os.path.exists(db_file):
+            print("Database not found. Creating new database...")
+            # with app.app_context():
+            #     db.create_all()
+            init_db()
+            print("Database created successfully.")
+        else:
+            print("Database exists and is ready.")
+            
+        # Verify database connection
+        with app.app_context():
+            # db.session.execute('SELECT 1').scalar()
+            db.session.execute(text('SELECT 1')).scalar()  # Now using text()
+            print("Database connection verified.")
+            
+    except Exception as e:
+        print(f"Database initialization failed: {str(e)}")
+        raise
+
+
 @app.route('/init_db')
 def init_db():
     try:
@@ -916,5 +953,6 @@ def logout():
     return redirect(url_for('login'))
 
 if __name__ == '__main__':
-    # app.run(host="0.0.0.0", port=8000, debug=True)
+    init_db_1()
+    # app.run(host="0.0.0.0", port=8000, debug=True)    
     serve(app, host="0.0.0.0", port=8000, threads=8)
