@@ -57,19 +57,22 @@ def GetFuns(alpha_cuts, a_y,b_y,c_y,d_y,a_d,b_d,c_d,d_d):
     
 # fn_dict = GetFuns()
 # print('function3:',fn_dict["fn3"])
-# For Alpha dash >>> Change according to GetFunsTriangular2()
+# For Alpha dash α-α' >>> Change according to GetFunsTriangular2()
 def GetFuns2(alpha_cuts, a_y,b_y,c_y,d_y,a_d,b_d,c_d,d_d,alpha1):
     # alpha_cuts = [0.3, 0.4, 0.5]
     # print('Young modulus:')
+    # alpha_cuts : α-α'
+    # alpha1: α
     a = a_y #Min
     b = b_y #peak
     c = c_y #upper peak
     d = d_y #Max   
     Y_min_list = []
     Y_max_list = []
-    for alpha in alpha_cuts:
+    # for alpha in alpha_cuts:
+    for alpha, alphadash in zip(alpha1, alpha_cuts):
         Y_min = a + (b - a) * alpha
-        Y_max = d - (d - c) * alpha 
+        Y_max = d - (d - c) * alphadash 
         Y_min_list.append(Y_min)
         Y_max_list.append(Y_max)
 
@@ -80,9 +83,10 @@ def GetFuns2(alpha_cuts, a_y,b_y,c_y,d_y,a_d,b_d,c_d,d_d,alpha1):
     d2 = d_d  # Maximum value (kg/m³)
     d_min_list = []
     d_max_list = []
-    for alpha in alpha_cuts:
+    # for alpha in alpha_cuts:
+    for alpha, alphadash in zip(alpha1, alpha_cuts):
         d_min = a2 + (b2 - a2) * alpha
-        d_max = d2 - (d2 - c2) * alpha 
+        d_max = d2 - (d2 - c2) * alphadash 
         d_min_list.append(d_min)
         d_max_list.append(d_max)
     fn1_list = [] 

@@ -150,7 +150,7 @@ def export_table_image(g_name, df, status):
         mimetype='image/png'
     )
 
-
+# alpha dash α-α'
 def Comparative_Alpha_Dash(alpha, alpha_dash, graph, t1, materials):
 # Trapezoidal (a, b, c, d) values for Young's Modulus and Density
     # materials = {
