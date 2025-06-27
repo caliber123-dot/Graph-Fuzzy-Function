@@ -1,5 +1,6 @@
 # Define parameters for the trapezoidal function
 import math
+import numpy as np
 
 # For Trapezoidal fn
 def GetFuns(alpha_cuts, a_y,b_y,c_y,d_y,a_d,b_d,c_d,d_d):
@@ -34,10 +35,11 @@ def GetFuns(alpha_cuts, a_y,b_y,c_y,d_y,a_d,b_d,c_d,d_d):
     fn3_list = [] 
     fn4_list = []  
     for i in range(3):    
-        fn1 = (1/(2*3.14)) * math.sqrt(Y_min_list[i]/d_min_list[i])         
-        fn2 = (1/(2*3.14)) * math.sqrt(Y_max_list[i]/d_min_list[i])
-        fn3 = (1/(2*3.14)) * math.sqrt(Y_min_list[i]/d_max_list[i])
-        fn4 = (1/(2*3.14)) * math.sqrt(Y_max_list[i]/d_max_list[i])
+        # fn1 = (1/(2*3.14)) * math.sqrt(Y_min_list[i]/d_min_list[i])
+        fn1 = (1/(2*np.pi)) * np.sqrt(Y_min_list[i]/d_min_list[i])         
+        fn2 = (1/(2*np.pi)) * np.sqrt(Y_max_list[i]/d_min_list[i])
+        fn3 = (1/(2*np.pi)) * np.sqrt(Y_min_list[i]/d_max_list[i])
+        fn4 = (1/(2*np.pi)) * np.sqrt(Y_max_list[i]/d_max_list[i])
     
         fn1_list.append(round(fn1, 4)) # Ymin dmin 
         fn2_list.append(round(fn2, 4)) # Ymax dmin
@@ -88,10 +90,10 @@ def GetFuns2(alpha_cuts, a_y,b_y,c_y,d_y,a_d,b_d,c_d,d_d,alpha1):
     fn3_list = [] 
     fn4_list = []  
     for i in range(3):    
-        fn1 = (1/(2*3.14)) * math.sqrt(Y_min_list[i]/d_min_list[i])         
-        fn2 = (1/(2*3.14)) * math.sqrt(Y_max_list[i]/d_min_list[i])
-        fn3 = (1/(2*3.14)) * math.sqrt(Y_min_list[i]/d_max_list[i])
-        fn4 = (1/(2*3.14)) * math.sqrt(Y_max_list[i]/d_max_list[i])
+        fn1 = (1/(2*np.pi)) * np.sqrt(Y_min_list[i]/d_min_list[i])         
+        fn2 = (1/(2*np.pi)) * np.sqrt(Y_max_list[i]/d_min_list[i])
+        fn3 = (1/(2*np.pi)) * np.sqrt(Y_min_list[i]/d_max_list[i])
+        fn4 = (1/(2*np.pi)) * np.sqrt(Y_max_list[i]/d_max_list[i])
     
         fn1_list.append(round(fn1, 4)) # Ymin dmin 
         fn2_list.append(round(fn2, 4)) # Ymax dmin
