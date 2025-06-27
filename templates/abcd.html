@@ -229,12 +229,13 @@
         <li style="float: right;"><a href="/logout">Logout</a></li>
         <li style="float: right;"><a href="">Welcome, {{ session.get('name') }}</a></li>
     </ul>
+    
     <form action="/abcd" method="POST">
         <div class="container" id="mainContainer">
             <div class="left-section1">
                 <div class="form-group"
                     style="margin-top: 0px;margin-bottom: 0px;width: 500px;background-color: #fafafa;padding: 20px;">
-                    <button type="button" class="collapsible" style="width:100%">Edit a,b,c,d</button>
+                    <button type="button" class="collapsible" style="width:100%" onclick="FunEditText();">Edit a,b,c,d</button>
                     <select name="ddlfuntion" id="ddlfuntion" required style="width:100%">
                         <option value="">Select Function.</option>
                         <option value="1" {% if s2=="1" %}selected{% endif %}>Trapezoidal Fuzzy
@@ -255,7 +256,7 @@
                         <table style="width: 100%">
                             <tr>
                                 <td></td>
-                                <th>Density</th>
+                                <th>Density </th>
                                 <th>Young's modulus</th>
                             </tr>
                             <tr>
@@ -316,6 +317,24 @@
 
         </div>
     </form>
+    <script>
+        function FunEditText(){
+            alert("You can now edit 'a' or 'd' - Density & Young's modulus");
+            const ad = document.getElementById("a_value_d");
+            const ay = document.getElementById("a_value_y");
+            const dd = document.getElementById("d_value_d");
+            const dy = document.getElementById("d_value_y");
+            ad.readOnly = false;
+            ay.readOnly = false;
+            ad.style.cursor = 'auto';
+            ay.style.cursor = 'auto';
+
+            dd.readOnly = false;
+            dy.readOnly = false;
+            dd.style.cursor = 'auto';
+            dy.style.cursor = 'auto';
+        }
+    </script>
     <script>
         function MyValidate() {
             // alert("hi");
