@@ -1092,7 +1092,13 @@ def compare():
         t1 = filename + "_Alpha_Table.png"
         t2 = filename + "_Alpha_Table_Dash.png"
         # Get all rows where mat_fm_id = 1 (equivalent to mat_type = 1)
-        results = tbl_materials.query.filter_by(mat_fm_id=1).order_by(tbl_materials.mat_id).all()
+        # results = tbl_materials.query.filter_by(mat_fm_id=1).order_by(tbl_materials.mat_id).all()
+        results = tbl_materials.query.filter(
+        and_(
+            tbl_materials.mat_status == 1,
+            tbl_materials.mat_fm_id == ddlfuntion,
+            tbl_materials.mat_user_id == session['user_id']
+        )).order_by(tbl_materials.mat_id).all()
         materials = {
             row.mat_name: tuple(safe_float(v) for v in (
                 row.mat_a_val_y, row.mat_b_val_y, row.mat_c_val_y, row.mat_d_val_y,
