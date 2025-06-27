@@ -80,28 +80,28 @@ function ExportToExcel() {
         const selectedMaterial = Material.options[Material.selectedIndex].text.trim();
         // alert(selectedMaterial);               
         if (selectedMaterial == 'Aluminium')
-            filename = "TRAP_" + "AL"
+            filename = "Natural_Frequency_Trapezoidal_" + "AL"
         else if (selectedMaterial == 'Neoprene Rubber')
-            filename = "TRAP_" + "NR"
+            filename = "Natural_Frequency_Trapezoidal_" + "NR"
         else if (selectedMaterial == 'Teflon')
-            filename = "TRAP_" + "TF"
+            filename = "Natural_Frequency_Trapezoidal_" + "TF"
         else if (selectedMaterial == 'Nylon')
-            filename = "TRAP_" + "NL"
+            filename = "Natural_Frequency_Trapezoidal_" + "NL"
         else if (selectedMaterial == 'SS-304 Grade ABS Silicon')
-            filename = "TRAP_" + "SS304"
+            filename = "Natural_Frequency_Trapezoidal_" + "SS304"
     }
     else if (Tfn.selectedIndex == 2) {
         const selectedMaterial = Material.options[Material.selectedIndex].text.trim();
         if (selectedMaterial == 'Aluminium')
-            filename = "TRIA_" + "AL"
+            filename = "Natural_Frequency_Triangular_" + "AL"
         else if (selectedMaterial == 'Neoprene Rubber')
-            filename = "TRIA_" + "NR"
+            filename = "Natural_Frequency_Triangular_" + "NR"
         else if (selectedMaterial == 'Teflon')
-            filename = "TRIA_" + "TF"
+            filename = "Natural_Frequency_Triangular_" + "TF"
         else if (selectedMaterial == 'Nylon')
-            filename = "TRIA_" + "NL"
+            filename = "Natural_Frequency_Triangular_" + "NL"
         else if (selectedMaterial == 'SS-304 Grade ABS Silicon')
-            filename = "TRIA_" + "SS304"
+            filename = "Natural_Frequency_Triangular_" + "SS304"
     }
     // Collect image filenames
     for (const id of imageIds) {

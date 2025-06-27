@@ -8,3 +8,4 @@ templates/demo2.html
 demo.py
 demo2.py
 README.txt
+/static/img/*

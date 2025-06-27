@@ -315,26 +315,26 @@ def graph():
 
             if(ddlfuntion == '1'): #Trapezoidal
                 if mat_name == 'Aluminium':
-                    filename = "TRAP_" + "AL"
+                    filename = "Natural_Frequency_Trapezoidal_" + "AL"
                 elif mat_name == 'Neoprene Rubber':
-                    filename = "TRAP_" + "NR"
+                    filename = "Natural_Frequency_Trapezoidal_" + "NR"
                 elif mat_name == 'Teflon':
-                    filename = "TRAP_" + "TF"
+                    filename = "Natural_Frequency_Trapezoidal_" + "TF"
                 elif mat_name == 'Nylon':
-                    filename = "TRAP_" + "NL"
+                    filename = "Natural_Frequency_Trapezoidal_" + "NL"
                 elif mat_name == 'SS-304 Grade ABS Silicon':
-                    filename = "TRAP_" + "SS304"
+                    filename = "Natural_Frequency_Trapezoidal_" + "SS304"
             if(ddlfuntion == '2'): #Triangular
                 if mat_name == 'Aluminium':
-                    filename = "TRIA_" + "AL"
+                    filename = "Natural_Frequency_Triangular_" + "AL"
                 elif mat_name == 'Neoprene Rubber':
-                    filename = "TRIA_" + "NR"
+                    filename = "Natural_Frequency_Triangular_" + "NR"
                 elif mat_name == 'Teflon':
-                    filename = "TRIA_" + "TF"
+                    filename = "Natural_Frequency_Triangular_" + "TF"
                 elif mat_name == 'Nylon':
-                    filename = "TRIA_" + "NL"
+                    filename = "Natural_Frequency_Triangular_" + "NL"
                 elif mat_name == 'SS-304 Grade ABS Silicon':
-                    filename = "TRIA_" + "SS304"
+                    filename = "Natural_Frequency_Triangular_" + "SS304"
         # print("Material Name =====>>>>", mat_name)
         fun_type = ''
         if(ddlfuntion == '1'):   
@@ -462,26 +462,26 @@ def home():
                 mat_name = material.mat_name if material else None            
                 if(ddlfuntion == '1'): #Trapezoidal
                     if mat_name == 'Aluminium':
-                        filename = "TRAP_" + "AL"
+                        filename = "Natural_Frequency_Trapezoidal_" + "AL"
                     elif mat_name == 'Neoprene Rubber':
-                        filename = "TRAP_" + "NR"
+                        filename = "Natural_Frequency_Trapezoidal_" + "NR"
                     elif mat_name == 'Teflon':
-                        filename = "TRAP_" + "TF"
+                        filename = "Natural_Frequency_Trapezoidal_" + "TF"
                     elif mat_name == 'Nylon':
-                        filename = "TRAP_" + "NL"
+                        filename = "Natural_Frequency_Trapezoidal_" + "NL"
                     elif mat_name == 'SS-304 Grade ABS Silicon':
-                        filename = "TRAP_" + "SS304"
+                        filename = "Natural_Frequency_Trapezoidal_" + "SS304"
                 if(ddlfuntion == '2'): #Triangular
                     if mat_name == 'Aluminium':
-                        filename = "TRIA_" + "AL"
+                        filename = "Natural_Frequency_Triangular_" + "AL"
                     elif mat_name == 'Neoprene Rubber':
-                        filename = "TRIA_" + "NR"
+                        filename = "Natural_Frequency_Triangular_" + "NR"
                     elif mat_name == 'Teflon':
-                        filename = "TRIA_" + "TF"
+                        filename = "Natural_Frequency_Triangular_" + "TF"
                     elif mat_name == 'Nylon':
-                        filename = "TRIA_" + "NL"
+                        filename = "Natural_Frequency_Triangular_" + "NL"
                     elif mat_name == 'SS-304 Grade ABS Silicon':
-                        filename = "TRIA_" + "SS304"
+                        filename = "Natural_Frequency_Triangular_" + "SS304"
             # Create Alpha Graph
             g1 = filename + '_Alpha_' + 'Density' + '.png'   
             g3 = filename + '_Alpha_' + 'Young' + '.png' 
@@ -951,6 +951,52 @@ def logout():
     session.clear()
     flash('You have been logged out', 'success')
     return redirect(url_for('login'))
+
+from Comparative import Comparative_Alpha, Comparative_Alpha_Dash
+@app.route('/compare', methods=['GET', 'POST'])
+def compare():    
+    if request.method=='POST':
+        ddlfuntion = request.form.get('ddlfuntion')  # ID        
+        ddlalphacut = request.form.get('ddlalphacut') # ID
+        a1 = safe_float(request.form.get('alpha1'))
+        a2 = (request.form.get('alpha_dash1'))
+        a3 = (request.form.get('alpha_dash2'))
+        g2 = g4 = 'basic.avif' # Default Graph Image
+        show_alpha="d-hide"
+        show_alpha_dash="d-hide"
+        filename='Natural_Frequency_Trapezoidal_'
+        t1 = filename + "_Alpha_Table.png"
+        t2 = filename + "_Alpha_Table_Dash.png"
+        # Get all rows where mat_fm_id = 1 (equivalent to mat_type = 1)
+        results = tbl_materials.query.filter_by(mat_fm_id=1).all()
+        materials = {
+            row.mat_name: tuple(safe_float(v) for v in (
+                row.mat_a_val_y, row.mat_b_val_y, row.mat_c_val_y, row.mat_d_val_y,
+                row.mat_a_val_d, row.mat_b_val_d, row.mat_c_val_d, row.mat_d_val_d
+            ))
+            for row in results
+        }
+        # print(materials)
+        if(ddlalphacut == "1"): #Alpha Cut
+            t2 = "basic.avif"
+            alpha_cut = a1
+            g2 = filename + '_Bar_alpha' + '.png' # Graph_Name
+            t1 = "Comparative_Alpha_Table.png"
+            g11 = Comparative_Alpha(alpha_cut,g2,t1, materials)
+            show_alpha = "d-show"
+        elif(ddlalphacut == "2"): #Alpha Dash Cut
+            t1 = "basic.avif"
+            alpha_cut = a2
+            alpha_dash = a3
+            g4 = filename + '_Bar_alpha_dash' + '.png' # Graph_Name
+            t2 = "Comparative_Alpha_Dash_Table.png"
+            g12 = Comparative_Alpha_Dash(alpha_cut, alpha_dash, g4,t2, materials)
+            # show_alpha = "d-show"
+            show_alpha_dash = "d-show"
+        return render_template('compare.html', g2=g2, g4=g4,t2=t2,t1=t1,a1=a1,a2=a2,a3=a3,show_alpha=show_alpha,show_alpha_dash=show_alpha_dash,s2=ddlfuntion,s3=ddlalphacut)
+    # Comparative_Alpha(0.5)
+    return render_template('compare.html', current_user=None)
+
 
 if __name__ == '__main__':
     # init_db_1()
