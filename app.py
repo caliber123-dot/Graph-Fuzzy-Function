@@ -13,11 +13,6 @@ from sqlalchemy import text  # Import the text function
 # app = Flask(__name__)
 app = Flask(__name__, instance_relative_config=True)
 
-# Path to database in instance folder
-# db_path = os.path.join(app.instance_path, 'fuzzyfunction.db')
-# print("Path :",db_path)
-# Path : H:\BCA_Projects\GUI.Graph\instance\fuzzyfunction.db
-
 load_dotenv() # Load variables from .env file
 app.secret_key = os.getenv('SECRET_KEY')
 # app.secret_key = secrets.token_hex(16)  # Generate a secure random SECRET_KEY
@@ -41,6 +36,7 @@ class tbl_materials(db.Model):
     mat_c_val_y = db.Column(db.String(50), nullable=False)
     mat_d_val_y = db.Column(db.String(50), nullable=False)
     mat_status = db.Column(db.Integer, nullable=False)
+    mat_user_id = db.Column(db.Integer, nullable=False)
 
 class tbl_alpha(db.Model):
     alpha_id = db.Column(db.Integer, primary_key=True)
@@ -53,11 +49,13 @@ class tbl_alpha(db.Model):
     alpha_alphadash2 = db.Column(db.Float, nullable=True)
     alpha_alphadash3 = db.Column(db.Float, nullable=True)
     alpha_status = db.Column(db.Integer, nullable=False)
+    alpha_user_id = db.Column(db.Integer, nullable=False)
 
 class tbl_alpha_val(db.Model):
     av_id = db.Column(db.Integer, primary_key=True)
     av_alpha = db.Column(db.Float, nullable=False)
     av_status = db.Column(db.Integer, nullable=False) # 1: alpha & 2: alpha dash
+    av_user_id = db.Column(db.Integer, nullable=False)
 
 # Define User model
 class User(db.Model):
@@ -71,7 +69,6 @@ class User(db.Model):
     user_phone = db.Column(db.LargeBinary, nullable=True)
     user_type = db.Column(db.String(20), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-
 
 # Initialize the database for Sqlite db
 def init_db_1():
@@ -102,7 +99,6 @@ def init_db_1():
         print(f"Database initialization failed: {str(e)}")
         raise
 
-
 @app.route('/init_db')
 def init_db():
     try:
@@ -110,111 +106,215 @@ def init_db():
              # Drop tbl_materials table if it exists
             tbl_materials.__table__.drop(db.engine, checkfirst=True)
             tbl_alpha_val.__table__.drop(db.engine, checkfirst=True)
+            tbl_alpha.__table__.drop(db.engine, checkfirst=True)
             db.create_all()
             # List of material names to check and insert
-            material_names = ["Aluminium", "Neoprene Rubber", "Teflon", "Nylon", "SS-304 Grade ABS Silicon"]
+            # material_names = ["Aluminium", "Neoprene Rubber", "Teflon", "Nylon", "SS-304 Grade ABS Silicon"]
             # Check which materials already exist
-            existing_materials = tbl_materials.query.filter(tbl_materials.mat_name.in_(material_names)).all()
-            existing_names = [mat.mat_name for mat in existing_materials]
+            # existing_materials = tbl_materials.query.filter(tbl_materials.mat_name.in_(material_names)).all()
+            # existing_names = [mat.mat_name for mat in existing_materials]
             # Only add materials that don't already exist
-            materials_to_add = []
-            if "Aluminium" not in existing_names:
-                materials_to_add.append(tbl_materials(
-                   mat_fm_id=1, mat_name="Aluminium", mat_a_val_d="2680", mat_b_val_d="2690",
-                    mat_c_val_d="2710", mat_d_val_d="2720", mat_a_val_y="68947600000", mat_b_val_y="71402200000",
-                    mat_c_val_y="77402200000", mat_d_val_y="79966000000", mat_status=1
-                ))
-                materials_to_add.append(tbl_materials(
-                   mat_fm_id=2, mat_name="Aluminium", mat_a_val_d="2680", mat_b_val_d="2700",
-                    mat_c_val_d="2720", mat_d_val_d="0", mat_a_val_y="68947600000", mat_b_val_y="74456800000",
-                    mat_c_val_y="79966000000", mat_d_val_y="0", mat_status=1                   
-                ))
-            if "Neoprene Rubber" not in existing_names:
-                materials_to_add.append(tbl_materials(
-                   mat_fm_id=1, mat_name="Neoprene Rubber", mat_a_val_d="1250", mat_b_val_d="1260",
-                    mat_c_val_d="1290", mat_d_val_d="1300", mat_a_val_y="100000", mat_b_val_y="200000",
-                    mat_c_val_y="400000", mat_d_val_y="500000", mat_status=1
-                ))
-                materials_to_add.append(tbl_materials(
-                   mat_fm_id=2, mat_name="Neoprene Rubber", mat_a_val_d="1250", mat_b_val_d="1275",
-                    mat_c_val_d="1300", mat_d_val_d="0", mat_a_val_y="100000", mat_b_val_y="300000",
-                    mat_c_val_y="500000", mat_d_val_y="0", mat_status=1                   
-                ))
+            # materials_to_add = []
+            # if "Aluminium" not in existing_names:
+            #     materials_to_add.append(tbl_materials(
+            #        mat_fm_id=1, mat_name="Aluminium", mat_a_val_d="2680", mat_b_val_d="2690",
+            #         mat_c_val_d="2710", mat_d_val_d="2720", mat_a_val_y="68947600000", mat_b_val_y="71402200000",
+            #         mat_c_val_y="77402200000", mat_d_val_y="79966000000", mat_status=1
+            #     ))
+            #     materials_to_add.append(tbl_materials(
+            #        mat_fm_id=2, mat_name="Aluminium", mat_a_val_d="2680", mat_b_val_d="2700",
+            #         mat_c_val_d="2720", mat_d_val_d="0", mat_a_val_y="68947600000", mat_b_val_y="74456800000",
+            #         mat_c_val_y="79966000000", mat_d_val_y="0", mat_status=1                   
+            #     ))
+            # if "Neoprene Rubber" not in existing_names:
+            #     materials_to_add.append(tbl_materials(
+            #        mat_fm_id=1, mat_name="Neoprene Rubber", mat_a_val_d="1250", mat_b_val_d="1260",
+            #         mat_c_val_d="1290", mat_d_val_d="1300", mat_a_val_y="100000", mat_b_val_y="200000",
+            #         mat_c_val_y="400000", mat_d_val_y="500000", mat_status=1
+            #     ))
+            #     materials_to_add.append(tbl_materials(
+            #        mat_fm_id=2, mat_name="Neoprene Rubber", mat_a_val_d="1250", mat_b_val_d="1275",
+            #         mat_c_val_d="1300", mat_d_val_d="0", mat_a_val_y="100000", mat_b_val_y="300000",
+            #         mat_c_val_y="500000", mat_d_val_y="0", mat_status=1                   
+            #     ))
                 
-            if "Teflon" not in existing_names:
-                materials_to_add.append(tbl_materials(
-                   mat_fm_id=1, mat_name="Teflon", mat_a_val_d="2180", mat_b_val_d="2188",
-                    mat_c_val_d="2212", mat_d_val_d="2220", mat_a_val_y="4.00e+08", mat_b_val_y="4.50e+08",
-                    mat_c_val_y="5.50e+08", mat_d_val_y="6.00e+08", mat_status=1
-                ))
-                materials_to_add.append(tbl_materials(
-                   mat_fm_id=2, mat_name="Teflon", mat_a_val_d="2180", mat_b_val_d="2200",
-                    mat_c_val_d="2220", mat_d_val_d="0", mat_a_val_y="4.00e+08", mat_b_val_y="5.00e+08",
-                    mat_c_val_y="6.00e+08", mat_d_val_y="0", mat_status=1                   
-                ))
+            # if "Teflon" not in existing_names:
+            #     materials_to_add.append(tbl_materials(
+            #        mat_fm_id=1, mat_name="Teflon", mat_a_val_d="2180", mat_b_val_d="2188",
+            #         mat_c_val_d="2212", mat_d_val_d="2220", mat_a_val_y="4.00e+08", mat_b_val_y="4.50e+08",
+            #         mat_c_val_y="5.50e+08", mat_d_val_y="6.00e+08", mat_status=1
+            #     ))
+            #     materials_to_add.append(tbl_materials(
+            #        mat_fm_id=2, mat_name="Teflon", mat_a_val_d="2180", mat_b_val_d="2200",
+            #         mat_c_val_d="2220", mat_d_val_d="0", mat_a_val_y="4.00e+08", mat_b_val_y="5.00e+08",
+            #         mat_c_val_y="6.00e+08", mat_d_val_y="0", mat_status=1                   
+            #     ))
 
-            if "Nylon" not in existing_names:
-                materials_to_add.append(tbl_materials(
-                   mat_fm_id=1, mat_name="Nylon", mat_a_val_d="1050", mat_b_val_d="1075",
-                    mat_c_val_d="1125", mat_d_val_d="1150", mat_a_val_y="2.00e+09", mat_b_val_y="2.50e+09",
-                    mat_c_val_y="3.50e+09", mat_d_val_y="4.00e+09", mat_status=1
-                ))
-                materials_to_add.append(tbl_materials(
-                   mat_fm_id=2, mat_name="Nylon", mat_a_val_d="1050", mat_b_val_d="1100",
-                    mat_c_val_d="1150", mat_d_val_d="0", mat_a_val_y="2.00E+09", mat_b_val_y="3.00E+09",
-                    mat_c_val_y="4.00E+09", mat_d_val_y="0", mat_status=1                   
-                ))
+            # if "Nylon" not in existing_names:
+            #     materials_to_add.append(tbl_materials(
+            #        mat_fm_id=1, mat_name="Nylon", mat_a_val_d="1050", mat_b_val_d="1075",
+            #         mat_c_val_d="1125", mat_d_val_d="1150", mat_a_val_y="2.00e+09", mat_b_val_y="2.50e+09",
+            #         mat_c_val_y="3.50e+09", mat_d_val_y="4.00e+09", mat_status=1
+            #     ))
+            #     materials_to_add.append(tbl_materials(
+            #        mat_fm_id=2, mat_name="Nylon", mat_a_val_d="1050", mat_b_val_d="1100",
+            #         mat_c_val_d="1150", mat_d_val_d="0", mat_a_val_y="2.00E+09", mat_b_val_y="3.00E+09",
+            #         mat_c_val_y="4.00E+09", mat_d_val_y="0", mat_status=1                   
+            #     ))
                 
-            if "SS-304 Grade ABS Silicon" not in existing_names:
-                materials_to_add.append(tbl_materials(
-                   mat_fm_id=1, mat_name="SS-304 Grade ABS Silicon", mat_a_val_d="7900", mat_b_val_d="7915",
-                    mat_c_val_d="7945", mat_d_val_d="7960", mat_a_val_y="1.93e+11", mat_b_val_y="1.95e+11",
-                    mat_c_val_y="1.98e+11", mat_d_val_y="2.00e+11", mat_status=1
-                ))
-                materials_to_add.append(tbl_materials(
-                   mat_fm_id=2, mat_name="SS-304 Grade ABS Silicon", mat_a_val_d="7900", mat_b_val_d="7930",
-                    mat_c_val_d="7960", mat_d_val_d="0", mat_a_val_y="1.93E+11", mat_b_val_y="1.96E+11",
-                    mat_c_val_y="2.00E+11", mat_d_val_y="0", mat_status=1                   
-                ))
-            alpha_val_to_add = []
-            alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.1,av_status=1))
-            alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.2,av_status=1))
-            alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.3,av_status=1))
-            alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.4,av_status=1))
-            alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.5,av_status=1))
-            alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.6,av_status=1))
-            alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.7,av_status=1))
-            alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.8,av_status=1))
-            alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.9,av_status=1))
+            # if "SS-304 Grade ABS Silicon" not in existing_names:
+            #     materials_to_add.append(tbl_materials(
+            #        mat_fm_id=1, mat_name="SS-304 Grade ABS Silicon", mat_a_val_d="7900", mat_b_val_d="7915",
+            #         mat_c_val_d="7945", mat_d_val_d="7960", mat_a_val_y="1.93e+11", mat_b_val_y="1.95e+11",
+            #         mat_c_val_y="1.98e+11", mat_d_val_y="2.00e+11", mat_status=1
+            #     ))
+            #     materials_to_add.append(tbl_materials(
+            #        mat_fm_id=2, mat_name="SS-304 Grade ABS Silicon", mat_a_val_d="7900", mat_b_val_d="7930",
+            #         mat_c_val_d="7960", mat_d_val_d="0", mat_a_val_y="1.93E+11", mat_b_val_y="1.96E+11",
+            #         mat_c_val_y="2.00E+11", mat_d_val_y="0", mat_status=1                   
+            #     ))
+            # alpha_val_to_add = []
+            # alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.1,av_status=1))
+            # alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.2,av_status=1))
+            # alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.3,av_status=1))
+            # alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.4,av_status=1))
+            # alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.5,av_status=1))
+            # alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.6,av_status=1))
+            # alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.7,av_status=1))
+            # alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.8,av_status=1))
+            # alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.9,av_status=1))
 
-            alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.11,av_status=2))
-            alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.22,av_status=2))
-            alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.33,av_status=2))
-            alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.44,av_status=2))
-            alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.55,av_status=2))
-            alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.66,av_status=2))
-            alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.77,av_status=2))
-            alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.88,av_status=2))
-            alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.99,av_status=2))
-            # Add to session and commit to the database
-            if materials_to_add or alpha_val_to_add:
-                if materials_to_add:
-                    db.session.add_all(materials_to_add)
-                if alpha_val_to_add:
-                    db.session.add_all(alpha_val_to_add)
-                db.session.commit()
-                print("Material added successfully.")    
-                return "<h1>Tables created and materials inserted successfully.</h1>", 200    
-            else:
-                 return "<h1>Tables already created. All materials already exist.</h1>", 200    
-            # print("Tables created!")
-            # return "<h1>Tables created successfully!</h1>", 200
+            # alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.11,av_status=2))
+            # alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.22,av_status=2))
+            # alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.33,av_status=2))
+            # alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.44,av_status=2))
+            # alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.55,av_status=2))
+            # alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.66,av_status=2))
+            # alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.77,av_status=2))
+            # alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.88,av_status=2))
+            # alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.99,av_status=2))
+            # # Add to session and commit to the database
+            # if materials_to_add or alpha_val_to_add:
+            #     if materials_to_add:
+            #         db.session.add_all(materials_to_add)
+            #     if alpha_val_to_add:
+            #         db.session.add_all(alpha_val_to_add)
+            #     db.session.commit()
+            #     print("Material added successfully.")    
+            #     return "<h1>Tables created and materials inserted successfully.</h1>", 200    
+            # else:
+            #      return "<h1>Tables already created. All materials already exist.</h1>", 200    
+            print("Tables created!")
+            return "<h1>Tables created successfully!</h1>", 200
     except Exception as e:
         return f"Error creating Tables: {str(e)}", 500
 
+def add_marerial_userwise(user_id):
+    material_names = ["Aluminium", "Neoprene Rubber", "Teflon", "Nylon", "SS-304 Grade ABS Silicon"]
+    # Check which materials already exist
+    # existing_materials = tbl_materials.query.filter(tbl_materials.mat_name.in_(material_names)).all()
+    existing_materials = tbl_materials.query.filter(
+    and_(
+        tbl_materials.mat_name.in_(material_names),
+        tbl_materials.mat_user_id == user_id
+    )).all()
+    existing_names = [mat.mat_name for mat in existing_materials]
+    # Only add materials that don't already exist
+    materials_to_add = []
+    if "Aluminium" not in existing_names:
+        materials_to_add.append(tbl_materials(
+            mat_fm_id=1, mat_name="Aluminium", mat_a_val_d="2680", mat_b_val_d="2690",
+            mat_c_val_d="2710", mat_d_val_d="2720", mat_a_val_y="6.8E10", mat_b_val_y="6.9E10",
+            mat_c_val_y="7.1E10", mat_d_val_y="7.2E10", mat_status=1, mat_user_id=user_id
+        ))
+        materials_to_add.append(tbl_materials(
+            mat_fm_id=2, mat_name="Aluminium", mat_a_val_d="2680", mat_b_val_d="2700",
+            mat_c_val_d="2720", mat_d_val_d="0", mat_a_val_y="68947600000", mat_b_val_y="74456800000",
+            mat_c_val_y="79966000000", mat_d_val_y="0", mat_status=1, mat_user_id=user_id                   
+        ))
+    if "Neoprene Rubber" not in existing_names:
+        materials_to_add.append(tbl_materials(
+            mat_fm_id=1, mat_name="Neoprene Rubber", mat_a_val_d="1250", mat_b_val_d="1260",
+            mat_c_val_d="1290", mat_d_val_d="1300", mat_a_val_y="100000", mat_b_val_y="200000",
+            mat_c_val_y="400000", mat_d_val_y="500000", mat_status=1, mat_user_id=user_id
+        ))
+        materials_to_add.append(tbl_materials(
+            mat_fm_id=2, mat_name="Neoprene Rubber", mat_a_val_d="1250", mat_b_val_d="1275",
+            mat_c_val_d="1300", mat_d_val_d="0", mat_a_val_y="100000", mat_b_val_y="300000",
+            mat_c_val_y="500000", mat_d_val_y="0", mat_status=1, mat_user_id=user_id                   
+        ))
+                
+    if "Teflon" not in existing_names:
+        materials_to_add.append(tbl_materials(
+            mat_fm_id=1, mat_name="Teflon", mat_a_val_d="2180", mat_b_val_d="2188",
+            mat_c_val_d="2212", mat_d_val_d="2220", mat_a_val_y="4.00e+08", mat_b_val_y="4.50e+08",
+            mat_c_val_y="5.50e+08", mat_d_val_y="6.00e+08", mat_status=1, mat_user_id=user_id
+        ))
+        materials_to_add.append(tbl_materials(
+            mat_fm_id=2, mat_name="Teflon", mat_a_val_d="2180", mat_b_val_d="2200",
+            mat_c_val_d="2220", mat_d_val_d="0", mat_a_val_y="4.00e+08", mat_b_val_y="5.00e+08",
+            mat_c_val_y="6.00e+08", mat_d_val_y="0", mat_status=1, mat_user_id=user_id                   
+        ))
+
+    if "Nylon" not in existing_names:
+        materials_to_add.append(tbl_materials(
+            mat_fm_id=1, mat_name="Nylon", mat_a_val_d="1050", mat_b_val_d="1075",
+            mat_c_val_d="1125", mat_d_val_d="1150", mat_a_val_y="2.00e+09", mat_b_val_y="2.50e+09",
+            mat_c_val_y="3.50e+09", mat_d_val_y="4.00e+09", mat_status=1, mat_user_id=user_id
+        ))
+        materials_to_add.append(tbl_materials(
+            mat_fm_id=2, mat_name="Nylon", mat_a_val_d="1050", mat_b_val_d="1100",
+            mat_c_val_d="1150", mat_d_val_d="0", mat_a_val_y="2.00E+09", mat_b_val_y="3.00E+09",
+            mat_c_val_y="4.00E+09", mat_d_val_y="0", mat_status=1, mat_user_id=user_id                   
+        ))
+        
+    if "SS-304 Grade ABS Silicon" not in existing_names:
+        materials_to_add.append(tbl_materials(
+            mat_fm_id=1, mat_name="SS-304 Grade ABS Silicon", mat_a_val_d="7900", mat_b_val_d="7915",
+            mat_c_val_d="7945", mat_d_val_d="7960", mat_a_val_y="1.93e+11", mat_b_val_y="1.95e+11",
+            mat_c_val_y="1.98e+11", mat_d_val_y="2.00e+11", mat_status=1, mat_user_id=user_id
+        ))
+        materials_to_add.append(tbl_materials(
+            mat_fm_id=2, mat_name="SS-304 Grade ABS Silicon", mat_a_val_d="7900", mat_b_val_d="7930",
+            mat_c_val_d="7960", mat_d_val_d="0", mat_a_val_y="1.93E+11", mat_b_val_y="1.96E+11",
+            mat_c_val_y="2.00E+11", mat_d_val_y="0", mat_status=1, mat_user_id=user_id                   
+        ))
+    alpha_val_to_add = []
+    # For alpha value insert if not exists
+    existing_alphas = [alpha.av_alpha for alpha in tbl_alpha_val.query.filter_by(av_user_id=user_id).all()]
+    # alpha_values = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+    # Status 1 alpha values
+    alpha_values_status_1 = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+    # Status 2 alpha values
+    alpha_values_status_2 = [0.11, 0.22, 0.33, 0.44, 0.55, 0.66, 0.77, 0.88, 0.99]
+
+    # Add status 1 values if not present
+    for val in alpha_values_status_1:
+        if val not in existing_alphas:
+            alpha_val_to_add.append(tbl_alpha_val(av_alpha=val, av_status=1, av_user_id=user_id))
+
+    # alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.9,av_status=1,av_user_id=user_id))
+
+    # Add status 2 values if not present
+    for val in alpha_values_status_2:
+        if val not in existing_alphas:
+            alpha_val_to_add.append(tbl_alpha_val(av_alpha=val, av_status=2, av_user_id=user_id))
+
+    # alpha_val_to_add.append(tbl_alpha_val(av_alpha=0.99,av_status=2,av_user_id=user_id))
+    # Add to session and commit to the database
+    if materials_to_add or alpha_val_to_add:
+        if materials_to_add:
+            db.session.add_all(materials_to_add)
+        if alpha_val_to_add:
+            db.session.add_all(alpha_val_to_add)
+        db.session.commit()
+        print("Material added successfully.")    
+        return "<h1>Materials inserted successfully.</h1>", 200    
+    else:
+        return "<h1>All materials already exist.</h1>", 200    
+
 @app.route('/newmat')
-def newmat():
-    # return render_template('index.html',g1=g1,g2=g2,g3=g3,g4=g4,materials=materials, s1=None)
+def newmat():    
     return render_template('newmat.html')
 
 # @app.route('/abcd')
@@ -279,8 +379,16 @@ def graph():
     fn_dict_dash = fn_dict = ''
     filename=''
     # materials = tbl_materials.query.filter_by(mat_status=1).all()  # Only active materials
-    alpha_val1 = tbl_alpha_val.query.filter_by(av_status=1).order_by(asc(tbl_alpha_val.av_alpha)).all()
-    alpha_val2 = tbl_alpha_val.query.filter_by(av_status=2).order_by(asc(tbl_alpha_val.av_alpha)).all()
+    # alpha_val1 = tbl_alpha_val.query.filter_by(av_status=1).order_by(asc(tbl_alpha_val.av_alpha)).all()
+    alpha_val1 = tbl_alpha_val.query.filter(
+    tbl_alpha_val.av_status == 1,
+    tbl_alpha_val.av_user_id == session['user_id']
+    ).order_by(asc(tbl_alpha_val.av_alpha)).all()
+    # alpha_val2 = tbl_alpha_val.query.filter_by(av_status=2).order_by(asc(tbl_alpha_val.av_alpha)).all()
+    alpha_val2 = tbl_alpha_val.query.filter(
+    tbl_alpha_val.av_status == 2,
+    tbl_alpha_val.av_user_id == session['user_id']
+    ).order_by(asc(tbl_alpha_val.av_alpha)).all()
     if request.method=='POST':
         ddlfuntion = request.form.get('ddlfuntion')  # ID
         ddlmat_ID = request.form.get('ddlmaterials') # ID 
@@ -289,7 +397,8 @@ def graph():
         materials = tbl_materials.query.filter(
         and_(
             tbl_materials.mat_status == 1,
-            tbl_materials.mat_fm_id == ddlfuntion
+            tbl_materials.mat_fm_id == ddlfuntion,
+            tbl_materials.mat_user_id == session['user_id']
         )).order_by(tbl_materials.mat_id).all()
 
         a1 = safe_float(request.form.get('alpha1'))
@@ -386,13 +495,13 @@ def graph():
         alpha_val_to_add = []            
         for new_val in arr1:
             print(new_val)
-            alpha_val_to_add.append(tbl_alpha_val(av_alpha=new_val,av_status=1))            
+            alpha_val_to_add.append(tbl_alpha_val(av_alpha=new_val,av_status=1,av_user_id=session['user_id']))            
         add_Alpha_val2(a4, alpha_val2)
         add_Alpha_val2(a5, alpha_val2)
         add_Alpha_val2(a6, alpha_val2)
         for new_val2 in arr2:
             print(new_val2)
-            alpha_val_to_add.append(tbl_alpha_val(av_alpha=new_val2,av_status=2))            
+            alpha_val_to_add.append(tbl_alpha_val(av_alpha=new_val2,av_status=2,av_user_id=session['user_id']))            
             # if alpha_val_to_add:
         if alpha_val_to_add:
             db.session.add_all(alpha_val_to_add)
@@ -422,14 +531,24 @@ def home():
     fn_dict_dash = fn_dict = ''
     # materials = tbl_materials.query.filter_by(mat_status=1).all()  # Only active materials    
     g1 = g2 = g3 = g4 = 'basic.avif' # Default Graph Image
-    alpha_val1 = tbl_alpha_val.query.filter_by(av_status=1).order_by(asc(tbl_alpha_val.av_alpha)).all()
-    alpha_val2 = tbl_alpha_val.query.filter_by(av_status=2).order_by(asc(tbl_alpha_val.av_alpha)).all()
+    # alpha_val1 = tbl_alpha_val.query.filter_by(av_status=1).order_by(asc(tbl_alpha_val.av_alpha)).all()
+    # alpha_val2 = tbl_alpha_val.query.filter_by(av_status=2).order_by(asc(tbl_alpha_val.av_alpha)).all()
+    alpha_val1 = tbl_alpha_val.query.filter(
+    tbl_alpha_val.av_status == 1,
+    tbl_alpha_val.av_user_id == session['user_id']
+    ).order_by(asc(tbl_alpha_val.av_alpha)).all()
+
+    alpha_val2 = tbl_alpha_val.query.filter(
+    tbl_alpha_val.av_status == 2,
+    tbl_alpha_val.av_user_id == session['user_id']
+    ).order_by(asc(tbl_alpha_val.av_alpha)).all()
     if request.method=='POST':
         ddlfuntion = request.form.get('ddlfuntion') # id 
         materials = tbl_materials.query.filter(
         and_(
             tbl_materials.mat_status == 1,
-            tbl_materials.mat_fm_id == ddlfuntion
+            tbl_materials.mat_fm_id == ddlfuntion,
+            tbl_materials.mat_user_id == session['user_id']
         )).order_by(tbl_materials.mat_id).all()
         # Retrieve form data
         ddlmaterials = request.form.get('ddlmaterials') # id
@@ -538,13 +657,13 @@ def home():
             alpha_val_to_add = []            
             for new_val in arr1:
                 print(new_val)
-                alpha_val_to_add.append(tbl_alpha_val(av_alpha=new_val,av_status=1))            
+                alpha_val_to_add.append(tbl_alpha_val(av_alpha=new_val,av_status=1,av_user_id=session['user_id']))            
             add_Alpha_val2(a4, alpha_val2)
             add_Alpha_val2(a5, alpha_val2)
             add_Alpha_val2(a6, alpha_val2)
             for new_val2 in arr2:
                 print(new_val2)
-                alpha_val_to_add.append(tbl_alpha_val(av_alpha=new_val2,av_status=2))            
+                alpha_val_to_add.append(tbl_alpha_val(av_alpha=new_val2,av_status=2,av_user_id=session['user_id']))            
             # if alpha_val_to_add:
             if alpha_val_to_add:
                 db.session.add_all(alpha_val_to_add)
@@ -600,7 +719,8 @@ def add_Materials(ddlmaterials,material):
             mat_b_val=str(b_value),
             mat_c_val=str(c_value),
             mat_d_val=str(d_value),
-            mat_status=1
+            mat_status=1,
+            mat_user_id=session['user_id']
         )
         db.session.add(new_material)
         db.session.commit()
@@ -633,7 +753,8 @@ def add_Alpha(a1,a2,a3,a4,a5,a6,ddlfuntion,ddlmaterials):
             alpha_alphadash1=a4,
             alpha_alphadash2=a5,
             alpha_alphadash3=a6,
-            alpha_status=1
+            alpha_status=1,
+            alpha_user_id=session['user_id']
         )
         db.session.add(tosave)
         db.session.commit()
@@ -717,7 +838,8 @@ def get_materials(function_id):
     materials = tbl_materials.query.filter(
         and_(
             tbl_materials.mat_status == 1,
-            tbl_materials.mat_fm_id == function_id
+            tbl_materials.mat_fm_id == function_id,
+            tbl_materials.mat_user_id == session['user_id']
         )
     ).order_by(tbl_materials.mat_id).all()
 
@@ -729,7 +851,6 @@ def get_materials(function_id):
     return jsonify(material_list)
 from export import export_images_to_excel, export_images_to_excel2
 from werkzeug.utils import secure_filename
-
 
 @app.route('/export_excel', methods=['POST'])
 def export_excel():
@@ -785,7 +906,6 @@ def export_excel():
                 os.remove(output_path)
             except:
                 pass
-
 
 @app.route('/exportimage')
 def exportimage():
@@ -938,6 +1058,7 @@ def login():
             session['username_email'] = user.username_email
             session['name'] = user.full_name
             session['user_type'] = user.user_type
+            add_marerial_userwise(user.id)
             flash('Login successful!', 'success')
             return redirect(url_for('home'))
         else:
@@ -954,7 +1075,10 @@ def logout():
 
 from Comparative import Comparative_Alpha, Comparative_Alpha_Dash
 @app.route('/compare', methods=['GET', 'POST'])
-def compare():    
+def compare():  
+    if 'user_id' not in session:
+        flash('Please login first', 'error')
+        return redirect(url_for('login'))  
     if request.method=='POST':
         ddlfuntion = request.form.get('ddlfuntion')  # ID        
         ddlalphacut = request.form.get('ddlalphacut') # ID
@@ -997,8 +1121,7 @@ def compare():
     # Comparative_Alpha(0.5)
     return render_template('compare.html', current_user=None)
 
-
 if __name__ == '__main__':
-    # init_db_1()
+    # Online Site On Render.com
     # app.run(host="0.0.0.0", port=8000, debug=True)    
     serve(app, host="0.0.0.0", port=8000, threads=8)
