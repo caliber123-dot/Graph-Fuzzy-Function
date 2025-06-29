@@ -201,7 +201,8 @@
             border-right: none;
         }
 
-        li a {
+        li a,
+        .dropbtn {
             display: block;
             color: white;
             text-align: center;
@@ -216,6 +217,41 @@
 
         .active2 {
             background-color: #04AA6D;
+        }
+
+        li a:hover,
+        .dropdown:hover .dropbtn {
+            background-color: red;
+        }
+
+        li.dropdown {
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+            color: white;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
         }
     </style>
 </head>
@@ -234,6 +270,14 @@
         <li><a href="/home">Home</a></li>
         <li><a class="active2" href="/graph">Bar Chart</a></li>
         <li><a  href="/compare">Comparison Chart</a></li>
+        <li class="dropdown">
+            <a href="javascript:void(0)" class="dropbtn">New Material</a>
+            <div class="dropdown-content">
+                <a href="#">Line Chart</a>
+                <a href="#">Bar Chart</a>
+                <a href="#">Add Material</a>
+            </div>
+        </li>
         <li><a href="/abcd">Edit in (a,b,c,d)</a></li>
         <li style="display: none;"><a href="/newmat">New Material</a></li>
         <li style="display: none;"><a href="/newbar">New BarChart</a></li>
@@ -394,7 +438,9 @@
                     <button type="submit" class="change-bg-btn" style="font-weight: 600;" >Create Bar Graph</button>
                     <!-- <input type="text" name="cut_id" id="cut_id" value="{{cut_id}}" style="display: none;"> -->
                 </div>
-
+                 <div class="form-group" style="float: left;font-weight: 600;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+                    <p>Execution Time taken: <b>{{ exec_time }} </b> seconds</p>
+                </div>
                 <div class="form-group color-panel" style="float: left;display: none;">
                     <label for="startColor">Change Background Color:</label>
                     Back Color: <input type="color" id="startColor2" value="#cee9b8">
@@ -497,7 +543,11 @@
             </div>
         </div>
     </form>
-
+    <ul>
+        <li style="float: right;"><a>Execution Time taken: <b>{{ exec_time }} </b> seconds</a></li>        
+        <li style="float: left;"><a href="/logout">Logout</a></li>
+        <li style="float: left;"><a href="">Welcome, {{ session.get('name') }}</a></li>
+    </ul>
     <script>
         // Get the modal
         var modal = document.getElementById("myModal");

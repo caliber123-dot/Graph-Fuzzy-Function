@@ -12,10 +12,20 @@ async function onDownload() {
         const fileHandle = await window.showSaveFilePicker({
             // suggestedName: 'image_name.png', // Default file name
             suggestedName: image.alt,
-            types: [{
-                description: 'Image Files',
-                accept: { 'image/jpeg': ['.jpg', '.jpeg'], 'image/png': ['.png'] },
-            }],
+            // types: [{
+            //     description: 'Image Files',
+            //     accept: { 'image/jpeg': ['.jpg', '.jpeg'], 'image/png': ['.png'] },
+            // }],
+            types: [
+                {
+                    description: 'PNG Image',
+                    accept: { 'image/png': ['.png'] }
+                },
+                {
+                    description: 'JPEG Image',
+                    accept: { 'image/jpeg': ['.jpg', '.jpeg'] }
+                }
+            ]
         });
 
         // Create a writable stream to the selected file

@@ -203,7 +203,8 @@
             border-right: none;
         }
 
-        li a {
+        li a,
+        .dropbtn {
             display: block;
             color: white;
             text-align: center;
@@ -219,7 +220,43 @@
         .active2 {
             background-color: #04AA6D;
         }
+
+        li a:hover,
+        .dropdown:hover .dropbtn {
+            background-color: red;
+        }
+
+        li.dropdown {
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+            color: white;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
     </style>
+
 </head>
 
 <body id="mbody">
@@ -236,6 +273,14 @@
         <li><a href="/home">Home</a></li>
         <li><a href="/graph">Bar Chart</a></li>
         <li><a class="active2" href="/compare">Comparison Chart</a></li>
+        <li class="dropdown">
+            <a href="javascript:void(0)" class="dropbtn">New Material</a>
+            <div class="dropdown-content">
+                <a href="#">Line Chart</a>
+                <a href="#">Bar Chart</a>
+                <a href="#">Add Material</a>
+            </div>
+        </li>
         <li><a href="/abcd">Edit in (a,b,c,d)</a></li>
         <li style="display: none;"><a href="/newmat">New Material</a></li>
         <li style="display: none;"><a href="/newbar">New BarChart</a></li>
@@ -283,11 +328,11 @@
                         const cut_id = document.getElementById("ddlalphacut");
                         if (cut_id.selectedIndex == 1) {
                             document.getElementById("tr1").style.display = "block";
-                            document.getElementById("tr2").style.display = "none";                            
+                            document.getElementById("tr2").style.display = "none";
                         }
                         else if (cut_id.selectedIndex == 2) {
                             document.getElementById("tr1").style.display = "none";
-                            document.getElementById("tr2").style.display = "block";                            
+                            document.getElementById("tr2").style.display = "block";
                         }
                     }
                 </script>
@@ -296,7 +341,7 @@
                     <tr id="tr1" class="tr_display {{ show_alpha }}">
                         <!-- <tr id="tr1" class="tr_display"> -->
                         <td style="width: 20%;"><b>α:</b></td>
-                        <td ><input type="text" list="alpha1-options"  id="alpha1" name="alpha1" value="{{a1}}"
+                        <td><input type="text" list="alpha1-options" id="alpha1" name="alpha1" value="{{a1}}"
                                 placeholder="Enter α" required autocomplete="off"
                                 onkeypress="return validateZeroDecimalInput(event)"
                                 oninput="validateZeroDecimalFormat(this)" onblur="validateZeroDecimalFinal(this)">
@@ -310,8 +355,8 @@
 
                     <tr id="tr2" class="tr_display {{ show_alpha_dash }}">
                         <td style="width: 20%;"><b>α-α':</b></td>
-                        <td><input type="text"  list="alpha11-options" name="alpha_dash1" id="alpha_dash1"
-                                value="{{a2}}" style="width: 30%;float: left;" placeholder="Enter α" autocomplete="off"
+                        <td><input type="text" list="alpha11-options" name="alpha_dash1" id="alpha_dash1" value="{{a2}}"
+                                style="width: 30%;float: left;" placeholder="Enter α" autocomplete="off"
                                 onkeypress="return validateZeroDecimalInput(event)"
                                 oninput="validateZeroDecimalFormat(this)" onblur="validateZeroDecimalFinal(this)">
                             <datalist id="alpha11-options">
@@ -382,7 +427,8 @@
 
                 </div>
                 <div class="graph-box tr_display {{ show_alpha_dash }}">Bar Chart : α-α'-Cut<img id="gr4"
-                        src="static/img/{{g4}}" onclick="onMyPopup(this)" style="width: 100%;height: auto;" alt="{{g4}}">
+                        src="static/img/{{g4}}" onclick="onMyPopup(this)" style="width: 100%;height: auto;"
+                        alt="{{g4}}">
                 </div>
             </div>
             <!-- ========== 2222 ======== -->
@@ -402,7 +448,11 @@
             </div>
         </div>
     </form>
-
+    <ul>
+        <li style="float: right;"><a>Execution Time taken: <b>{{ exec_time }} </b> seconds</a></li>
+        <li style="float: left;"><a href="/logout">Logout</a></li>
+        <li style="float: left;"><a href="">Welcome, {{ session.get('name') }}</a></li>
+    </ul>
     <script>
         // Get the modal
         var modal = document.getElementById("myModal");
@@ -473,8 +523,8 @@
         // Call this function when the page loads
         document.addEventListener('DOMContentLoaded', applySavedBackgrounds);
     </script>
-    <!-- <script src="static/js/code.js"></script>
-    <script src="static/js/code_graph.js"></script> -->
+    <!-- <script src="static/js/code.js"></script> -->
+    <script src="static/js/code_compare.js"></script>
     <script src="static/js/script.js"></script>
     <!-- jsPDF save in one file -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -483,48 +533,30 @@
         // Initialize jsPDF
         const { jsPDF } = window.jspdf;
         async function onDownloadPdf() {
+            // alert("Inside onDownloadPdf");
             const imageIds = ['gr1', 'gr2', 'gr3', 'gr4']; // IDs of all images
             // alert()
             // const imageIds = ['gr1', 'gr2', 'gr3']; // IDs of all images
             const pdf = new jsPDF();
             let imagesAdded = 0; // Track how many images were successfully added
             const Tfn = document.getElementById('ddlfuntion');
-            const Material = document.getElementById('ddlmaterials');
+            // const Material = document.getElementById('ddlmaterials');
             let filename = '';
             if (Tfn.selectedIndex == 0) {
                 alert('Select Fuzzy Membership Function');
                 return;
             }
-            if (Material.selectedIndex == 0) {
-                alert('Select Materials');
-                return;
-            }
+            // if (Material.selectedIndex == 0) {
+            //     alert('Select Materials');
+            //     return;
+            // }
             else if (Tfn.selectedIndex == 1) {
-                const selectedMaterial = Material.options[Material.selectedIndex].text.trim();
-                // alert(selectedMaterial);               
-                if (selectedMaterial == 'Aluminium')
-                    filename = "Natural_Frequency_Trapezoidal_" + "AL"
-                else if (selectedMaterial == 'Neoprene Rubber')
-                    filename = "Natural_Frequency_Trapezoidal_" + "NR"
-                else if (selectedMaterial == 'Teflon')
-                    filename = "Natural_Frequency_Trapezoidal_" + "TF"
-                else if (selectedMaterial == 'Nylon')
-                    filename = "Natural_Frequency_Trapezoidal_" + "NL"
-                else if (selectedMaterial == 'SS-304 Grade ABS Silicon')
-                    filename = "Natural_Frequency_Trapezoidal_" + "SS304"
+                filename = "Natural_Frequency_Trapezoidal_";
+
             }
             else if (Tfn.selectedIndex == 2) {
-                const selectedMaterial = Material.options[Material.selectedIndex].text.trim();
-                if (selectedMaterial == 'Aluminium')
-                    filename = "Natural_Frequency_Triangular_" + "AL"
-                else if (selectedMaterial == 'Neoprene Rubber')
-                    filename = "Natural_Frequency_Triangular_" + "NR"
-                else if (selectedMaterial == 'Teflon')
-                    filename = "Natural_Frequency_Triangular_" + "TF"
-                else if (selectedMaterial == 'Nylon')
-                    filename = "Natural_Frequency_Triangular_" + "NL"
-                else if (selectedMaterial == 'SS-304 Grade ABS Silicon')
-                    filename = "Natural_Frequency_Triangular_" + "SS304"
+                filename = "Natural_Frequency_Triangular_";
+
             }
             try {
                 for (let i = 0; i < imageIds.length; i++) {

@@ -41,10 +41,15 @@ def GetFuns(alpha_cuts, a_y,b_y,c_y,d_y,a_d,b_d,c_d,d_d):
         fn3 = (1/(2*np.pi)) * np.sqrt(Y_min_list[i]/d_max_list[i])
         fn4 = (1/(2*np.pi)) * np.sqrt(Y_max_list[i]/d_max_list[i])
     
-        fn1_list.append(round(fn1, 4)) # Ymin dmin 
-        fn2_list.append(round(fn2, 4)) # Ymax dmin
-        fn3_list.append(round(fn3, 4)) # Ymin dmax
-        fn4_list.append(round(fn4, 4)) # Ymax dmax
+        # fn1_list.append(round(fn1, 4)) # Ymin dmin 
+        # fn2_list.append(round(fn2, 4)) # Ymax dmin
+        # fn3_list.append(round(fn3, 4)) # Ymin dmax
+        # fn4_list.append(round(fn4, 4)) # Ymax dmax
+        # Format to exactly 4 decimal places
+        fn1_list.append(float(f"{fn1:.4f}"))
+        fn2_list.append(float(f"{fn2:.4f}"))
+        fn3_list.append(float(f"{fn3:.4f}"))
+        fn4_list.append(float(f"{fn4:.4f}"))
         
     fn_dict = {
         'α': alpha_cuts,
@@ -99,10 +104,14 @@ def GetFuns2(alpha_cuts, a_y,b_y,c_y,d_y,a_d,b_d,c_d,d_d,alpha1):
         fn3 = (1/(2*np.pi)) * np.sqrt(Y_min_list[i]/d_max_list[i])
         fn4 = (1/(2*np.pi)) * np.sqrt(Y_max_list[i]/d_max_list[i])
     
-        fn1_list.append(round(fn1, 4)) # Ymin dmin 
-        fn2_list.append(round(fn2, 4)) # Ymax dmin
-        fn3_list.append(round(fn3, 4)) # Ymin dmax
-        fn4_list.append(round(fn4, 4)) # Ymax dmax
+        # fn1_list.append(round(fn1, 4)) # Ymin dmin 
+        # fn2_list.append(round(fn2, 4)) # Ymax dmin
+        # fn3_list.append(round(fn3, 4)) # Ymin dmax
+        # fn4_list.append(round(fn4, 4)) # Ymax dmax
+        fn1_list.append(float(f"{fn1:.4f}"))
+        fn2_list.append(float(f"{fn2:.4f}"))
+        fn3_list.append(float(f"{fn3:.4f}"))
+        fn4_list.append(float(f"{fn4:.4f}"))
         # print("alpha:>>>>>", alpha1)
         alpha_dash_alpha = [f"{a}-{b}" for a, b in zip(alpha1,alpha_cuts)]
     fn_dict = {

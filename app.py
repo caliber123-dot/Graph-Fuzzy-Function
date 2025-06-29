@@ -9,6 +9,7 @@ import re
 import bcrypt
 from datetime import datetime
 from sqlalchemy import text  # Import the text function
+import time
 
 # app = Flask(__name__)
 app = Flask(__name__, instance_relative_config=True)
@@ -368,7 +369,8 @@ from barchat import GetBarChat, GetBarChat2
 from app_fn_triangular import GetFunsTriangular,GetFunsTriangular2, export_table_image,GetMinMax_Tri,GetMinMax_Tri2
 @app.route('/graph', methods=['GET', 'POST'])
 # @app.route('/graph')
-def graph():    
+def graph(): 
+    start_time = time.time()   
     if 'user_id' not in session:
         flash('Please login first', 'error')
         return redirect(url_for('login'))
@@ -513,7 +515,9 @@ def graph():
                 alpha_val2 = tbl_alpha_val.query.filter_by(av_status=2).order_by(asc(tbl_alpha_val.av_alpha)).all()
         arr1.clear()
         arr2.clear()
-        return render_template('graph.html',fn_dict= fn_dict,alpha_cuts=alpha_cuts,alpha=alpha,alpha_dash_cuts=alpha_dash_cuts,fn_dict_dash=fn_dict_dash,g1=g1,g2=g2,g3=g3,g4=g4,a1=a1,a2=a2,a3=a3,a4=a4,a5=a5,a6=a6,s1=ddlmat_ID,s2=ddlfuntion,s3=ddlalphacut,materials=materials,show_alpha=show_alpha,show_alpha_dash=show_alpha_dash,t1=t1,t2=t2,alpha_val1=alpha_val1,alpha_val2=alpha_val2)
+        end_time = time.time()
+        execution_time = end_time - start_time
+        return render_template('graph.html',fn_dict= fn_dict,alpha_cuts=alpha_cuts,alpha=alpha,alpha_dash_cuts=alpha_dash_cuts,fn_dict_dash=fn_dict_dash,g1=g1,g2=g2,g3=g3,g4=g4,a1=a1,a2=a2,a3=a3,a4=a4,a5=a5,a6=a6,s1=ddlmat_ID,s2=ddlfuntion,s3=ddlalphacut,materials=materials,show_alpha=show_alpha,show_alpha_dash=show_alpha_dash,t1=t1,t2=t2,alpha_val1=alpha_val1,alpha_val2=alpha_val2,exec_time=round(execution_time, 2))
     
     return render_template('graph.html',g1=g1,g2=g2,g3=g3,g4=g4,s1=None, alpha_val1=alpha_val1,alpha_val2=alpha_val2)
 
@@ -525,6 +529,7 @@ from Triangular import GetFuzzyFunction_aplha2, GetFuzzyFunction_aplha_alpha_das
 # from TriangularYoung import TriangularYoungFun
 @app.route('/home', methods=['GET', 'POST'])
 def home():
+    start_time = time.time()
     if 'user_id' not in session:
         flash('Please login first', 'error')
         return redirect(url_for('login'))
@@ -675,9 +680,9 @@ def home():
                     alpha_val2 = tbl_alpha_val.query.filter_by(av_status=2).order_by(asc(tbl_alpha_val.av_alpha)).all()
             arr1.clear()
             arr2.clear()
-            # exists = any(item.av_alpha == search_value for item in alpha_val1)
-            # print(f"Does {search_value} exist? {exists}")
-            return render_template('index.html', g1=g1,g2=g2,g3=g3,g4=g4,a1=a1,a2=a2,a3=a3,a4=a4,a5=a5,a6=a6,materials=materials,s1=ddlmaterials,s2=ddlfuntion,alpha_id=alpha_id,is_update=is_update,alpha_val1=alpha_val1,alpha_val2=alpha_val2, fn_dict=fn_dict,fn_dict_dash=fn_dict_dash)     
+            end_time = time.time()
+            execution_time = end_time - start_time
+            return render_template('index.html', g1=g1,g2=g2,g3=g3,g4=g4,a1=a1,a2=a2,a3=a3,a4=a4,a5=a5,a6=a6,materials=materials,s1=ddlmaterials,s2=ddlfuntion,alpha_id=alpha_id,is_update=is_update,alpha_val1=alpha_val1,alpha_val2=alpha_val2, fn_dict=fn_dict,fn_dict_dash=fn_dict_dash,exec_time=round(execution_time, 2))     
     return render_template('index.html',g1=g1,g2=g2,g3=g3,g4=g4, s1=None, alpha_val1=alpha_val1,alpha_val2=alpha_val2)
 global arr1, arr2
 # r1 = 0
@@ -849,7 +854,7 @@ def get_materials(function_id):
     ]
 
     return jsonify(material_list)
-from export import export_images_to_excel, export_images_to_excel2
+from export import export_images_to_excel, export_images_to_excel2,export_images_to_excel_compare
 from werkzeug.utils import secure_filename
 
 @app.route('/export_excel', methods=['POST'])
@@ -975,6 +980,62 @@ def export_excel2():
             except:
                 pass
 
+@app.route('/export_excel_compare', methods=['POST'])
+def export_excel_compare():
+    try:
+        fn_dict = request.form.get('fn_dict')
+        file1 = request.form.get('file1')
+        filetitle = request.form.get('filetitle')
+        # print("file1>>",file1)
+        # print("fn_dict>>",fn_dict)
+                    
+        # Secure the filenames and create full paths
+        img1_path = os.path.join('static', 'img', secure_filename(file1))
+        img2_path = os.path.join('static', 'img', secure_filename(file1))
+        
+        # Verify images exist
+        if not all([os.path.exists(img1_path), os.path.exists(img2_path)]):
+            return {"error": "One or both images not found"}, 404
+
+        # Create absolute path for temp Excel
+        output_path = os.path.abspath('temp_export.xlsx')
+        
+        # Generate Excel
+        export_images_to_excel_compare(
+            img1=img1_path,
+            img2=img2_path,
+            output_excel=output_path,
+            max_width=600,
+            max_height=400,
+            fn_dict=fn_dict,
+            filetitle=filetitle
+        )
+
+        # Verify Excel was created
+        if not os.path.exists(output_path):
+            return {"error": "Failed to create Excel file"}, 500
+
+        # Send file with proper headers
+        return send_file(
+            output_path,
+            as_attachment=True,
+            download_name='exported_data.xlsx',
+            mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            conditional=True
+        )
+
+    except Exception as e:
+        return {"error": f"Server error: {str(e)}"}, 500
+        
+    finally:
+        # Clean up temp file
+        if os.path.exists(output_path):
+            try:
+                os.remove(output_path)
+            except:
+                pass
+
+
 @app.route('/')
 def index():
     return render_template('home.html', current_user=None)
@@ -1073,12 +1134,23 @@ def logout():
     flash('You have been logged out', 'success')
     return redirect(url_for('login'))
 
-from Comparative import Comparative_Alpha, Comparative_Alpha_Dash
+from Comparative import Comparative_Alpha, Comparative_Alpha_Dash, Comparative_Alpha_Triangular, Comparative_Alpha_Dash_Triangular
 @app.route('/compare', methods=['GET', 'POST'])
 def compare():  
+    start_time = time.time() 
     if 'user_id' not in session:
         flash('Please login first', 'error')
         return redirect(url_for('login'))  
+    alpha_val1 = tbl_alpha_val.query.filter(
+    tbl_alpha_val.av_status == 1,
+    tbl_alpha_val.av_user_id == session['user_id']
+    ).order_by(asc(tbl_alpha_val.av_alpha)).all()
+    # alpha_val2 = tbl_alpha_val.query.filter_by(av_status=2).order_by(asc(tbl_alpha_val.av_alpha)).all()
+    alpha_val2 = tbl_alpha_val.query.filter(
+    tbl_alpha_val.av_status == 2,
+    tbl_alpha_val.av_user_id == session['user_id']
+    ).order_by(asc(tbl_alpha_val.av_alpha)).all()
+
     if request.method=='POST':
         ddlfuntion = request.form.get('ddlfuntion')  # ID        
         ddlalphacut = request.form.get('ddlalphacut') # ID
@@ -1112,7 +1184,10 @@ def compare():
             alpha_cut = a1
             g2 = filename + '_Bar_alpha' + '.png' # Graph_Name
             t1 = "Comparative_Alpha_Table.png"
-            g11 = Comparative_Alpha(alpha_cut,g2,t1, materials)
+            if(ddlfuntion == '1'): # Trapezoidal
+                fn_dict = Comparative_Alpha(alpha_cut,g2,t1, materials)
+            elif(ddlfuntion == '2'): # Triangular
+                fn_dict = Comparative_Alpha_Triangular(alpha_cut,g2,t1, materials)
             show_alpha = "d-show"
         elif(ddlalphacut == "2"): #Alpha Dash Cut
             t1 = "basic.avif"
@@ -1120,12 +1195,18 @@ def compare():
             alpha_dash = a3
             g4 = filename + '_Bar_alpha_dash' + '.png' # Graph_Name
             t2 = "Comparative_Alpha_Dash_Table.png"
-            g12 = Comparative_Alpha_Dash(alpha_cut, alpha_dash, g4,t2, materials)
+            if(ddlfuntion == '1'): # Trapezoidal
+                fn_dict = Comparative_Alpha_Dash(alpha_cut, alpha_dash, g4,t2, materials)
+            #    print("fn_dict :::::", fn_dict)
+            elif(ddlfuntion == '2'): # Triangular
+                fn_dict = Comparative_Alpha_Dash_Triangular(alpha_cut, alpha_dash, g4,t2, materials)
             # show_alpha = "d-show"
             show_alpha_dash = "d-show"
-        return render_template('compare.html', g2=g2, g4=g4,t2=t2,t1=t1,a1=a1,a2=a2,a3=a3,show_alpha=show_alpha,show_alpha_dash=show_alpha_dash,s2=ddlfuntion,s3=ddlalphacut)
+        end_time = time.time()
+        execution_time = end_time - start_time
+        return render_template('compare.html',fn_dict=fn_dict ,g2=g2, g4=g4,t2=t2,t1=t1,a1=a1,a2=a2,a3=a3,show_alpha=show_alpha,show_alpha_dash=show_alpha_dash,s2=ddlfuntion,s3=ddlalphacut,alpha_val1=alpha_val1,alpha_val2=alpha_val2,exec_time=round(execution_time, 2))
     # Comparative_Alpha(0.5)
-    return render_template('compare.html', current_user=None)
+    return render_template('compare.html', alpha_val1=alpha_val1,alpha_val2=alpha_val2)
 
 if __name__ == '__main__':
     # Online Site On Render.com
