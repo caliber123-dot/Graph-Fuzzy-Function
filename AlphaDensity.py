@@ -20,9 +20,9 @@ def alphaDensityFun(a1,a2,a3,graph):
     x_bar = [d - (d - c) * alpha_val for alpha_val in alpha]  # Right slope
 
     # Debugging prints
-    print(f"Updated alpha values: {alpha}")
-    print(f"Lower bounds (x): {x}")
-    print(f"Upper bounds (x̄): {x_bar}")
+    # print(f"Updated alpha values: {alpha}")
+    # print(f"Lower bounds (x): {x}")
+    # print(f"Upper bounds (x̄): {x_bar}")
 
     # Clear previous plots
     plt.clf()

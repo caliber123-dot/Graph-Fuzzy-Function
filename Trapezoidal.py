@@ -97,11 +97,14 @@ def GetFuzzyFunction_aplha_alpha_dash(a_val, b_val, c_val, d_val, a1, a2, a3, a4
     b = b_val
     c = c_val
     d = d_val
+    # print(a,b,c,d)
     # User Inputs
     # alpha_input = input("Enter α values (comma separated, like 0.3,0.3333,0.4567): ")
     # alpha_dash_input = input("Enter α' values (comma separated, like 0.3,0.3333,0.4567): ")
     alpha = [a1, a2, a3]
     alpha_dash = [a4, a5, a6]
+    # print(alpha)
+    # print(alpha_dash)
     # Convert to float
     # alpha = [float(val.strip()) for val in alpha_input.split(',')]
     # alpha_dash = [float(val.strip()) for val in alpha_dash_input.split(',')]
@@ -144,6 +147,12 @@ def GetFuzzyFunction_aplha_alpha_dash(a_val, b_val, c_val, d_val, a1, a2, a3, a4
             x_extend = 3  
         else:
             x_extend = 3e8
+    else:
+        if(module == "Density"):
+            x_extend = 3
+        else:
+            # x_extend = 1e9
+            x_extend = 3
 
     for i in range(len(alpha)):
         color = colors[i % len(colors)]

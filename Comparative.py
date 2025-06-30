@@ -121,7 +121,7 @@ def Comparative_Alpha(alpha_str, graph, t1, materials):
 
 def Comparative_Alpha_Triangular(alpha_str, graph, t1, materials):
     # Trapezoidal α-cut bounds
-    print(materials)
+    # print(materials)
     def alpha_cut(a, b, c, d, α):
         lower = a + α * (b - a)
         upper = c - α * (c - b)

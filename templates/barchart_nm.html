@@ -268,10 +268,10 @@
     <h1>Study on Natural Frequency of Oscillation of Unilink Flexible Robot using Fuzzy Function</h1>
     <ul>
         <li><a href="/home">Home</a></li>
-        <li><a class="active2" href="/graph">Bar Chart</a></li>
+        <li><a  href="/graph">Bar Chart</a></li>
         <li><a  href="/compare">Comparison Chart</a></li>
         <li class="dropdown">
-            <a href="javascript:void(0)" class="dropbtn">New Material</a>
+            <a class="active2" href="javascript:void(0)" class="dropbtn">New Material</a>
             <div class="dropdown-content">
                 <a href="/linechart_nm">Line Chart</a>
                 <a href="/barchart_nm">Bar Chart</a>
@@ -285,7 +285,7 @@
         <li style="float: right;"><a href="/logout">Logout</a></li>
         <li style="float: right;"><a href="">Welcome, {{ session.get('name') }}</a></li>
     </ul>
-    <form action="/graph" method="POST" onsubmit="return handleFormSubmit(event)">
+    <form action="/barchart_nm" method="POST" onsubmit="return handleFormSubmit(event)">
         <div class="container" id="mainContainer">
             <div class="left-section">
                 <div class="form-group">
@@ -618,7 +618,7 @@
         // Call this function when the page loads
         document.addEventListener('DOMContentLoaded', applySavedBackgrounds);
     </script>
-    <script src="static/js/code.js"></script>
+    <script src="static/js/code_nm.js"></script>
     <script src="static/js/code_graph.js"></script>
     <script src="static/js/script.js"></script>
     <!-- jsPDF save in one file -->
@@ -657,6 +657,8 @@
                     filename = "Natural_Frequency_Trapezoidal_" + "NL"
                 else if(selectedMaterial == 'SS-304 Grade ABS Silicon')                   
                     filename = "Natural_Frequency_Trapezoidal_" + "SS304"
+                else
+                    filename = "Natural_Frequency_Trapezoidal_" + selectedMaterial
             }
             else if (Tfn.selectedIndex == 2){
                 const selectedMaterial = Material.options[Material.selectedIndex].text.trim();                
@@ -670,6 +672,8 @@
                     filename = "Natural_Frequency_Triangular_" + "NL"
                 else if(selectedMaterial == 'SS-304 Grade ABS Silicon')                   
                     filename = "Natural_Frequency_Triangular_" + "SS304"
+                else
+                    filename = "Natural_Frequency_Triangular_" + selectedMaterial
             }
             try {
                 for (let i = 0; i < imageIds.length; i++) {

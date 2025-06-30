@@ -44,10 +44,10 @@ def GetFunsTriangular(alpha_cuts,a_y,b_y,c_y,a_d,b_d,c_d):
         fn3_list.append(round(fn3, 4)) # Ymin dmax
         fn4_list.append(round(fn4, 4)) # Ymax dmax
 
-    print("Function 1 :",fn1_list)
-    print("Function 2 :",fn2_list)
-    print("Function 3 :",fn3_list)
-    print("Function 4 :",fn4_list)    
+    # print("Function 1 :",fn1_list)
+    # print("Function 2 :",fn2_list)
+    # print("Function 3 :",fn3_list)
+    # print("Function 4 :",fn4_list)    
     fn_dict = {
         'α': alpha_cuts,
         "fn1": fn1_list,

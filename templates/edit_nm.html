@@ -349,20 +349,21 @@
         <li><a href="/graph">Bar Chart</a></li>
         <li><a href="/compare">Comparison Chart</a></li>
         <li class="dropdown">
-            <a href="javascript:void(0)" class="dropbtn">New Material</a>
+            <a class="active2" href="javascript:void(0)" class="dropbtn">New Material</a>
             <div class="dropdown-content">
                 <a href="/linechart_nm">Line Chart</a>
                 <a href="/barchart_nm">Bar Chart</a>
                 <a href="/edit_nm">Edit Material</a>
             </div>
         </li>
-        <li><a class="active2" href="/abcd">Edit in (a,b,c,d)</a></li>
+        <li><a href="/abcd">Edit in (a,b,c,d)</a></li>
         <li style="display: none;"><a href="/newmat">New Material</a></li>
         <li style="display: none;"><a href="/newbar">New BarChart</a></li>
 
         <li style="float: right;"><a href="/logout">Logout</a></li>
         <li style="float: right;"><a href="">Welcome, {{ session.get('name') }}</a></li>
     </ul>
+
     <!-- Flash messages container -->
     <div class="flash-container">
         {% with messages = get_flashed_messages(with_categories=true) %}
@@ -382,13 +383,13 @@
         {% endwith %}
     </div>
 
-    <form action="/abcd" method="POST">
+    <form action="/edit_nm" method="POST">
         <div class="container" id="mainContainer">
             <div class="left-section1">
                 <div class="form-group"
                     style="margin-top: 0px;margin-bottom: 0px;width: 500px;background-color: #fafafa;padding: 20px;">
-                    <button type="button" class="collapsible" style="width:100%" onclick="FunEditText();">Edit
-                        a,b,c,d</button>
+                    <button type="button" class="collapsible" style="width:100%" onclick="FunEditText();">Edit in New
+                        Material a,b,c,d</button>
                     <select name="ddlfuntion" id="ddlfuntion" required style="width:100%">
                         <option value="">Select Function.</option>
                         <option value="1" {% if s2=="1" %}selected{% endif %}>Trapezoidal Fuzzy
@@ -407,6 +408,9 @@
                     <div class="content21" style="display: block;width: 100%;margin-top: 10px;">
                         <!-- <label><u>Add Material:</u></label> -->
                         <table style="width: 100%">
+                            <tr>
+                                <td colspan="3"><input type="text" id="txtmaterial" name="txtmaterial" placeholder="Enter Material" value="{{txtmaterial}}"></td>
+                            </tr>
                             <tr>
                                 <td></td>
                                 <th>Density </th>
@@ -450,8 +454,7 @@
                                         value="Changes"></td>
 
                             </tr>
-                        </table>
-                        
+                        </table>                        
                     </div>
                 </div>
 
@@ -467,7 +470,6 @@
                     </button>
                 </div>
             </div>
-
         </div>
     </form>
     <script>
@@ -543,12 +545,7 @@
             }
             else {
                 return true;
-            }
-            // if (!material || !a || !b || !c || !d) {
-            //     e.preventDefault(); // Stop form from submitting
-            //     alert("Please fill in all fields (material, a, b, c, d).");
-            // }
-
+            }            
         }
     </script>
     <script>
@@ -573,22 +570,9 @@
                 if (modal) modal.style.display = "none";
             }
         }
-        // When the user clicks on <span> (x), close the modal
-        // span.onclick = function () {
-        //     modal.style.display = "none";
-        // }
+        
     </script>
-    <!-- <select name="ddlfuntion" id="ddlfuntion" required style="width:100%">
-        <option value="">Select Function.</option>
-        <option value="1">Trapezoidal Fuzzy Function.</option>
-        <option value="2">Triangular Fuzzy Function.</option>
-    </select> -->
-
-    <!-- <td>
-        <input type="text" id="c_value_d" name="c_value_d" value="{{c}}" placeholder="Enter c value" required readonly
-            class="readdata">
-    </td> -->
-
+    
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const ddlFunction = document.getElementById('ddlfuntion');
@@ -652,7 +636,7 @@
         // Call this function when the page loads
         document.addEventListener('DOMContentLoaded', applySavedBackgrounds);
     </script>
-    <script src="static/js/abcd.js"></script>
+    <script src="static/js/abcd_nm.js"></script>
     <script src="static/js/script.js"></script>
     <!-- jsPDF save in one file -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -742,4 +726,5 @@
         }, 5000); // Hide after 5 seconds
     </script>
 </body>
+
 </html>

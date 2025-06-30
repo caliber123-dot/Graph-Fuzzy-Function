@@ -302,9 +302,9 @@
         <li class="dropdown">
             <a href="javascript:void(0)" class="dropbtn">New Material</a>
             <div class="dropdown-content">
-                <a href="#">Line Chart</a>
-                <a href="#">Bar Chart</a>
-                <a href="#">Add Material</a>
+                <a href="/linechart_nm">Line Chart</a>
+                <a href="/barchart_nm">Bar Chart</a>
+                <a href="/edit_nm">Edit Material</a>
             </div>
         </li>
         <li><a href="/abcd">Edit in (a,b,c,d)</a></li>
@@ -459,7 +459,7 @@
 
                 <div class="form-group">
                     <button type="submit" id="alphaButton" class="change-bg-btn" >
-                        {{ 'Create Alpha Graph' if is_update else 'Create Alpha Graph' }}
+                        {{ 'Create Line Graph' if is_update else 'Create Line Graph' }}
                     </button>
                     <input type="text" name="alpha_id" id="alpha_id" value="{{alpha_id}}" style="display: none;">
 
