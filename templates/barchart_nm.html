@@ -438,7 +438,7 @@
                     <button type="submit" class="change-bg-btn" style="font-weight: 600;" >Create Bar Graph</button>
                     <!-- <input type="text" name="cut_id" id="cut_id" value="{{cut_id}}" style="display: none;"> -->
                 </div>
-                 <div class="form-group" style="float: left;font-weight: 600;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+                 <div class="form-group" style="display: none;">
                     <p>Execution Time taken: <b>{{ exec_time }} </b> seconds</p>
                 </div>
                 <div class="form-group color-panel" style="float: left;display: none;">
@@ -544,9 +544,9 @@
         </div>
     </form>
     <ul>
-        <li style="float: right;"><a>Execution Time taken: <b>{{ exec_time }} </b> seconds</a></li>        
-        <li style="float: left;"><a href="/logout">Logout</a></li>
-        <li style="float: left;"><a href="">Welcome, {{ session.get('name') }}</a></li>
+        <li style="float: none;"><a>Execution Time taken: <b>{{ exec_time }} </b> seconds</a></li>        
+        <!-- <li style="float: left;"><a href="/logout">Logout</a></li>
+        <li style="float: left;"><a href="">Welcome, {{ session.get('name') }}</a></li> -->
     </ul>
     <script>
         // Get the modal

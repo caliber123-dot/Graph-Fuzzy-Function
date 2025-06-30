@@ -581,7 +581,7 @@
                     <input type="text" name="alpha_id" id="alpha_id" value="{{alpha_id}}" style="display: none;">
 
                 </div>
-                <div class="form-group" style="float: left;font-weight: 600;">
+                <div class="form-group" style="float: left;font-weight: 600;display: none;">
                     <!-- <h2>Processing completed!</h2> -->
                     <p>Execution Time taken: <b>{{ exec_time }} </b> seconds</p>
                 </div>
@@ -706,9 +706,9 @@
         </form>
     </div>
     <ul>
-        <li style="float: right;"><a>Execution Time taken: <b>{{ exec_time }} </b> seconds</a></li>
-        <li style="float: left;"><a href="/logout">Logout</a></li>
-        <li style="float: left;"><a href="">Welcome, {{ session.get('name') }}</a></li>
+        <li style="float: none;"><a>Execution Time taken: <b>{{ exec_time }} </b> seconds</a></li>
+        <!-- <li style="float: left;"><a href="/logout">Logout</a></li>
+        <li style="float: left;"><a href="">Welcome, {{ session.get('name') }}</a></li> -->
     </ul>
     <script>
         var modal2 = document.getElementById("myModal2");
