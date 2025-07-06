@@ -58,8 +58,7 @@ class tbl_alpha_val(db.Model):
 
 # Define User model
 class User(db.Model):
-    __tablename__ = 'tbl_register'
-    
+    __tablename__ = 'tbl_register'    
     id = db.Column(db.Integer, primary_key=True)
     full_name = db.Column(db.String(100), nullable=False)
     username_email = db.Column(db.String(100), unique=True, nullable=False)
@@ -68,6 +67,14 @@ class User(db.Model):
     user_phone = db.Column(db.LargeBinary, nullable=True)
     user_type = db.Column(db.String(20), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+class PasswordReset(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('tbl_register.id'), nullable=False)
+    token = db.Column(db.String(100), unique=True, nullable=False)
+    expires_at = db.Column(db.DateTime, nullable=False)
+    used = db.Column(db.Boolean, default=False)
+    user = db.relationship('User', backref=db.backref('reset_tokens', lazy=True))
 
 # Initialize the database for Sqlite db
 def init_db_1():

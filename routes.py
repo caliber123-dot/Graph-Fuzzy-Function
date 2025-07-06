@@ -1,4 +1,4 @@
-from app import app, db, tbl_alpha, tbl_alpha_val, tbl_materials, User
+from app import app, db, tbl_alpha, tbl_alpha_val, tbl_materials, User, PasswordReset
 from flask import render_template, request , jsonify, send_file, redirect, url_for, flash, session
 from sqlalchemy import and_
 from sqlalchemy import asc
@@ -1625,4 +1625,104 @@ def del_mat():
     material.mat_status = 0
     db.session.commit()
     return jsonify({'message': 'Material deleted successfully'}), 200
-           
+
+import secrets     
+from datetime import datetime, timedelta      
+# Forgot Password Route
+@app.route('/forgot-password', methods=['GET', 'POST'])
+def forgot_password():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        if not email:
+            flash('Email is required', 'error')
+            return render_template('forgot_password.html')
+        
+        user = User.query.filter_by(username_email=email).first()
+        if user:
+            # Generate a secure token
+            token = secrets.token_urlsafe(32)
+            expires_at = datetime.utcnow() + timedelta(hours=1)  # Token expires in 1 hour
+            
+            # Store token in database
+            
+            reset = PasswordReset(user_id=user.id, token=token, expires_at=expires_at)
+            db.session.add(reset)
+            db.session.commit()
+            
+            # Send reset email
+            reset_url = url_for('reset_password', token=token, _external=True)
+            subject = 'Password Reset Request'
+            body = f'''
+            Hello {user.full_name},
+            <br /><br />
+            You requested a password reset. Click the link below to reset your password:
+            <br /><br />
+            {reset_url}
+            <br /><br />
+            This link will expire in 1 hour. If you did not request this, ignore this email.
+            '''
+            try:
+                # send_email(email, subject, body)
+                sender = "caliberai123@gmail.com" #From
+                from dotenv import load_dotenv
+                load_dotenv() # Load variables from .env file
+                password = os.getenv('PSW_KEY')
+                send_email(subject, body, sender, email, password)
+                flash('A password reset link has been sent to your email.', 'success')
+            except Exception as e:
+                flash('Failed to send email. Please try again later.', 'error')
+                db.session.delete(reset)  # Rollback token if email fails
+                db.session.commit()
+        else:
+            # Generic message to prevent user enumeration
+            flash('A password reset link has been sent to your email.', 'success')
+        
+        return render_template('forgot_password.html')
+    
+    return render_template('forgot_password.html')
+
+# Reset Password Route
+@app.route('/reset-password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    reset = PasswordReset.query.filter_by(token=token, used=False).first()
+    
+    if not reset or reset.expires_at < datetime.utcnow():
+        flash('Invalid or expired reset link.', 'error')
+        return redirect(url_for('forgot_password'))
+    
+    if request.method == 'POST':
+        password = request.form.get('password')
+        confirm_password = request.form.get('confirm_password')
+        
+        if not all([password, confirm_password]):
+            flash('All fields are required', 'error')
+            return render_template('reset_password.html', token=token)
+        
+        if password != confirm_password:
+            flash('Passwords do not match', 'error')
+            return render_template('reset_password.html', token=token)
+        
+        # Update user's password
+        user = User.query.get(reset.user_id)
+        user.password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+        reset.used = True  # Mark token as used
+        db.session.commit()
+        
+        flash('Password reset successful! Please log in.', 'success')
+        return redirect(url_for('login'))
+    
+    return render_template('reset_password.html', token=token)
+
+import smtplib
+from email.mime.text import MIMEText
+def send_email(subject, body, sender, recipients, password):
+    msg = MIMEText(body, 'html')
+    msg['Subject'] = subject
+    msg['From'] = sender
+    msg['To'] = ', '.join(recipients)
+    with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp_server:
+       smtp_server.login(sender, password)
+       smtp_server.sendmail(sender, recipients, msg.as_string())
+    return 1
+    # print("Email sent successfully!")
+
