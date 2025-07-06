@@ -2,6 +2,9 @@
 function fetchAlphaData() {
     const matId = document.getElementById("ddlmaterials").value;
     const fm_id = document.getElementById("ddlfuntion").value;
+    const Material = document.getElementById('ddlmaterials');
+    const selectedMaterial = Material.options[Material.selectedIndex].text.trim();
+    document.getElementById("txtmaterial").value = selectedMaterial;
 
     fetch(`/get_material_data/${matId}/${fm_id}`)
         .then(response => {

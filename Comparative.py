@@ -4,7 +4,7 @@ import pandas as pd
 from flask import send_file
 
 # Material data: (Y_a, Y_b, Y_c, Y_d, ρ_a, ρ_b, ρ_c, ρ_d)
-def Comparative_Alpha(alpha_str, graph, t1, materials):    
+def Comparative_Alpha(alpha_str, graph, t1, materials, ddlfuntion):    
     # Trapezoidal α-cut bounds
     def alpha_cut(a, b, c, d, α):
         lower = a + α * (b - a)
@@ -58,8 +58,12 @@ def Comparative_Alpha(alpha_str, graph, t1, materials):
         'fn3 (Y̲,ρ̅)': [f"{x:.4f}" for x in fn3_vals],
         'fn4 (Y̅,ρ̅)': [f"{x:.4f}" for x in fn4_vals]
     })
-    # t1 : α-Cut tbl 
-    export_table_image(t1, df, 1)
+    if(ddlfuntion == '1'): # Trapezoidal
+        fn = "Trapezoidal"
+    else:
+        fn = "Triangular"
+    tit = "Comparative " + fn + " α-Cut Table for all Materials" 
+    export_table_image(t1, df, 1, tit)
     
     fn_dict = {
         'Material': names,
@@ -171,7 +175,8 @@ def Comparative_Alpha_Triangular(alpha_str, graph, t1, materials):
         'fn4 (Y̅,ρ̅)': [f"{x:.4f}" for x in fn4_vals]
     })
     # t1 : α-Cut tbl 
-    export_table_image(t1, df, 1)
+    tit = "Comparative Triangular α-Cut Table for all Materials" 
+    export_table_image(t1, df, 1, tit)
     fn_dict = {
         'Material': names,
         "α": str(α),
@@ -224,22 +229,33 @@ def Comparative_Alpha_Triangular(alpha_str, graph, t1, materials):
     return fn_dict
 
 
-def export_table_image(g_name, df, status):
-    # if alpha_dash_cuts is not None:
-    #     alpha_dash_alpha = [f"{a}-{b}" for a, b in zip(alpha_cuts, alpha_dash_cuts)]
-    # alpha_cuts = alpha_cut    
-    df = df
-    
-    # Reset index and pass only values without index
-    if status == 1 :
-        fig, ax = plt.subplots(figsize=(9, 2.8))
-    else:
-        fig, ax = plt.subplots(figsize=(10, 2.8))
+def export_table_image(g_name, df, status, tit):   
+    base_height = 2.0
+    row_height = 0.4  # per additional row
+    total_height = base_height + row_height * len(df)
+    print("len(df)::",len(df))
+    # Set figure size
+    fig_width = 10 if status != 1 else 9
+    fig, ax = plt.subplots(figsize=(fig_width, total_height))
     ax.axis('off')
+    # df = df    
+    # Reset index and pass only values without index
+    # if status == 1 :
+    #     fig, ax = plt.subplots(figsize=(9, 3.8))
+    # else:
+    #     fig, ax = plt.subplots(figsize=(10, 4.8))
+    # ax.axis('off')
+    if len(df) <= 5:
+        title_y = 0.95
+    elif len(df) <= 6:
+        title_y = 0.88
+    elif len(df) <= 7:
+        title_y = 0.78
+    else:
+        title_y = 0.90
 
-    # Add centered title
-    # plt.title(alpha, fontsize=10, weight='bold', pad=4)
-
+    fig.suptitle(tit, fontsize=10, weight='normal', y=title_y)
+    
     # Create table without index column
     tbl = ax.table(
         cellText=df.values,
@@ -249,19 +265,19 @@ def export_table_image(g_name, df, status):
     )
     # Format table
     tbl.auto_set_font_size(False)
-    tbl.set_fontsize(12)
+    tbl.set_fontsize(10)
     tbl.scale(1.2, 1.5)  # Makes cells larger for padding effect
 
     # Eliminate extra space
     # plt.subplots_adjust(left=0.01, right=0.99, top=0.75, bottom=0.05)
 
-    # Optional: adjust cell size manually (finer control)
-    # for (row, col), cell in tbl.get_celld().items():
-    #     cell.set_height(0.22)
-    #     cell.set_width(0.18)
     # Adjust cell size: first column is double width
     for (row, col), cell in tbl.get_celld().items():
         cell.set_height(0.22)
+        # Bold the header row (row 0)
+        if row == 0:
+            cell.set_text_props(weight='bold')
+            cell.set_facecolor("#fafafa")  # Optional: light grey background
         if col == 0:
             cell.set_width(0.36)  # Double width
         else:
@@ -328,7 +344,8 @@ def Comparative_Alpha_Dash(alpha, alpha_dash, graph, t1, materials):
 
     # Display results with 4 decimal places
     df = pd.DataFrame(rows)
-    export_table_image(t1, df, 2)
+    tit = "Comparative Trapezoidal α-α'-Cut Table for all Materials" 
+    export_table_image(t1, df, 2, tit)
     # print("\nComparative Natural Frequency Table (in Hz):")
     # print(df.to_string(index=False))
     fn_dict = {
@@ -435,8 +452,8 @@ def Comparative_Alpha_Dash_Triangular(alpha, alpha_dash, graph, t1, materials):
 
     # Display results with 4 decimal places
     df = pd.DataFrame(rows)
-
-    export_table_image(t1, df, 2)
+    tit = "Comparative Triangular α-α'-Cut Table for all Materials" 
+    export_table_image(t1, df, 2, tit)
     # print("\nComparative Natural Frequency Table (in Hz):")
     # print(df.to_string(index=False))
     fn_dict = {

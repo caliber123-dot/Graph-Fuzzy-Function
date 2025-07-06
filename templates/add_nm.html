@@ -349,14 +349,14 @@
         <li><a href="/graph">Bar Chart</a></li>
         <li><a href="/compare">Comparison Chart</a></li>
         <li class="dropdown">
-            <a href="javascript:void(0)" class="dropbtn">New</a>
+            <a class="active2" href="javascript:void(0)" class="dropbtn">New</a>
             <div class="dropdown-content">
                 <a href="/add_nm">Add Material</a>
                 <a href="/abcd">Edit Material</a>
-                <a href="/del_nm">Delete Material</a>                
+                <a href="/del_nm">Delete Material</a>
             </div>
         </li>
-        <!-- <li><a href="/abcd">Edit in (a,b,c,d)</a></li> -->
+        <li style="display: none;"><a href="/abcd">Edit in (a,b,c,d)</a></li>
         <li style="display: none;"><a href="/newmat">New Material</a></li>
         <li style="display: none;"><a href="/newbar">New BarChart</a></li>
 
@@ -383,13 +383,12 @@
         {% endwith %}
     </div>
 
-    <form action="/edit_nm" method="POST">
+    <form action="/add_nm" method="POST">
         <div class="container" id="mainContainer">
             <div class="left-section1">
                 <div class="form-group"
                     style="margin-top: 0px;margin-bottom: 0px;width: 500px;background-color: #fafafa;padding: 20px;">
-                    <button type="button" class="collapsible" style="width:100%" onclick="FunEditText();">Edit in New
-                        Material a,b,c,d</button>
+                    <button type="button" class="collapsible" style="width:100%" >Add New Material</button>
                     <select name="ddlfuntion" id="ddlfuntion" required style="width:100%">
                         <option value="">Select Function.</option>
                         <option value="1" {% if s2=="1" %}selected{% endif %}>Trapezoidal Fuzzy
@@ -398,18 +397,12 @@
                             Function.</option>
                     </select>
 
-                    <select name="ddlmaterials" id="ddlmaterials" required style="width:100%">
-                        <option value="">Select Materials.</option>
-                        {% for mat in materials %}
-                        <option value="{{ mat.mat_id }}" {% if s1|int==mat.mat_id %}selected{% endif %}>{{ mat.mat_name
-                            }}</option>
-                        {% endfor %}
-                    </select>
+                    
                     <div class="content21" style="display: block;width: 100%;margin-top: 10px;">
                         <!-- <label><u>Add Material:</u></label> -->
                         <table style="width: 100%">
                             <tr>
-                                <td colspan="3"><input type="text" id="txtmaterial" name="txtmaterial" placeholder="Enter Material" value="{{txtmaterial}}"></td>
+                                <td colspan="3"><input type="text" id="txtmaterial" name="txtmaterial" placeholder="Enter New Material" value="{{new_mat}}"></td>
                             </tr>
                             <tr>
                                 <td></td>
@@ -419,11 +412,9 @@
                             <tr>
                                 <td><b>a:</b></td>
                                 <td><input type="text" id="a_value_d" name="a_value_d" value="{{a}}"
-                                        placeholder="Enter a value" required readonly
-                                        style="cursor: not-allowed;background-color: #eee;"></td>
+                                        placeholder="Enter a value" required ></td>
                                 <td><input type="text" id="a_value_y" name="a_value_y" value="{{a1}}"
-                                        placeholder="Enter a value" required readonly
-                                        style="cursor: not-allowed;background-color: #eee"></td>
+                                        placeholder="Enter a value" required ></td>
                             </tr>
                             <tr>
                                 <td><b>b:</b></td>
@@ -435,23 +426,21 @@
                             <tr>
                                 <td><b>c:</b></td>
                                 <td><input type="text" id="c_value_d" name="c_value_d" value="{{c}}"
-                                        placeholder="Enter c value" required readonly class="readdata"></td>
+                                        placeholder="Enter c value" required ></td>
                                 <td><input type="text" id="c_value_y" name="c_value_y" value="{{c1}}"
-                                        placeholder="Enter c value" required readonly class="readdata"></td>
+                                        placeholder="Enter c value" required ></td>
                             </tr>
                             <tr>
                                 <td><b>d:</b></td>
                                 <td><input type="text" id="d_value_d" name="d_value_d" value="{{d}}"
-                                        placeholder="Enter d value" readonly
-                                        style="cursor: not-allowed;background-color: #eee"></td>
+                                        placeholder="Enter d value" ></td>
                                 <td><input type="text" id="d_value_y" name="d_value_y" value="{{d1}}"
-                                        placeholder="Enter d value" readonly
-                                        style="cursor: not-allowed;background-color: #eee"></td>
+                                        placeholder="Enter d value" ></td>
                             </tr>
                             <tr>
                                 <td colspan="3"><input type="submit" onclick="return MyValidate()"
                                         style="width: 100%;background-color: green;color: white;padding: 10px;"
-                                        value="Changes"></td>
+                                        value="Add New Material"></td>
 
                             </tr>
                         </table>                        
@@ -573,30 +562,7 @@
         
     </script>
     
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const ddlFunction = document.getElementById('ddlfuntion');
-            const c_value_d = document.getElementById('c_value_d');
-            const c_value_y = document.getElementById('c_value_y');
-
-            ddlFunction.addEventListener('change', function () {
-                if (this.value === '1') {
-                    // Trapezoidal Fuzzy: Make readonly and add class
-                    c_value_d.readOnly = false;
-                    c_value_y.readOnly = false;
-                    c_value_d.classList.remove('readdata');
-                    c_value_y.classList.remove('readdata');
-                }
-                else if (this.value === '2') {
-                    // Triangular Fuzzy: Make editable and remove class
-                    c_value_d.readOnly = true;
-                    c_value_y.readOnly = true;
-                    c_value_d.classList.add('readdata');
-                    c_value_y.classList.add('readdata');
-                }
-            });
-        });
-    </script>
+   
     <script>
         function changeBackground(mval) {
             const startColor = document.getElementById('startColor').value;
@@ -636,7 +602,7 @@
         // Call this function when the page loads
         document.addEventListener('DOMContentLoaded', applySavedBackgrounds);
     </script>
-    <script src="static/js/abcd_nm.js"></script>
+    <!-- <script src="static/js/abcd_nm.js"></script> -->
     <script src="static/js/script.js"></script>
     <!-- jsPDF save in one file -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>

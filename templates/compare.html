@@ -274,14 +274,14 @@
         <li><a href="/graph">Bar Chart</a></li>
         <li><a class="active2" href="/compare">Comparison Chart</a></li>
         <li class="dropdown">
-            <a href="javascript:void(0)" class="dropbtn">New Material</a>
+            <a href="javascript:void(0)" class="dropbtn">New</a>
             <div class="dropdown-content">
-                <a href="/linechart_nm">Line Chart</a>
-                <a href="/barchart_nm">Bar Chart</a>
-                <a href="/edit_nm">Edit Material</a>
+                <a href="/add_nm">Add Material</a>
+                <a href="/abcd">Edit Material</a>
+                <a href="/del_nm">Delete Material</a>                
             </div>
         </li>
-        <li><a href="/abcd">Edit in (a,b,c,d)</a></li>
+        <!-- <li><a href="/abcd">Edit in (a,b,c,d)</a></li> -->
         <li style="display: none;"><a href="/newmat">New Material</a></li>
         <li style="display: none;"><a href="/newbar">New BarChart</a></li>
 
@@ -551,11 +551,11 @@
             //     return;
             // }
             else if (Tfn.selectedIndex == 1) {
-                filename = "Natural_Frequency_Trapezoidal_";
+                filename = "Comp_Trapezoidal_";
 
             }
             else if (Tfn.selectedIndex == 2) {
-                filename = "Natural_Frequency_Triangular_";
+                filename = "Comp_Triangular_";
 
             }
             try {

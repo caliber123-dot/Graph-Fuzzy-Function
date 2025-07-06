@@ -300,14 +300,15 @@
         <li><a href="/graph">Bar Chart</a></li>
         <li><a  href="/compare">Comparison Chart</a></li>
         <li class="dropdown">
-            <a href="javascript:void(0)" class="dropbtn">New Material</a>
+            <a href="javascript:void(0)" class="dropbtn">New</a>
             <div class="dropdown-content">
-                <a href="/linechart_nm">Line Chart</a>
-                <a href="/barchart_nm">Bar Chart</a>
-                <a href="/edit_nm">Edit Material</a>
+                <a href="/add_nm">Add Material</a>
+                <a href="/abcd">Edit Material</a>
+                <a href="/del_nm">Delete Material</a>
+                
             </div>
         </li>
-        <li><a href="/abcd">Edit in (a,b,c,d)</a></li>
+        <!-- <li><a href="/abcd">Edit in (a,b,c,d)</a></li> -->
         <li style="display: none;"><a href="/newmat">New Material</a></li>
         <li style="display: none;"><a href="/newbar">New BarChart</a></li>
 
@@ -459,7 +460,7 @@
 
                 <div class="form-group">
                     <button type="submit" id="alphaButton" class="change-bg-btn" >
-                        {{ 'Create Line Graph' if is_update else 'Create Line Graph' }}
+                        {{ 'Create Alpha Graph' if is_update else 'Create Alpha Graph' }}
                     </button>
                     <input type="text" name="alpha_id" id="alpha_id" value="{{alpha_id}}" style="display: none;">
 
@@ -679,28 +680,28 @@
                 const selectedMaterial = Material.options[Material.selectedIndex].text.trim();
                 // alert(selectedMaterial);               
                 if (selectedMaterial == 'Aluminium')
-                    filename = "Natural_Frequency_Trapezoidal_" + "AL"
+                    filename = "Trapezoidal_" + "AL"
                 else if (selectedMaterial == 'Neoprene Rubber')
-                    filename = "Natural_Frequency_Trapezoidal_" + "NR"
+                    filename = "Trapezoidal_" + "NR"
                 else if (selectedMaterial == 'Teflon')
-                    filename = "Natural_Frequency_Trapezoidal_" + "TF"
+                    filename = "Trapezoidal_" + "TF"
                 else if (selectedMaterial == 'Nylon')
-                    filename = "Natural_Frequency_Trapezoidal_" + "NL"
+                    filename = "Trapezoidal_" + "NL"
                 else if (selectedMaterial == 'SS-304 Grade ABS Silicon')
-                    filename = "Natural_Frequency_Trapezoidal_" + "SS304"
+                    filename = "Trapezoidal_" + "SS304"
             }
             else if (Tfn.selectedIndex == 2) {
                 const selectedMaterial = Material.options[Material.selectedIndex].text.trim();
                 if (selectedMaterial == 'Aluminium')
-                    filename = "Natural_Frequency_Triangular_" + "AL"
+                    filename = "Triangular_" + "AL"
                 else if (selectedMaterial == 'Neoprene Rubber')
-                    filename = "Natural_Frequency_Triangular_" + "NR"
+                    filename = "Triangular_" + "NR"
                 else if (selectedMaterial == 'Teflon')
-                    filename = "Natural_Frequency_Triangular_" + "TF"
+                    filename = "Triangular_" + "TF"
                 else if (selectedMaterial == 'Nylon')
-                    filename = "Natural_Frequency_Triangular_" + "NL"
+                    filename = "Triangular_" + "NL"
                 else if (selectedMaterial == 'SS-304 Grade ABS Silicon')
-                    filename = "Natural_Frequency_Triangular_" + "SS304"
+                    filename = "Triangular_" + "SS304"
             }
             // alert(filename);
             try {

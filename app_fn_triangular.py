@@ -110,7 +110,7 @@ def GetFunsTriangular2(alpha_cuts,alpha_dash_cuts,a_y,b_y,c_y,a_d,b_d,c_d):
     # print("\nNatural Frequency Table (in Hz):")
     # print(df.to_string(index=False))
 
-def export_table_image(g_name, alpha , fn_dict, alpha_cuts, alpha_dash_cuts):
+def export_table_image(g_name, alpha , fn_dict, alpha_cuts, alpha_dash_cuts, tit):
     if alpha_dash_cuts is not None:
         alpha_dash_alpha = [f"{a}-{b}" for a, b in zip(alpha_cuts, alpha_dash_cuts)]
     alpha_cuts = alpha_cuts    
@@ -125,8 +125,11 @@ def export_table_image(g_name, alpha , fn_dict, alpha_cuts, alpha_dash_cuts):
     
     # Reset index and pass only values without index
     fig, ax = plt.subplots(figsize=(6, 2.8))
+    # fig, ax = plt.subplots(figsize=(6, 3.2))  # Slightly taller for space for title
     ax.axis('off')
 
+    # Add title at the top center (e.g., use g_name or alpha)
+    fig.suptitle(tit, fontsize=10, weight='normal', y=0.95)
     # Add centered title
     # plt.title(alpha, fontsize=10, weight='bold', pad=4)
 

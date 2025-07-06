@@ -232,13 +232,13 @@ def abcd():
         ddlfuntion = request.form.get('ddlfuntion') # id 
         materials = tbl_materials.query.filter(
         and_(
-            tbl_materials.mat_status == 1,
+            tbl_materials.mat_status != 0,
             tbl_materials.mat_fm_id == ddlfuntion,
             tbl_materials.mat_user_id == session['user_id']
         )).order_by(tbl_materials.mat_id).all()
         # Retrieve form data
         matid = request.form.get('ddlmaterials') # id
-        # print(ddlmaterials)
+        txtmaterial = request.form.get('txtmaterial') # name
         a_value_d = request.form.get('a_value_d')
         b_value_d = request.form.get('b_value_d')
         c_value_d = request.form.get('c_value_d')
@@ -253,7 +253,7 @@ def abcd():
 
         if material_to_update:
             # Update the existing material
-            # material_to_update.mat_name = material
+            material_to_update.mat_name = txtmaterial.strip()
             material_to_update.mat_a_val_d = a_value_d.strip()
             material_to_update.mat_b_val_d = b_value_d.strip()
             material_to_update.mat_c_val_d = c_value_d.strip()
@@ -307,7 +307,7 @@ def graph():
 
         materials = tbl_materials.query.filter(
         and_(
-            tbl_materials.mat_status == 1,
+            tbl_materials.mat_status != 0,
             tbl_materials.mat_fm_id == ddlfuntion,
             tbl_materials.mat_user_id == session['user_id']
         )).order_by(tbl_materials.mat_id).all()
@@ -372,11 +372,13 @@ def graph():
             if(ddlfuntion == '1'): # Trapezoidal
                 fn_dict = GetFuns(alpha_cuts,a_y,b_y,c_y,d_y,a_d,b_d,c_d,d_d)
                 # print(fn_dict)
-                export_table_image(t1, "Table : α-Cut",fn_dict, alpha_cuts, None)
+                tit = "Natural Frequency for Trapezoidal α-Cut Table (" + mat_name + ")"   
+                export_table_image(t1, "Table : α-Cut",fn_dict, alpha_cuts, None, tit)
             else: # Triangular
                 fn_dict = GetFunsTriangular(alpha_cuts,a_y,b_y,c_y,a_d,b_d,c_d)
                 # print(fn_dict)
-                export_table_image(t1, "Table : α-Cut",fn_dict, alpha_cuts, None)
+                tit = "Natural Frequency for Triangular α-Cut Table (" + mat_name + ")" 
+                export_table_image(t1, "Table : α-Cut",fn_dict, alpha_cuts, None, tit)
             g2 = filename + '_Bar_alpha' + '.png' 
             g1 = GetBarChat(alpha_cuts, fn_dict, g2, mat_name, 1, fun_type)
             show_alpha = "d-show"
@@ -390,12 +392,14 @@ def graph():
             # fn_dict_dash = GetFuns(alpha_dash_cuts)            
             if(ddlfuntion == '1'): # Trapezoidal
                 fn_dict_dash = GetFuns2(alpha_dash_cuts,a_y,b_y,c_y,d_y,a_d,b_d,c_d,d_d,alpha)       
-                # print("fn_dict_dash >>>: ",fn_dict_dash)         
-                export_table_image(t2, "Table : α-α'-Cut",fn_dict_dash, alpha, alpha_dash_cuts)
+                # print("fn_dict_dash >>>: ",fn_dict_dash)
+                tit = "Natural Frequency for Trapezoidal α-α'-Cut Table (" + mat_name + ")"            
+                export_table_image(t2, "Table : α-α'-Cut",fn_dict_dash, alpha, alpha_dash_cuts, tit)
             else: # Triangular
                 fn_dict_dash = GetFunsTriangular2(alpha,alpha_dash_cuts,a_y,b_y,c_y,a_d,b_d,c_d)
                 # print(fn_dict_dash)
-                export_table_image(t2, "Table : α-α'-Cut",fn_dict_dash, alpha, alpha_dash_cuts)
+                tit = "Natural Frequency for Triangular α-α'-Cut Table (" + mat_name + ")"   
+                export_table_image(t2, "Table : α-α'-Cut",fn_dict_dash, alpha, alpha_dash_cuts, tit)
                 # print(fn_dict_dash)
             g4 = filename + '_Bar_alpha_dash' + '.png' 
             g3 = GetBarChat2(alpha,alpha_dash_cuts, fn_dict_dash, g4, mat_name, 2, fun_type)
@@ -460,7 +464,7 @@ def home():
         ddlfuntion = request.form.get('ddlfuntion') # id 
         materials = tbl_materials.query.filter(
         and_(
-            tbl_materials.mat_status == 1,
+            tbl_materials.mat_status != 0,
             tbl_materials.mat_fm_id == ddlfuntion,
             tbl_materials.mat_user_id == session['user_id']
         )).order_by(tbl_materials.mat_id).all()
@@ -495,26 +499,26 @@ def home():
                 mat_name = material.mat_name if material else None            
                 if(ddlfuntion == '1'): #Trapezoidal
                     if mat_name == 'Aluminium':
-                        filename = "Natural_Frequency_Trapezoidal_" + "AL"
+                        filename = "Trapezoidal_" + "AL"
                     elif mat_name == 'Neoprene Rubber':
-                        filename = "Natural_Frequency_Trapezoidal_" + "NR"
+                        filename = "Trapezoidal_" + "NR"
                     elif mat_name == 'Teflon':
-                        filename = "Natural_Frequency_Trapezoidal_" + "TF"
+                        filename = "Trapezoidal_" + "TF"
                     elif mat_name == 'Nylon':
-                        filename = "Natural_Frequency_Trapezoidal_" + "NL"
+                        filename = "Trapezoidal_" + "NL"
                     elif mat_name == 'SS-304 Grade ABS Silicon':
-                        filename = "Natural_Frequency_Trapezoidal_" + "SS304"
+                        filename = "Trapezoidal_" + "SS304"
                 if(ddlfuntion == '2'): #Triangular
                     if mat_name == 'Aluminium':
-                        filename = "Natural_Frequency_Triangular_" + "AL"
+                        filename = "Triangular_" + "AL"
                     elif mat_name == 'Neoprene Rubber':
-                        filename = "Natural_Frequency_Triangular_" + "NR"
+                        filename = "Triangular_" + "NR"
                     elif mat_name == 'Teflon':
-                        filename = "Natural_Frequency_Triangular_" + "TF"
+                        filename = "Triangular_" + "TF"
                     elif mat_name == 'Nylon':
-                        filename = "Natural_Frequency_Triangular_" + "NL"
+                        filename = "Triangular_" + "NL"
                     elif mat_name == 'SS-304 Grade ABS Silicon':
-                        filename = "Natural_Frequency_Triangular_" + "SS304"
+                        filename = "Triangular_" + "SS304"
             # Create Alpha Graph
             g1 = filename + '_Alpha_' + 'Density' + '.png'   
             g3 = filename + '_Alpha_' + 'Young' + '.png' 
@@ -750,7 +754,7 @@ def get_alpha_data_cut(mat_id,fm_id,cut_id):
 def get_materials(function_id):
     materials = tbl_materials.query.filter(
         and_(
-            tbl_materials.mat_status == 1,
+            tbl_materials.mat_status != 0,
             tbl_materials.mat_fm_id == function_id,
             tbl_materials.mat_user_id == session['user_id']
         )
@@ -838,7 +842,7 @@ def export_excel():
 
 @app.route('/exportimage')
 def exportimage():
-    export_table_image("Alpha_Table.png",None,None)
+    # export_table_image("Alpha_Table.png",None,None)
     return "<h1>Tables image success.</h1>"
 
 # From Index
@@ -1074,7 +1078,7 @@ def compare():
     tbl_alpha_val.av_status == 2,
     tbl_alpha_val.av_user_id == session['user_id']
     ).order_by(asc(tbl_alpha_val.av_alpha)).all()
-
+    t1 = t2 = filename = ''
     if request.method=='POST':
         ddlfuntion = request.form.get('ddlfuntion')  # ID        
         ddlalphacut = request.form.get('ddlalphacut') # ID
@@ -1084,14 +1088,17 @@ def compare():
         g2 = g4 = 'basic.avif' # Default Graph Image
         show_alpha="d-hide"
         show_alpha_dash="d-hide"
-        filename='Natural_Frequency_Trapezoidal_'
-        t1 = filename + "_Alpha_Table.png"
-        t2 = filename + "_Alpha_Table_Dash.png"
+        if ddlfuntion == '1':
+            filename='Comp_Trapezoidal'
+        else:
+            filename='Comp_Triangular'
+        # t1 = filename + "_Alpha_Table.png"
+        # t2 = filename + "_Alpha_Table_Dash.png"
         # Get all rows where mat_fm_id = 1 (equivalent to mat_type = 1)
         # results = tbl_materials.query.filter_by(mat_fm_id=1).order_by(tbl_materials.mat_id).all()
         results = tbl_materials.query.filter(
         and_(
-            tbl_materials.mat_status == 1,
+            tbl_materials.mat_status != 0,
             tbl_materials.mat_fm_id == ddlfuntion,
             tbl_materials.mat_user_id == session['user_id']
         )).order_by(tbl_materials.mat_id).all()
@@ -1107,9 +1114,9 @@ def compare():
             t2 = "basic.avif"
             alpha_cut = a1
             g2 = filename + '_Bar_alpha' + '.png' # Graph_Name
-            t1 = "Comparative_Alpha_Table.png"
+            t1 = filename + "_Alpha_Table.png"
             if(ddlfuntion == '1'): # Trapezoidal
-                fn_dict = Comparative_Alpha(alpha_cut,g2,t1, materials)
+                fn_dict = Comparative_Alpha(alpha_cut,g2,t1, materials, ddlfuntion)
             elif(ddlfuntion == '2'): # Triangular
                 fn_dict = Comparative_Alpha_Triangular(alpha_cut,g2,t1, materials)
             show_alpha = "d-show"
@@ -1118,7 +1125,7 @@ def compare():
             alpha_cut = a2
             alpha_dash = a3
             g4 = filename + '_Bar_alpha_dash' + '.png' # Graph_Name
-            t2 = "Comparative_Alpha_Dash_Table.png"
+            t2 = filename + "_Alpha_Dash_Table.png"
             if(ddlfuntion == '1'): # Trapezoidal
                 fn_dict = Comparative_Alpha_Dash(alpha_cut, alpha_dash, g4,t2, materials)
             #    print("fn_dict :::::", fn_dict)
@@ -1439,11 +1446,11 @@ def barchart_nm():
             if(ddlfuntion == '1'): # Trapezoidal
                 fn_dict = GetFuns(alpha_cuts,a_y,b_y,c_y,d_y,a_d,b_d,c_d,d_d)
                 # print(fn_dict)
-                export_table_image(t1, "Table : α-Cut",fn_dict, alpha_cuts, None)
+                export_table_image(t1, "Table : α-Cut",fn_dict, alpha_cuts, None, None)
             else: # Triangular
                 fn_dict = GetFunsTriangular(alpha_cuts,a_y,b_y,c_y,a_d,b_d,c_d)
                 # print(fn_dict)
-                export_table_image(t1, "Table : α-Cut",fn_dict, alpha_cuts, None)
+                export_table_image(t1, "Table : α-Cut",fn_dict, alpha_cuts, None, None)
             g2 = filename + '_Bar_alpha' + '.png' 
             g1 = GetBarChat(alpha_cuts, fn_dict, g2, mat_name, 1, fun_type)
             show_alpha = "d-show"
@@ -1458,11 +1465,11 @@ def barchart_nm():
             if(ddlfuntion == '1'): # Trapezoidal
                 fn_dict_dash = GetFuns2(alpha_dash_cuts,a_y,b_y,c_y,d_y,a_d,b_d,c_d,d_d,alpha)       
                 # print("fn_dict_dash >>>: ",fn_dict_dash)         
-                export_table_image(t2, "Table : α-α'-Cut",fn_dict_dash, alpha, alpha_dash_cuts)
+                export_table_image(t2, "Table : α-α'-Cut",fn_dict_dash, alpha, alpha_dash_cuts, None)
             else: # Triangular
                 fn_dict_dash = GetFunsTriangular2(alpha,alpha_dash_cuts,a_y,b_y,c_y,a_d,b_d,c_d)
                 # print(fn_dict_dash)
-                export_table_image(t2, "Table : α-α'-Cut",fn_dict_dash, alpha, alpha_dash_cuts)
+                export_table_image(t2, "Table : α-α'-Cut",fn_dict_dash, alpha, alpha_dash_cuts, None)
                 # print(fn_dict_dash)
             g4 = filename + '_Bar_alpha_dash' + '.png' 
             g3 = GetBarChat2(alpha,alpha_dash_cuts, fn_dict_dash, g4, mat_name, 2, fun_type)
@@ -1546,3 +1553,76 @@ def edit_nm():
             flash("Error on updatation!", "ERROR")
         return render_template('edit_nm.html',materials=materials, s1=matid,s2=ddlfuntion,a=a_value_d,b=b_value_d,c=c_value_d,d=d_value_d,myMsg=myMsg,a1=a_value_y,b1=b_value_y,c1=c_value_y,d1=d_value_y,txtmaterial=txtmaterial)
     return render_template('edit_nm.html')
+
+@app.route('/add_nm', methods=['GET', 'POST'])
+def add_nm():
+    if request.method=='POST':
+        ddlfuntion = request.form.get('ddlfuntion') # id 
+        new_mat = request.form.get('txtmaterial').strip()  # Remove whitespace
+        a_value_d = request.form.get('a_value_d').strip()
+        b_value_d = request.form.get('b_value_d').strip()
+        c_value_d = request.form.get('c_value_d').strip()
+        d_value_d = request.form.get('d_value_d').strip()
+
+        a_value_y = request.form.get('a_value_y').strip()
+        b_value_y = request.form.get('b_value_y').strip()
+        c_value_y = request.form.get('c_value_y').strip()
+        d_value_y = request.form.get('d_value_y').strip()
+
+        # Check if material with same name and function ID already exists
+        existing_material = tbl_materials.query.filter_by(
+            mat_name=new_mat,
+            mat_fm_id=ddlfuntion,
+            mat_status=1,
+            mat_user_id=session['user_id'] 
+        ).first()
+        if existing_material:
+            flash('This material already exists for the selected function!', 'error')
+            print('This material already exists for the selected function!')
+        else:            
+                # Create a new material instance
+            new_material = tbl_materials(
+                mat_fm_id=ddlfuntion,
+                mat_name=new_mat,
+                mat_a_val_d=a_value_d,
+                mat_b_val_d=b_value_d,
+                mat_c_val_d=c_value_d,
+                mat_d_val_d=d_value_d,
+                mat_a_val_y=a_value_y,
+                mat_b_val_y=b_value_y,
+                mat_c_val_y=c_value_y,
+                mat_d_val_y=d_value_y,
+                mat_status=1,
+                mat_user_id=session['user_id']
+            )      
+            # Insert user into database
+            db.session.add(new_material)
+            try:
+                db.session.commit()
+                print("Add Materials Success!!!")
+                flash('This material add Successfully!', 'success')
+                # Success - you might want to flash a message or redirect
+            except Exception as e:
+                db.session.rollback()
+        return render_template('add_nm.html', s2=ddlfuntion, new_mat=new_mat)
+    return render_template('add_nm.html')
+
+@app.route('/del_nm', methods=['GET', 'POST'])
+def del_nm():    
+    return render_template('del_nm.html')
+
+@app.route('/del_mat', methods=['POST'])
+def del_mat():
+    mat_id = request.json.get('mat_id')
+    if not mat_id:
+        return jsonify({'error': 'Material ID is required'}), 400
+
+    material = tbl_materials.query.filter_by(mat_id=mat_id).first()
+    if not material:
+        return jsonify({'error': 'Material not found'}), 404
+
+    # Soft delete: update mat_status
+    material.mat_status = 0
+    db.session.commit()
+    return jsonify({'message': 'Material deleted successfully'}), 200
+           

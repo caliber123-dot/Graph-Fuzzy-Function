@@ -11,10 +11,10 @@ function ExportToExcel() {
         return;
     }    
     else if (Tfn.selectedIndex == 1) {
-        filename = "Natural_Frequency_Trapezoidal_All_Materials_";        
+        filename = "Comp_Trapezoidal_All_Materials_";        
     }
     else if (Tfn.selectedIndex == 2) {
-        filename = "Natural_Frequency_Triangular_All_Materials_";        
+        filename = "Comp_Triangular_All_Materials_";        
     }
     // Collect image filenames
     for (const id of imageIds) {
