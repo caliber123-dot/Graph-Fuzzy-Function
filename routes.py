@@ -1632,7 +1632,8 @@ from datetime import datetime, timedelta
 @app.route('/forgot-password', methods=['GET', 'POST'])
 def forgot_password():
     if request.method == 'POST':
-        email = request.form.get('email')
+        # email = request.form.get('email')
+        email = request.form.get('email', '').strip()
         if not email:
             flash('Email is required', 'error')
             return render_template('forgot_password.html')
@@ -1675,7 +1676,7 @@ def forgot_password():
                 db.session.commit()
         else:
             # Generic message to prevent user enumeration
-            flash('A password reset link has been sent to your email.', 'success')
+            flash('This email id is not registered.', 'error')
         
         return render_template('forgot_password.html')
     
