@@ -547,7 +547,7 @@ def home():
                     GetFuzzyFunction_aplha(a_d,b_d,c_d,d_d,a1,a2,a3,g1,mat_name,"Density")
                     GetFuzzyFunction_aplha(a_y,b_y,c_y,d_y,a1,a2,a3,g3,mat_name,"Young's Modulus")
                     fn_dict = GetMinMax(alpha_cuts,a_y,b_y,c_y,d_y,a_d,b_d,c_d,d_d)
-                    print(fn_dict)
+                    # print(fn_dict)
                 if a4 != '' and a5 != '' and a6 != '':                    
                     # alpha - alpha dash cut
                     alpha_dash = [a4,a5,a6]

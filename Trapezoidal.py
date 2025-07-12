@@ -126,12 +126,14 @@ def GetFuzzyFunction_aplha_alpha_dash(a_val, b_val, c_val, d_val, a1, a2, a3, a4
         if(module == "Density"):
             x_extend = 3  # Horizontal extension for α–α′ lines
         else:
-            x_extend = 1e9  # Large enough for visible extension
+            x_extend = 2.61e10  # Large enough for visible extension
+            # print('INNNNNNNN')  
     if material == "Neoprene Rubber":
         if(module == "Density"):
             x_extend = 3  
         else:
-            x_extend = 1e5  
+            x_extend = 1e5
+            
     if material == "Teflon":
         if(module == "Density"):
             x_extend = 3  
@@ -157,8 +159,14 @@ def GetFuzzyFunction_aplha_alpha_dash(a_val, b_val, c_val, d_val, a1, a2, a3, a4
     for i in range(len(alpha)):
         color = colors[i % len(colors)]
         # Draw extended slanted α–α′ line
-        x_start = x[i] - x_extend
-        x_end = x_bar[i] + x_extend
+        # x_start = x[i] - x_extend
+        # x_end = x_bar[i] + x_extend
+        # Calculate intersection with x-axis for left slope
+        # a = (x[i] - a) * (alpha[i] / (1.0 - alpha[i])) if alpha[i] < 1 else a
+        # print(a)
+        x_start = x[i] - (x[i] - a) * (alpha[i] / (1.0 - alpha[i])) if alpha[i] < 1 else a
+        # Calculate intersection with x-axis for right slope
+        x_end = x_bar[i] + (d - x_bar[i]) * (alpha_dash[i] / (1.0 - alpha[i])) if alpha_dash[i] < 1 else d
         plt.plot([x_start, x_end], [alpha[i], alpha_dash[i]], color=color, linestyle="--", linewidth=1.5)
         # Dots at α and α′
         plt.scatter([x[i], x_bar[i]], [alpha[i], alpha_dash[i]], color="black", zorder=5)
