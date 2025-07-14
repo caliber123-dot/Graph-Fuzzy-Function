@@ -301,6 +301,7 @@ def graph():
     tbl_alpha_val.av_user_id == session['user_id']
     ).order_by(asc(tbl_alpha_val.av_alpha)).all()
     if request.method=='POST':
+        time.sleep(5)
         ddlfuntion = request.form.get('ddlfuntion')  # ID
         ddlmat_ID = request.form.get('ddlmaterials') # ID 
         ddlalphacut = request.form.get('ddlalphacut') # ID 
