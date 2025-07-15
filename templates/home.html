@@ -143,8 +143,8 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="/">
-                <i class="bi bi-graph-up-arrow me-2"></i>Fuzzy Function Project
+            <a class="navbar-brand" href="/" style="line-height: normal;">
+                <i class="bi bi-graph-up-arrow me-2"></i>Study on Natural Frequency of Oscillation <br>of Uni-link Flexible Robot using Fuzzy Function
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -159,11 +159,11 @@
                         <a class="nav-link {% if request.path == url_for('graph') %}{% endif %}"
                             href="{{ url_for('home') }}">Graph</a>
                     </li>
-
                     <li class="nav-item">
-                        <a class="nav-link {% if request.path == url_for('contact') %}{% endif %}"
-                            href="{{ url_for('contact') }}">Contact</a>
+                        <a class="nav-link {% if request.path == url_for('graph') %}{% endif %}"
+                            href="{{ url_for('home') }}">Help</a>
                     </li>
+
                 </ul>
                 <div class="d-flex align-items-center">
                     <!-- Theme Toggle -->
@@ -252,7 +252,7 @@
                         <p class="lead">Explore fuzzy logic for material analysis with interactive graphs and fast
                             computations.</p>
                         {% else %}
-                        <h2>Welcome to Fuzzy Function Project</h2>
+                        <h2>Welcome to Study on Natural Frequency of Oscillation of Uni-link Flexible Robot using Fuzzy Function</h2>
                         <p class="lead">A lightweight web app for visualizing fuzzy membership functions, built for
                             material science and engineering.</p>
                         {% endif %}
@@ -309,7 +309,7 @@
                                 <div class="d-flex align-items-center mb-3">
                                     <i class="fas fa-bolt fa-2x feature-icon me-3 ms-2"></i>
                                     <div>
-                                        <h5>Fast Computations</h5>
+                                        <h5>Easy Computations</h5>
                                         <p class="mb-0">Graph generation in 0.5–2 seconds using vectorized NumPy
                                             calculations.</p>
                                     </div>
@@ -339,92 +339,7 @@
             </div>
         </section>
 
-        <!-- Key Capabilities Section -->
-        <section class="section-padding bg-light1">
-            <div class="container">
-                <div class="row text-center mb-5">
-                    <div class="col-12">
-                        <h2>Key Capabilities</h2>
-                        <p class="lead">Advanced tools for fuzzy logic-based material analysis.</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4 mb-4">
-                        <div class="card feature-card h-100">
-                            <div class="card-body text-center">
-                                <i class="fas fa-shapes fa-3x feature-icon mb-3"></i>
-                                <h4>Fuzzy Function Types</h4>
-                                <p>Support for trapezoidal and triangular membership functions for versatile analysis.
-                                </p>
-                                <a href="/" target="_blank" class="btn btn-outline-primary">
-                                    <i class="fas fa-chart-line me-2"></i>Try Functions
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-4">
-                        <div class="card feature-card h-100">
-                            <div class="card-body text-center">
-                                <i class="fas fa-sliders-h fa-3x feature-icon mb-3"></i>
-                                <h4>Predefined Examples</h4>
-                                <p>Quickly visualize fuzzy functions with built-in examples in app.py.</p>
-                                <a href="/" target="_blank" class="btn btn-outline-primary">
-                                    <i class="fas fa-play me-2"></i>Explore Examples
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-4">
-                        <div class="card feature-card h-100">
-                            <div class="card-body text-center">
-                                <i class="fas fa-cogs fa-3x feature-icon mb-3"></i>
-                                <h4>Optimized Performance</h4>
-                                <p>Vectorized NumPy, caching, and Web Workers for fast, efficient processing.</p>
-                                <a href="/" target="_blank" class="btn btn-outline-primary">
-                                    <i class="fas fa-tachometer-alt me-2"></i>Test Performance
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-4">
-                        <div class="card feature-card h-100">
-                            <div class="card-body text-center">
-                                <i class="fas fa-palette fa-3x feature-icon mb-3"></i>
-                                <h4>Customizable UI</h4>
-                                <p>Theme switcher and dynamic graph backgrounds for enhanced user experience.</p>
-                                <a href="/" target="_blank" class="btn btn-outline-primary">
-                                    <i class="fas fa-paint-brush me-2"></i>Customize Graphs
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-4">
-                        <div class="card feature-card h-100">
-                            <div class="card-body text-center">
-                                <i class="fas fa-server fa-3x feature-icon mb-3"></i>
-                                <h4>Lightweight Deployment</h4>
-                                <p>Hosted on Render.com with low CPU (0.1–0.25 vCPUs) and memory usage.</p>
-                                <a href="{{ url_for('register') }}" class="btn btn-outline-primary">
-                                    <i class="fas fa-user-plus me-2"></i>Get Started
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-4">
-                        <div class="card feature-card h-100">
-                            <div class="card-body text-center">
-                                <i class="fas fa-book-open fa-3x feature-icon mb-3"></i>
-                                <h4>Academic Grounding</h4>
-                                <p>Built on fuzzy logic research for decision-making under uncertainty.</p>
-                                <a href="/" target="_blank" class="btn btn-outline-primary">
-                                    <i class="fas fa-graduation-cap me-2"></i>Learn More
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+    
 
         {% endblock %}
     </main>

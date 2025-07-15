@@ -57,10 +57,15 @@ body {
 }
 
 .nav-link {
-  color: var(--dark-color) !important;
-  font-weight: 600;
+  /* color: var(--dark-color) !important; */
+  font-weight: 700;
   padding: 0.5rem 1rem;
   transition: all 0.2s;
+  color: black;
+  font-size: 18px;
+  margin-left: 10px;
+  border: 1px solid #adacff;
+  border-radius: 10px;
 }
 
 .dark-theme .nav-link {

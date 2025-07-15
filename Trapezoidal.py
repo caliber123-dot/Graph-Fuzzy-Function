@@ -159,14 +159,12 @@ def GetFuzzyFunction_aplha_alpha_dash(a_val, b_val, c_val, d_val, a1, a2, a3, a4
     for i in range(len(alpha)):
         color = colors[i % len(colors)]
         # Draw extended slanted α–α′ line
-        # x_start = x[i] - x_extend
-        # x_end = x_bar[i] + x_extend
-        # Calculate intersection with x-axis for left slope
-        # a = (x[i] - a) * (alpha[i] / (1.0 - alpha[i])) if alpha[i] < 1 else a
-        # print(a)
-        x_start = x[i] - (x[i] - a) * (alpha[i] / (1.0 - alpha[i])) if alpha[i] < 1 else a
+        # x_start = x[i] - 1
+        # x_end = x_bar[i] + 1  
+        x_start = x[i] - (x[i] - a) * (alpha[i] / (2.0 - alpha[i])) if alpha[i] < 1 else a
         # Calculate intersection with x-axis for right slope
-        x_end = x_bar[i] + (d - x_bar[i]) * (alpha_dash[i] / (1.0 - alpha[i])) if alpha_dash[i] < 1 else d
+        x_end = x_bar[i] + (d - x_bar[i]) * (alpha_dash[i] / (2.0 - alpha[i])) if alpha_dash[i] < 1 else d
+
         plt.plot([x_start, x_end], [alpha[i], alpha_dash[i]], color=color, linestyle="--", linewidth=1.5)
         # Dots at α and α′
         plt.scatter([x[i], x_bar[i]], [alpha[i], alpha_dash[i]], color="black", zorder=5)
