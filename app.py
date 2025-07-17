@@ -56,6 +56,12 @@ class tbl_alpha_val(db.Model):
     av_status = db.Column(db.Integer, nullable=False) # 1: alpha & 2: alpha dash
     av_user_id = db.Column(db.Integer, nullable=False)
 
+class tbl_member(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
+    status = db.Column(db.Integer, nullable=False) # 1: alpha & 2: alpha dash
+    user_id = db.Column(db.Integer, nullable=False)
+
 # Define User model
 class User(db.Model):
     __tablename__ = 'tbl_register'    
